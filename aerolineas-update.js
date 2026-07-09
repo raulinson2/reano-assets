@@ -5,7 +5,7 @@
   var CSS = `
   .rt-au{--brand:#FF8C03;--card:#ffffff;--text:#191512;--muted:#6b645c;--line:rgba(0,0,0,.10);--soft:rgba(0,0,0,.03);
     --op:#16a34a;--ca:#dc2626;--rp:#d97706;--rt:#2563eb;--na:#0891b2;
-    max-width:1120px;margin:0 auto 8px;padding:8px 20px 4px;
+    max-width:1120px;margin:0 auto 8px !important;padding:8px 20px 4px;
     font-family:'Montserrat',system-ui,-apple-system,sans-serif;color:var(--text);box-sizing:border-box}
   html.dark .rt-au{--card:#171f27;--text:#eef3f7;--muted:#9aa6b2;--line:rgba(255,255,255,.12);--soft:rgba(255,255,255,.03)}
   .rt-au *{box-sizing:border-box}
@@ -92,7 +92,7 @@
   function chev(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>';}
 
   function build(){
-    var wrap=document.createElement('section');
+    var wrap=document.createElement('div');
     wrap.id='rt-au-board';wrap.className='rt-au';
     var cards=A.map(function(a,i){
       var chips=a.ch.map(function(c){return '<span class="rt-au-chip">'+c+'</span>';}).join('');
