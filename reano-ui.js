@@ -31,7 +31,7 @@
   .rt-uni-logo-d{display:none}
   html.dark .rt-uni-logo-l{display:none}
   html.dark .rt-uni-logo-d{display:block}
-  .rt-uni-nav{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;min-width:0}
+  .rt-uni-menu{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;min-width:0}
   .rt-uni-link{font-size:14px;font-weight:600;color:#3d372f;text-decoration:none;padding:8px 13px;border-radius:9px;white-space:nowrap;transition:color .18s,background .18s}
   html.dark .rt-uni-link{color:#c9d2da}
   .rt-uni-link:hover{color:#FF8C03;background:rgba(255,140,3,.09)}
@@ -65,7 +65,7 @@
   html.dark .rt-uni-mobile a{color:#c9d2da;border-bottom-color:rgba(255,255,255,.07)}
   .rt-uni-mobile a.rt-uni-cta-m{margin-top:12px;text-align:center;background:linear-gradient(135deg,#25D366,#1ebe5a);color:#fff;border:0;border-radius:999px;padding:13px}
   @media(max-width:1000px){
-    .rt-uni-nav{display:none}
+    .rt-uni-menu{display:none}
     .rt-uni-burger{display:flex}
     .rt-uni-cta{display:none}
     .rt-uni-inner{height:60px}
@@ -116,7 +116,7 @@
     h.innerHTML=''
       +'<div class="rt-uni-inner">'
       +'<a class="rt-uni-logo" href="/"><img class="rt-uni-logo-l" src="'+LOGO_L+'" alt="Reaño Travels & Tours"><img class="rt-uni-logo-d" src="'+LOGO_D+'" alt="Reaño Travels & Tours"></a>'
-      +'<nav class="rt-uni-nav">'+links+'</nav>'
+      +'<div class="rt-uni-menu" role="navigation">'+links+'</div>'
       +'<div class="rt-uni-actions">'
       +'<button class="rt-uni-tg" aria-label="Cambiar tema">'+SUN+MOON+'</button>'
       +'<a class="rt-uni-cart" href="/cart" aria-label="Carrito">'+CART+'<span class="rt-uni-cart-n" style="display:none"></span></a>'
