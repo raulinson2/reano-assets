@@ -6,6 +6,10 @@
   var CSS = `
   /* ===== HEADER: márgenes (el header nativo full-width recibe márgenes tipo max-width 1200) ===== */
   .rt-nav{padding-left:max(20px,calc((100% - 1200px)/2)) !important;padding-right:max(20px,calc((100% - 1200px)/2)) !important}
+  /* declutter (solo CSS, la inyección no lo deshace): quitar "Inicio" (el logo ya va a inicio) y "Servicios" */
+  .rt-nav a[href="/"]:not(:has(img)):not(:has(svg)),
+  header.fixed a[href="/"]:not(:has(img)):not(:has(svg)){display:none !important}
+  .rt-nav a[href="/servicios"], header.fixed a[href="/servicios"]{display:none !important}
 
   /* ===== FOOTER: enlaces de columna en bloque (arregla TiendaHoteles / VuelosMundial pegados) ===== */
   .rt-footer a.rt-fblock{display:block !important;margin:0 0 9px !important}
