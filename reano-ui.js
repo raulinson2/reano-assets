@@ -196,10 +196,11 @@
       +'<div class="rt-ce-btns"><a class="rt-ce-b1" href="/tienda">Ver paquetes</a><a class="rt-ce-b2" href="'+WA+'" target="_blank" rel="noopener">Hablar con un asesor</a></div>';
     if(msg&&msg.parentElement){ msg.parentElement.insertBefore(box, msg); }
     else { (document.querySelector("#sections")||document.body).appendChild(box); }
-    if(msg){ msg.style.setProperty('display','none','important');
-      var wrap=msg.parentElement;
-      if(wrap){ [].slice.call(wrap.querySelectorAll('a,button')).forEach(function(b){ if(/seguir|comprando|continue|shopping/i.test(b.textContent||'')) b.style.setProperty('display','none','important'); }); }
-    }
+    if(msg){ msg.style.setProperty('display','none','important'); }
+    [].slice.call(document.querySelectorAll('a,button')).forEach(function(b){
+      if(b.closest('#rt-cart-empty-box')||b.closest('#rt-uni-header')) return;
+      if(/^\s*(seguir comprando|continue shopping|seguir viendo)\s*$/i.test((b.textContent||''))) b.style.setProperty('display','none','important');
+    });
   }
   function markCart(){
     var p=(location.pathname.replace(/\/+$/,'')||'/');
