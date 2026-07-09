@@ -126,8 +126,13 @@
 
   function onPage(){var p=location.pathname.replace(/\/+$/,'');return p==='/estado-aerolineas'||p==='/vuelos';}
 
+  function bumpDate(){
+    var upd=document.querySelector('.rt-updated');
+    if(upd && /8\s*jul/i.test(upd.textContent)) upd.textContent=upd.textContent.replace(/8\s*jul/i,'9 jul');
+  }
   function inject(){
     if(!onPage())return;
+    bumpDate();
     if(!document.getElementById('rt-au-css')){var st=document.createElement('style');st.id='rt-au-css';st.textContent=CSS;(document.head||document.documentElement).appendChild(st);}
     if(document.getElementById('rt-au-board'))return;
     var anchor=document.querySelector('.rt-wrap')||document.querySelector('.rt-legend');
@@ -135,9 +140,7 @@
     var board=build();
     anchor.parentNode.insertBefore(board, anchor);
     wire(board);
-    // bump the "Actualizado" date
-    var upd=document.querySelector('.rt-updated');
-    if(upd && /8\s*jul/i.test(upd.textContent)) upd.textContent=upd.textContent.replace(/8\s*jul/i,'9 jul');
+    bumpDate();
   }
 
   if(document.readyState!=='loading')inject();else document.addEventListener('DOMContentLoaded',inject);
