@@ -78,11 +78,11 @@
   body.rt-tienda #sections{position:relative}
   #rt-tienda-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
   #rt-tienda-bg::before{content:"";position:absolute;inset:0;
-    background:url('https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/losroques.jpg') center 30%/cover no-repeat;
-    opacity:.10;filter:saturate(1.1)}
+    background:url('https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/losroques.jpg') center 22%/cover no-repeat fixed;
+    opacity:.17;filter:saturate(1.05)}
   #rt-tienda-bg::after{content:"";position:absolute;inset:0;
-    background:radial-gradient(1100px 460px at 50% -60px,rgba(255,140,3,.16),transparent 70%)}
-  html:not(.dark) #rt-tienda-bg::before{opacity:.14}
+    background:linear-gradient(180deg,rgba(0,0,0,.0),transparent 55%,rgba(0,0,0,.0)),radial-gradient(1200px 520px at 50% 4%,rgba(255,140,3,.15),transparent 62%)}
+  html:not(.dark) #rt-tienda-bg::before{opacity:.24}
   body.rt-tienda #sections > *{position:relative;z-index:1}
 
   /* ===== CARRITO: ocultar bloques de pago cuando está vacío + centrar vacío ===== */
@@ -114,6 +114,12 @@
     var h=document.getElementById('rt-uni-header'); if(!h)return;
     var menu=h.querySelector('.rt-uni-menu'); if(!menu)return;
     if(!menu.querySelector('.rt-uni-link')){ menu.innerHTML=menuHTML(); }
+  }
+  function hideOld(){
+    ['.rt-nav','.rt-herowrap','header.fixed'].forEach(function(sel){
+      var els=document.querySelectorAll(sel);
+      for(var i=0;i<els.length;i++){ if(els[i].id!=='rt-uni-header') els[i].style.setProperty('display','none','important'); }
+    });
   }
   function buildHeader(){
     if(document.getElementById('rt-uni-header'))return;
@@ -178,7 +184,7 @@
     }
   }
 
-  function run(){ injectCSS(); buildHeader(); guardMenu(); fixFooter(); markTienda(); markCart(); updateCart(); }
+  function run(){ injectCSS(); buildHeader(); guardMenu(); hideOld(); fixFooter(); markTienda(); markCart(); updateCart(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   var mo=new MutationObserver(function(){ run(); });
   try{mo.observe(document.documentElement,{childList:true,subtree:true});}catch(e){}
