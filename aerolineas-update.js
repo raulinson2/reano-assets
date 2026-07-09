@@ -128,6 +128,7 @@
 
   function inject(){
     if(!onPage())return;
+    if(!document.getElementById('rt-au-css')){var st=document.createElement('style');st.id='rt-au-css';st.textContent=CSS;(document.head||document.documentElement).appendChild(st);}
     if(document.getElementById('rt-au-board'))return;
     var anchor=document.querySelector('.rt-wrap')||document.querySelector('.rt-legend');
     if(!anchor){var host=document.querySelector('#sections');if(!host)return; host.appendChild(build()); wire(document.getElementById('rt-au-board')); return;}
