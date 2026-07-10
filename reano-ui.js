@@ -44,12 +44,14 @@
   /* ===== PRODUCTO: breadcrumb legible en oscuro ===== */
   html.dark [class*="readcrumb"], html.dark [class*="readcrumb"] a,
   html.dark [class*="readcrumb"] span, html.dark [class*="readcrumb"] svg{color:#a6adb6 !important;fill:#a6adb6 !important}
-  /* imagen de galeria a todo el ancho de su columna (elimina la foto mini con vacio) */
-  [class*="ProductItem-gallery"] img{width:100% !important;height:auto !important;border-radius:14px}
-  [class*="ProductItem-gallery"]{width:100%}
-  /* recortar el vacio gigante bajo el bloque de compra */
-  .ProductItem, [class*="ProductItem"]{min-height:0 !important}
-  section[class*="product"], .page-section.product-section{min-height:0 !important;padding-bottom:36px !important}
+  /* galeria: colapsar el alto reservado vacio y pulir la imagen */
+  .product-gallery, .product-gallery-slides{height:auto !important;min-height:0 !important}
+  .product-gallery-slides-item{position:relative !important}
+  .product-gallery-slides-item-image{width:100% !important;height:auto !important;border-radius:16px;
+    box-shadow:0 22px 44px -20px rgba(0,0,0,.45)}
+  /* recortar el vacio bajo el bloque de compra */
+  .product-detail{min-height:0 !important;padding-bottom:34px !important}
+  .product-detail .content{min-height:0 !important}
 
   /* ===== CARRITO: layout en 2 columnas alineadas (items | resumen) ===== */
   div:has(> .cart-container){display:grid !important;grid-template-columns:minmax(0,1.55fr) minmax(360px,1fr);
