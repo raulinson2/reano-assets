@@ -54,8 +54,11 @@
   .product-detail .content{min-height:0 !important}
 
   /* ===== CARRITO: layout en 2 columnas alineadas (items | resumen) ===== */
+  /* fuera las tarjetas decorativas del addon que desordenaban la pagina */
+  .rt-cart-hero, .rt-cart-extra, .rt-cart-card{display:none !important}
   div:has(> .cart-container){display:grid !important;grid-template-columns:minmax(0,1.55fr) minmax(360px,1fr);
     gap:30px;align-items:start;max-width:1180px;margin:0 auto !important;padding:26px 20px 70px;box-sizing:border-box}
+  .cart-row{align-items:center}
   div:has(> .cart-summary){width:100% !important}
   .cart-summary{width:100% !important;box-sizing:border-box}
   .cart-container::before{content:"Tu carrito";display:block;font-family:'Montserrat',system-ui,sans-serif;
