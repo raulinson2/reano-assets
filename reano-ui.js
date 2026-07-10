@@ -1,33 +1,73 @@
-/* Reano Travels - UI fixes v2 (SIN header propio; solo CSS estable + carrito) */
+/* Reano Travels - UI fixes v3
+   CSS estable (la inyeccion del sitio no puede deshacer CSS):
+   header unificado, footer unificado y legible en claro/oscuro,
+   fondo de tienda, pagina de producto, carrito ordenado. */
 (function(){
-  if(window.__rtUI2) return; window.__rtUI2=1;
+  if(window.__rtUI3) return; window.__rtUI3=1;
   var WA='https://wa.me/584247309699?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20paquetes%20de%20viaje';
+  var IMG='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/losroques.jpg';
 
   var CSS = `
-  /* ===== HEADER: márgenes (el header nativo full-width recibe márgenes tipo max-width 1200) ===== */
+  /* ===== HEADER: margenes tipo max-width 1200 en el header legacy ===== */
   .rt-nav{padding-left:max(20px,calc((100% - 1200px)/2)) !important;padding-right:max(20px,calc((100% - 1200px)/2)) !important}
-  /* declutter (solo CSS, la inyección no lo deshace): quitar "Inicio" (el logo ya va a inicio) y "Servicios" */
+  /* declutter: quitar "Inicio" (el logo ya va a inicio) y "Servicios" */
   .rt-nav a[href="/"]:not(:has(img)):not(:has(svg)),
   header.fixed a[href="/"]:not(:has(img)):not(:has(svg)){display:none !important}
   .rt-nav a[href="/servicios"], header.fixed a[href="/servicios"]{display:none !important}
+  /* CTA del header unificado al naranja de marca en TODAS las pestanas */
+  .rt-nav-cta{background:linear-gradient(135deg,#FF8C03,#E67A00) !important;color:#fff !important;
+    border:none !important;text-transform:uppercase;font-weight:700 !important;letter-spacing:.05em;
+    font-size:12.5px !important;padding:10px 20px !important;border-radius:999px !important;
+    box-shadow:0 6px 16px -6px rgba(255,140,3,.55)}
+  .rt-nav-cta:hover{filter:brightness(1.07)}
 
-  /* ===== FOOTER: enlaces de columna en bloque (arregla TiendaHoteles / VuelosMundial pegados) ===== */
-  .rt-footer a.rt-fblock{display:block !important;margin:0 0 9px !important}
+  /* ===== FOOTER UNIFICADO (mismo look premium oscuro en todas las pestanas y ambos temas) ===== */
+  .rt-footer, footer.rea-stuck{background:#0e0e10 !important;border-top:1px solid rgba(255,140,3,.4) !important}
+  /* cada enlace de columna en su propia linea (arregla TiendaHoteles pegados) */
+  .rt-footer a[href^="/"]:not(:has(img)):not(:has(svg)),
+  footer.rea-stuck a[href^="/"]:not(:has(img)):not(:has(svg)){
+    display:block !important;margin:0 0 10px !important;
+    color:#c9ced6 !important;font-weight:500 !important;text-decoration:none}
+  .rt-footer a[href^="/"]:hover, footer.rea-stuck a[href^="/"]:hover{color:#FF8C03 !important}
+  .rt-foot-title{color:#8b929c !important}
+  .rt-footer p, footer.rea-stuck p{color:#9aa1ab !important}
+  .rt-footer .rt-soc-link, footer.rea-stuck .rt-soc-link,
+  .rt-footer .rt-soc-link span, footer.rea-stuck .rt-soc-link span{color:#c9ced6 !important}
+  .rt-footer .rt-soc-link:hover, footer.rea-stuck .rt-soc-link:hover{color:#FF8C03 !important}
+  .rt-footer > div:last-child, footer.rea-stuck > div:last-child{color:#7d838d !important}
 
-  /* ===== TIENDA: fondo sutil detrás del showcase ===== */
-  body.rt-tienda #sections{position:relative}
-  #rt-tienda-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  #rt-tienda-bg::before{content:"";position:absolute;inset:0;
-    background:url('https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/losroques.jpg') center 22%/cover no-repeat;
-    opacity:.16;filter:saturate(1.05)}
-  #rt-tienda-bg::after{content:"";position:absolute;inset:0;
-    background:radial-gradient(1200px 520px at 50% 4%,rgba(255,140,3,.14),transparent 62%)}
-  html:not(.dark) #rt-tienda-bg::before{opacity:.22}
-  body.rt-tienda #sections > *{position:relative;z-index:1}
+  /* ===== TIENDA: fondo fotografico sutil detras del showcase ===== */
+  #rt-paquetes-showcase{position:relative}
+  #rt-paquetes-showcase > *:not(#rt-tienda-bg){position:relative;z-index:1}
+  html:not(.dark) #rt-tienda-bg{opacity:.20 !important}
 
-  /* ===== CARRITO: estado vacío premium ===== */
+  /* ===== PRODUCTO: breadcrumb legible en oscuro ===== */
+  html.dark [class*="readcrumb"], html.dark [class*="readcrumb"] a,
+  html.dark [class*="readcrumb"] span, html.dark [class*="readcrumb"] svg{color:#a6adb6 !important;fill:#a6adb6 !important}
+  /* imagen de galeria a todo el ancho de su columna (elimina la foto mini con vacio) */
+  [class*="ProductItem-gallery"] img{width:100% !important;height:auto !important;border-radius:14px}
+  [class*="ProductItem-gallery"]{width:100%}
+  /* recortar el vacio gigante bajo el bloque de compra */
+  .ProductItem, [class*="ProductItem"]{min-height:0 !important}
+  section[class*="product"], .page-section.product-section{min-height:0 !important;padding-bottom:36px !important}
+
+  /* ===== CARRITO: layout en 2 columnas alineadas (items | resumen) ===== */
+  div:has(> .cart-container){display:grid !important;grid-template-columns:minmax(0,1.55fr) minmax(360px,1fr);
+    gap:30px;align-items:start;max-width:1180px;margin:0 auto !important;padding:26px 20px 70px;box-sizing:border-box}
+  div:has(> .cart-summary){width:100% !important}
+  .cart-summary{width:100% !important;box-sizing:border-box}
+  .cart-container::before{content:"Tu carrito";display:block;font-family:'Montserrat',system-ui,sans-serif;
+    font-size:26px;font-weight:800;letter-spacing:-.01em;margin:0 0 18px;color:#1a1610}
+  html.dark .cart-container::before{color:#eef3f7}
+  @media(max-width:900px){div:has(> .cart-container){display:block !important}
+    .cart-container::before{font-size:22px}}
+
+  /* ===== CARRITO: estado vacio premium ===== */
   body.rt-cart-empty .rt-cart-hero, body.rt-cart-empty .rt-cart-extra, body.rt-cart-empty .rt-cart-card{display:none !important}
   body.rt-cart-empty .empty-message{display:none !important}
+  body.rt-cart-empty .cart-summary{display:none !important}
+  body.rt-cart-empty div:has(> .cart-container){display:block !important}
+  body.rt-cart-empty .cart-container::before{content:none}
   .rt-ce{max-width:600px;margin:10vh auto 13vh;text-align:center;padding:0 24px;font-family:'Montserrat',system-ui,-apple-system,sans-serif}
   .rt-ce-ico{font-size:56px;line-height:1;margin-bottom:12px}
   .rt-ce h2{font-size:27px;font-weight:800;letter-spacing:-.01em;margin:0 0 10px;color:#191512}
@@ -44,28 +84,23 @@
   `;
 
   function injectCSS(){
-    if(document.getElementById('rt-ui-css'))return;
-    var st=document.createElement('style');st.id='rt-ui-css';st.textContent=CSS;
+    if(document.getElementById('rt-ui-css3'))return;
+    var old=document.getElementById('rt-ui-css'); if(old) old.remove();
+    var st=document.createElement('style');st.id='rt-ui-css3';st.textContent=CSS;
     (document.head||document.documentElement).appendChild(st);
-  }
-
-  function fixFooter(){
-    var links=document.querySelectorAll('.rt-footer a');
-    for(var i=0;i<links.length;i++){var a=links[i];
-      if(a.querySelector('svg,img')) continue;
-      if(a.classList.contains('rt-fblock')) continue;
-      var t=(a.textContent||'').trim();
-      if(!t || t.length>26) continue;
-      a.classList.add('rt-fblock');
-    }
   }
 
   function markTienda(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda')return;
     document.body.classList.add('rt-tienda');
-    var host=document.querySelector('#sections');
+    var host=document.getElementById('rt-paquetes-showcase');
     if(host && !document.getElementById('rt-tienda-bg')){
-      var bg=document.createElement('div');bg.id='rt-tienda-bg';host.insertBefore(bg,host.firstChild);
+      var bg=document.createElement('div');bg.id='rt-tienda-bg';
+      bg.setAttribute('style','position:absolute;inset:0;z-index:0;pointer-events:none;'
+        +'background:url('+IMG+') center 30%/cover no-repeat;opacity:.15;'
+        +'-webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);'
+        +'mask-image:linear-gradient(to bottom,#000 55%,transparent 100%)');
+      host.insertBefore(bg,host.firstChild);
     }
   }
 
@@ -92,8 +127,8 @@
     else { document.body.classList.remove('rt-cart-empty'); }
   }
 
-  function run(){ injectCSS(); fixFooter(); markTienda(); markCart(); }
+  function run(){ injectCSS(); markTienda(); markCart(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
-  [400,1200,2600].forEach(function(d){ setTimeout(run,d); });
+  [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
 })();
