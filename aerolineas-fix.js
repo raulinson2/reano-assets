@@ -77,25 +77,30 @@
     });
     return done;
   }
+  function styleChip(leaf, kind){
+    if(!leaf) return;
+    var apply=function(el){ if(!el||!el.style) return;
+      if(kind==='conti'){ el.style.background='rgba(240,140,0,.16)'; el.style.color='#f08c00'; el.style.borderColor='rgba(240,140,0,.4)'; }
+      else { el.style.background='rgba(65,229,117,.14)'; el.style.color='#2fbf62'; el.style.borderColor='rgba(65,229,117,.4)'; } };
+    leaf.textContent = kind==='conti' ? 'CONTINGENCIA' : 'OPERA';
+    apply(leaf); apply(leaf.parentElement);
+  }
   function moveCard(name, destWord){
     var card=cardByName(name); if(!card) return;
     if(card.getAttribute('data-rtfx')==='moved') return;
     var dest=gridOf(destWord); if(!dest) return;
-    var tpl=dest.querySelector('.rt-card'); if(!tpl) return;
     if(OLD[name] && R[name]) setSummary(card, OLD[name], R[name]);
-    var myChip=chipOf(card), tplChip=chipOf(tpl);
-    if(myChip && tplChip){ var cl=tplChip.cloneNode(true); myChip.parentElement.replaceChild(cl,myChip); }
-    card.style.borderLeftColor = tpl.style.borderLeftColor || '';
+    styleChip(chipOf(card), destWord==='contingencia'?'conti':'opera');
+    card.style.borderLeftColor = destWord==='contingencia' ? 'rgb(240,140,0)' : 'rgb(65,197,118)';
     dest.appendChild(card);
     card.setAttribute('data-rtfx','moved');
   }
   function ensureBluestar(){
-    var exists=null;
-    document.querySelectorAll('.rt-card').forEach(function(c){ if((c.textContent||'').indexOf('Bluestar')===0) exists=c; });
-    if(exists) return;
+    var clones=document.querySelectorAll('[data-rtfx="bluestar"]');
+    for(var j=1;j<clones.length;j++){ clones[j].remove(); }
+    if(clones.length) return;
     var sasca=cardByName('SASCA Airlines'); if(!sasca) return;
     var dest=gridOf('contingencia'); if(!dest) return;
-    var tpl=dest.querySelector('.rt-card');
     var c=sasca.cloneNode(true);
     c.setAttribute('data-rtfx','bluestar');
     var ls=leafs(c.querySelector('.rt-left')||c);
@@ -103,9 +108,8 @@
       if(t.indexOf('SASCA Airlines')===0){ ls[i].textContent='Bluestar'; }
       else if(t.indexOf('Caracas ⇄ Los Roques')!==-1 || t.indexOf('cancelado')!==-1){ ls[i].textContent=R['Bluestar']; } }
     var logo=c.querySelector('.rt-logo'); if(logo){ logo.innerHTML='B'; }
-    var myChip=chipOf(c), tplChip=tpl?chipOf(tpl):null;
-    if(myChip && tplChip){ var cl2=tplChip.cloneNode(true); myChip.parentElement.replaceChild(cl2,myChip); }
-    if(tpl) c.style.borderLeftColor=tpl.style.borderLeftColor||'';
+    styleChip(chipOf(c),'conti');
+    c.style.borderLeftColor='rgb(240,140,0)';
     dest.insertBefore(c, dest.firstChild);
   }
   function updateSummaries(){
@@ -131,8 +135,9 @@
   var lastName='';
   document.addEventListener('click', function(e){
     var c=e.target && e.target.closest ? e.target.closest('.rt-card') : null;
-    if(c){ var t=(c.textContent||'').trim(); lastName=''; Object.keys(DET).forEach(function(k){ if(t.indexOf(k)===0) lastName=k; });
-      if(!lastName && t.indexOf('Bluestar')===0) lastName='Bluestar';
+    if(c){ var t=(c.textContent||'').trim(); lastName='';
+      if(c.getAttribute('data-rtfx')==='bluestar'){ lastName='Bluestar'; }
+      else { Object.keys(DET).forEach(function(k){ if(t.indexOf(k)===0) lastName=k; }); }
       setTimeout(fixModal, 90); setTimeout(fixModal, 300); }
   }, true);
   function fixModal(){
