@@ -61,13 +61,18 @@
     return res;
   }
   function chipOf(card){
-    var chip=null;
     if(!card) return null;
-    leafs(card.querySelector('.rt-right')||card).forEach(function(l){
-      var t=(l.textContent||'').trim();
-      if(!chip && t.length>2 && t.length<22 && t===t.toUpperCase() && /[A-ZÁÉÍÓÚ]/.test(t)) chip=l;
-    });
+    var right=card.querySelector('.rt-right')||card, chip=null;
+    var els=right.querySelectorAll('*');
+    for(var i=0;i<els.length;i++){ var t=(els[i].textContent||'').trim();
+      if(t.length>2 && t.length<24 && /^(SUSPENDIDA|SUSPENDIDO|CANCELADA|CANCELADO|OPERA|CONTINGENCIA|FLEX)/.test(t)) chip=els[i]; }
     return chip;
+  }
+  function setNodeText(el, txt){
+    var done=false;
+    for(var i=0;i<el.childNodes.length;i++){ var n=el.childNodes[i];
+      if(n.nodeType===3 && (n.nodeValue||'').trim().length>2){ n.nodeValue=txt; done=true; } }
+    if(!done) el.textContent=txt;
   }
   function setSummary(card, oldSnip, txt){
     var done=false;
@@ -77,13 +82,13 @@
     });
     return done;
   }
-  function styleChip(leaf, kind){
-    if(!leaf) return;
+  function styleChip(chip, kind){
+    if(!chip) return;
     var apply=function(el){ if(!el||!el.style) return;
       if(kind==='conti'){ el.style.background='rgba(240,140,0,.16)'; el.style.color='#f08c00'; el.style.borderColor='rgba(240,140,0,.4)'; }
       else { el.style.background='rgba(65,229,117,.14)'; el.style.color='#2fbf62'; el.style.borderColor='rgba(65,229,117,.4)'; } };
-    leaf.textContent = kind==='conti' ? 'CONTINGENCIA' : 'OPERA';
-    apply(leaf); apply(leaf.parentElement);
+    setNodeText(chip, kind==='conti' ? 'CONTINGENCIA' : 'OPERA');
+    apply(chip);
   }
   function moveCard(name, destWord){
     var card=cardByName(name); if(!card) return;
@@ -147,12 +152,17 @@
     var card=document.getElementById('rt-m-card'); if(!card) return;
     var head=card.querySelector('.rt-m-head');
     var CONTI={'Aerocaribe':1,'Estelar (nac.)':1,'Avior (nac.)':1,'Bluestar':1};
-    if(head){ leafs(head).forEach(function(l){ var t=(l.textContent||'').trim();
-      if(t==='SASCA Airlines' && lastName==='Bluestar') l.textContent='Bluestar';
-      if(/^(SUSPENDIDA|SUSPENDIDO|CANCELADA|CANCELADO)S?$/.test(t)){
-        if(CONTI[lastName]){ l.textContent='CONTINGENCIA'; l.style.background='rgba(240,140,0,.16)'; l.style.color='#f08c00'; l.style.borderColor='rgba(240,140,0,.4)'; }
-        else if(lastName==='TAP Air Portugal'){ l.textContent='OPERA'; l.style.background='rgba(65,229,117,.14)'; l.style.color='#2fbf62'; l.style.borderColor='rgba(65,229,117,.4)'; }
-      } }); }
+    if(head){
+      var tEl=null, cEl=null, hs=head.querySelectorAll('*');
+      for(var i=0;i<hs.length;i++){ var t=(hs[i].textContent||'').trim();
+        if(t==='SASCA Airlines') tEl=hs[i];
+        if(t.length>2 && t.length<24 && /^(SUSPENDIDA|SUSPENDIDO|CANCELADA|CANCELADO)/.test(t)) cEl=hs[i]; }
+      if(tEl && lastName==='Bluestar') setNodeText(tEl,'Bluestar');
+      if(cEl){
+        if(CONTI[lastName]) styleChip(cEl,'conti');
+        else if(lastName==='TAP Air Portugal') styleChip(cEl,'opera');
+      }
+    }
     var route=card.querySelector('.rt-m-route');
     if(route && R[lastName]) route.textContent=R[lastName];
     var ul=card.querySelector('.rt-m-list');
