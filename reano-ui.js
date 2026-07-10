@@ -107,6 +107,78 @@
   .rt-ce-b2{background:transparent;color:#191512;border:1px solid rgba(0,0,0,.16)}
   html.dark .rt-ce-b2{color:#eef3f7;border-color:rgba(255,255,255,.2)}
   .rt-ce-b2:hover{border-color:#FF8C03;color:#FF8C03}
+
+  /* ===== PRODUCTO: fondo blur del propio articulo + tema ===== */
+  body.rt-pp #sections, body.rt-pp .product-detail, body.rt-pp main{position:relative;z-index:2}
+  #rt-pblur{position:fixed;inset:-48px;z-index:0;pointer-events:none;background-position:center;background-size:cover;
+    filter:blur(46px) saturate(1.12);opacity:.38;transform:translateZ(0)}
+  #rt-pblur-scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(10,10,12,.6),rgba(10,10,12,.86))}
+  html:not(.dark) #rt-pblur{opacity:.3}
+  html:not(.dark) #rt-pblur-scrim{background:linear-gradient(180deg,rgba(252,249,245,.8),rgba(252,249,245,.93))}
+  /* etiqueta "Seccion:" y variantes con contraste en ambos temas */
+  body.rt-pp .product-detail label, body.rt-pp [class*="variant"] label{color:#6b645c !important}
+  html.dark body.rt-pp .product-detail label, html.dark body.rt-pp [class*="variant"] label{color:#a6adb6 !important}
+
+  /* ===== TIENDA: card destacada "Reserva con 50%" ===== */
+  .rt-fifty{max-width:880px;margin:30px auto;padding:36px 30px;border-radius:22px;text-align:center;position:relative;z-index:2;
+    background:linear-gradient(145deg,rgba(255,140,3,.12),rgba(255,140,3,.04));
+    border:1px solid rgba(255,140,3,.35);box-shadow:0 24px 50px -30px rgba(255,140,3,.45);
+    font-family:'Montserrat',system-ui,sans-serif}
+  .rt-fifty-ico{font-size:34px;margin-bottom:8px}
+  .rt-fifty h3{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:#1a1610}
+  html.dark .rt-fifty h3{color:#eef3f7}
+  .rt-fifty p{font-size:14.5px;color:#6b645c;margin:0 auto 20px;max-width:540px;line-height:1.6}
+  html.dark .rt-fifty p{color:#9aa6b2}
+  .rt-fifty-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .rt-fifty-pp{display:inline-flex;align-items:center;gap:8px;background:#ffc439;color:#111;font-weight:800;font-size:14px;
+    padding:12px 22px;border-radius:999px;text-decoration:none}
+  .rt-fifty-wa{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#25D366,#1ebe5a);color:#fff;
+    font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;text-decoration:none}
+  .rt-fifty-pp:hover,.rt-fifty-wa:hover{filter:brightness(1.06)}
+  .rt-fifty-fine{margin-top:14px;font-size:12px;color:#8b929c}
+
+  /* ===== CARRITO premium ===== */
+  .cart-row{background:rgba(128,128,128,.05);border:1px solid rgba(128,128,128,.16);border-radius:16px;
+    padding:14px !important;margin-bottom:12px}
+  .cart-row img{border-radius:12px}
+  .cart-summary{border:1px solid rgba(255,140,3,.3) !important;border-radius:18px !important;padding:22px !important}
+  .cart-summary::before{content:"Resumen del pedido";display:block;font-family:'Montserrat',system-ui,sans-serif;
+    font-weight:800;font-size:16px;margin-bottom:12px;color:#1a1610}
+  html.dark .cart-summary::before{color:#eef3f7}
+
+  /* ===== FORMULARIO DE PASAJERO (CRM-ready) ===== */
+  .rt-pax{margin-top:22px;border:1px solid rgba(128,128,128,.2);border-radius:18px;overflow:hidden;
+    background:rgba(128,128,128,.04);font-family:'Montserrat',system-ui,sans-serif}
+  .rt-pax-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;
+    background:transparent;border:0;cursor:pointer;font-family:inherit;font-weight:800;font-size:15px;color:#1a1610;text-align:left}
+  html.dark .rt-pax-head{color:#eef3f7}
+  .rt-pax-head small{font-weight:700;font-size:11px;color:#FF8C03;letter-spacing:.07em;text-transform:uppercase}
+  .rt-pax-chev{transition:transform .2s;flex-shrink:0}
+  .rt-pax.open .rt-pax-chev{transform:rotate(180deg)}
+  .rt-pax-body{display:none;padding:4px 18px 20px}
+  .rt-pax.open .rt-pax-body{display:block}
+  .rt-pax-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:700px){.rt-pax-grid{grid-template-columns:1fr}}
+  .rt-f{display:flex;flex-direction:column;gap:5px}
+  .rt-f.full{grid-column:1 / -1}
+  .rt-f label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b645c}
+  html.dark .rt-f label{color:#9aa6b2}
+  .rt-f input,.rt-f select,.rt-f textarea{padding:11px 12px;border-radius:10px;border:1px solid rgba(128,128,128,.28);
+    background:rgba(255,255,255,.8);color:#1a1610;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s;width:100%;box-sizing:border-box}
+  html.dark .rt-f input,html.dark .rt-f select,html.dark .rt-f textarea{background:rgba(255,255,255,.06);color:#eef3f7}
+  .rt-f input:focus,.rt-f select:focus,.rt-f textarea:focus{border-color:#FF8C03}
+  .rt-f.err input,.rt-f.err select{border-color:#e5484d !important}
+  .rt-tel{display:grid;grid-template-columns:140px 1fr;gap:8px}
+  .rt-radio{display:flex;gap:20px;align-items:center;padding-top:6px}
+  .rt-radio label{display:flex;gap:7px;align-items:center;font-size:14px;text-transform:none;letter-spacing:0;font-weight:600}
+  .rt-pax-submit{margin-top:16px;width:100%;padding:14px;border:0;border-radius:999px;cursor:pointer;font-family:inherit;
+    font-weight:800;font-size:14px;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#FF8C03,#E67A00);
+    box-shadow:0 10px 24px -10px rgba(255,140,3,.6)}
+  .rt-pax-submit:hover{filter:brightness(1.06)}
+  .rt-pax-ok{display:none;margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(65,229,117,.12);
+    border:1px solid rgba(65,229,117,.4);color:#2fbf62;font-weight:700;font-size:13.5px}
+  .rt-pax-note{margin-top:10px;font-size:11.5px;color:#8b929c;text-align:center}
   `;
 
   function injectCSS(){
@@ -189,7 +261,149 @@
     }
   }
 
-  function run(){ injectCSS(); markTienda(); markCart(); headerControls(); aliadosYummy(); }
+  // ===== PRODUCTO: fondo blur del propio articulo + galeria fallback + bloques muertos =====
+  var PIMG = {
+    'canaima': 'https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/canaima.jpg',
+    'los-roques': 'https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/losroques.jpg',
+    'margarita': 'https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/margarita.jpg'
+  };
+  function productPage(){
+    if(!/^\/tienda\/p\//.test(location.pathname)) return;
+    document.body.classList.add('rt-pp');
+    var gi=document.querySelector('.product-gallery img');
+    var src=(gi&&gi.src)?gi.src:'';
+    if(!src){ for(var k in PIMG){ if(location.pathname.indexOf(k)!==-1){ src=PIMG[k]; break; } } }
+    if(src && !document.getElementById('rt-pblur')){
+      var b=document.createElement('div'); b.id='rt-pblur'; b.style.backgroundImage='url("'+src+'")'; document.body.appendChild(b);
+      var s=document.createElement('div'); s.id='rt-pblur-scrim'; document.body.appendChild(s);
+    }
+    // paquetes de Venezuela sin foto de producto: colocar la foto del destino en la galeria
+    if(!gi && src){
+      var slides=document.querySelector('.product-gallery-slides');
+      if(slides && !slides.querySelector('img')){
+        var im=document.createElement('img'); im.src=src; im.alt=document.title;
+        im.style.cssText='width:100%;height:auto;border-radius:16px;display:block;box-shadow:0 22px 44px -20px rgba(0,0,0,.45)';
+        slides.appendChild(im);
+      }
+    }
+    // limpiar el bloque vacio de otra tonalidad al final de la vista (codigo muerto)
+    document.querySelectorAll('section, .page-section').forEach(function(sec){
+      if(sec.querySelector('.product-detail, img, form, .rt-paq, input, iframe')) return;
+      if((sec.textContent||'').trim()===''){ sec.style.setProperty('display','none','important'); }
+    });
+  }
+
+  // ===== TIENDA: seccion "Reserva con 50%" -> card destacada independiente =====
+  function fiftyCard(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda') return;
+    if(document.getElementById('rt-fifty')) return;
+    var h=null; document.querySelectorAll('h1,h2,h3').forEach(function(x){ if(!h && /Reserva con 50/i.test(x.textContent||'')) h=x; });
+    if(!h) return;
+    var sec=h.closest('section')||h.closest('.page-section')||h.parentElement;
+    var card=document.createElement('div'); card.id='rt-fifty'; card.className='rt-fifty';
+    card.innerHTML='<div class="rt-fifty-ico">🛡️</div>'
+      +'<h3>Reserva con 50% de inicial</h3>'
+      +'<p>Asegura tu cupo hoy con la mitad del valor y paga el resto antes de viajar. Sin intereses y con acompañamiento total de tu asesor Reaño.</p>'
+      +'<div class="rt-fifty-btns">'
+      +'<a class="rt-fifty-pp" href="/cart">💳 Pago seguro vía PayPal</a>'
+      +'<a class="rt-fifty-wa" target="_blank" rel="noopener" href="'+WA+'">💬 Cotizar por WhatsApp</a>'
+      +'</div>'
+      +'<div class="rt-fifty-fine">PayPal · Tarjeta · Zelle · Binance — coordina cuotas o abonos con tu asesor</div>';
+    sec.parentElement.insertBefore(card, sec);
+    sec.style.setProperty('display','none','important');
+  }
+
+  // ===== CARRITO: formulario de pasajero (obligatorio para emitir) — CRM-ready =====
+  // Para conectar el CRM: definir window.RT_CRM_ENDPOINT = 'https://...' antes de este script.
+  function paxForm(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/cart') return;
+    if(document.body.classList.contains('rt-cart-empty')) return;
+    if(document.getElementById('rt-pax')) return;
+    var host=document.querySelector('.cart-container'); if(!host) return;
+    function f(id,label,type,extra){ return '<div class="rt-f" id="rtf-'+id+'"><label for="rtp-'+id+'">'+label+'</label>'
+      +'<input id="rtp-'+id+'" type="'+(type||'text')+'" '+(extra||'')+'></div>'; }
+    var d=document.createElement('div'); d.id='rt-pax'; d.className='rt-pax open';
+    d.innerHTML=
+      '<button type="button" class="rt-pax-head" id="rt-pax-toggle">'
+      +'<span>🧾 Datos del pasajero <small>· obligatorio para emitir</small></span>'
+      +'<svg class="rt-pax-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>'
+      +'</button>'
+      +'<div class="rt-pax-body"><div class="rt-pax-grid">'
+      + f('nombre','Nombre y apellido completo','text','autocomplete="name"')
+      + '<div class="rt-f" id="rtf-tel"><label for="rtp-tel">Teléfono</label><div class="rt-tel">'
+      + '<select id="rtp-telcode"><option value="+58">🇻🇪 +58</option><option value="+57">🇨🇴 +57</option><option value="+1">🇺🇸 +1</option>'
+      + '<option value="+34">🇪🇸 +34</option><option value="+351">🇵🇹 +351</option><option value="+39">🇮🇹 +39</option><option value="+56">🇨🇱 +56</option>'
+      + '<option value="+51">🇵🇪 +51</option><option value="+54">🇦🇷 +54</option><option value="+507">🇵🇦 +507</option><option value="+52">🇲🇽 +52</option>'
+      + '<option value="+55">🇧🇷 +55</option><option value="otro">Otro</option></select>'
+      + '<input id="rtp-tel" type="tel" inputmode="tel" autocomplete="tel-national"></div></div>'
+      + f('email','Correo electrónico','email','autocomplete="email"')
+      + f('direccion','Dirección completa','text','autocomplete="street-address"')
+      + f('cp','Código postal','text','inputmode="numeric" autocomplete="postal-code"')
+      + f('pais','País','text','autocomplete="country-name"')
+      + f('ciudad','Ciudad','text','autocomplete="address-level2"')
+      + '<div class="rt-f" id="rtf-tipodoc"><label for="rtp-tipodoc">Tipo de documento</label>'
+      + '<select id="rtp-tipodoc"><option value="">Selecciona…</option><option>Pasaporte</option><option>DNI</option>'
+      + '<option>Cédula de Identidad</option><option>National ID</option></select></div>'
+      + f('numdoc','Número de documento oficial','text','')
+      + '<div class="rt-f" id="rtf-menores"><label>¿Viaja con menores?</label><div class="rt-radio">'
+      + '<label><input type="radio" name="rtp-menores" value="Sí"> Sí</label>'
+      + '<label><input type="radio" name="rtp-menores" value="No" checked> No</label></div></div>'
+      + '<div class="rt-f full" id="rtf-notas"><label for="rtp-notas">Notas o datos resaltantes (opcional)</label>'
+      + '<textarea id="rtp-notas" rows="3" placeholder="Alergias, asistencia especial, fechas preferidas…"></textarea></div>'
+      + '</div>'
+      + '<button type="button" class="rt-pax-submit" id="rt-pax-send">Guardar datos del pasajero</button>'
+      + '<div class="rt-pax-ok" id="rt-pax-ok">✓ Datos guardados. Continúa con el pago — tu asesor ya los tendrá al emitir.</div>'
+      + '<div class="rt-pax-note">Tus datos se usan solo para emitir tu paquete y se envían de forma segura.</div>'
+      + '</div>';
+    host.appendChild(d);
+    document.getElementById('rt-pax-toggle').addEventListener('click',function(){ d.classList.toggle('open'); });
+    document.getElementById('rt-pax-send').addEventListener('click',paxSubmit);
+  }
+  function paxSubmit(){
+    var val=function(id){ var e=document.getElementById('rtp-'+id); return e?(e.value||'').trim():''; };
+    var req=['nombre','tel','email','direccion','cp','pais','ciudad','tipodoc','numdoc'];
+    var ok=true;
+    req.forEach(function(id){
+      var wrap=document.getElementById('rtf-'+(id==='tel'?'tel':id))||document.getElementById('rtf-'+id);
+      var filled=val(id)!=='';
+      if(wrap) wrap.classList.toggle('err', !filled);
+      if(!filled) ok=false;
+    });
+    if(!ok) return;
+    var menores='No'; document.querySelectorAll('input[name="rtp-menores"]').forEach(function(r){ if(r.checked) menores=r.value; });
+    var items=[]; document.querySelectorAll('.cart-row').forEach(function(r){
+      var price=(r.querySelector('.cart-row-price')||{}).textContent||'';
+      items.push({item:(r.textContent||'').trim().slice(0,70), precio:price.trim()});
+    });
+    var subtotal=''; document.querySelectorAll('.cart-summary *').forEach(function(e){ var t=(e.textContent||'').trim(); if(/^US\$/.test(t)) subtotal=t; });
+    var payload={
+      fuente:'reanotravel.com/cart', fecha:new Date().toISOString(),
+      pasajero:{
+        nombre:val('nombre'), telefono:(document.getElementById('rtp-telcode')||{}).value+' '+val('tel'),
+        email:val('email'), direccion:val('direccion'), codigoPostal:val('cp'),
+        pais:val('pais'), ciudad:val('ciudad'),
+        tipoDocumento:val('tipodoc'), numeroDocumento:val('numdoc'),
+        viajaConMenores:menores, notas:val('notas')
+      },
+      carrito:items, subtotal:subtotal
+    };
+    try{ var q=JSON.parse(localStorage.getItem('rt-crm-queue')||'[]'); q.push(payload); localStorage.setItem('rt-crm-queue', JSON.stringify(q)); }catch(e){}
+    if(window.RT_CRM_ENDPOINT){
+      try{ fetch(window.RT_CRM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){}); }catch(e){}
+    }
+    var okBox=document.getElementById('rt-pax-ok'); if(okBox) okBox.style.display='block';
+    var msg='🧾 *Datos del pasajero — Reaño Travels*%0A'
+      +'Nombre: '+encodeURIComponent(payload.pasajero.nombre)+'%0A'
+      +'Tel: '+encodeURIComponent(payload.pasajero.telefono)+'%0A'
+      +'Email: '+encodeURIComponent(payload.pasajero.email)+'%0A'
+      +'Doc: '+encodeURIComponent(payload.pasajero.tipoDocumento+' '+payload.pasajero.numeroDocumento)+'%0A'
+      +'Menores: '+payload.pasajero.viajaConMenores+'%0A'
+      +'Carrito: '+encodeURIComponent(items.map(function(i){return i.item.slice(0,30);}).join(' | '))+'%0A'
+      +(payload.pasajero.notas?('Notas: '+encodeURIComponent(payload.pasajero.notas)):'');
+    window.open('https://wa.me/584247309699?text='+msg,'_blank');
+  }
+
+  function run(){ injectCSS(); markTienda(); markCart(); headerControls(); aliadosYummy(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
