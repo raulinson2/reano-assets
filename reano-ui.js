@@ -14,6 +14,16 @@
   .rt-nav a[href="/"]:not(:has(img)):not(:has(svg)),
   header.fixed a[href="/"]:not(:has(img)):not(:has(svg)){display:none !important}
   .rt-nav a[href="/servicios"], header.fixed a[href="/servicios"]{display:none !important}
+  /* TERCER header (nav fijo tailwind que traen las paginas internas): mismo declutter */
+  nav.fixed a[href="/"]:not(:has(img)):not(:has(svg)),
+  nav.fixed a[href$="reanotravel.com"]:not(:has(img)):not(:has(svg)),
+  nav.fixed a[href$="reanotravel.com/"]:not(:has(img)):not(:has(svg)),
+  nav.fixed a[href="/servicios"], nav.fixed a[href$="/servicios"], nav.fixed a[href$="/servicios/"]{display:none !important}
+  /* que el CTA nunca se parta en dos lineas y que los controles respiren */
+  nav.fixed .btn-primary{white-space:nowrap}
+  nav.fixed .gap-3{gap:14px !important}
+  nav.fixed .gap-6{gap:22px}
+  .rt-nav a[href$="/servicios"], header.fixed a[href$="/servicios"]{display:none !important}
   /* CTA del header unificado al naranja de marca en TODAS las pestanas */
   .rt-nav-cta{background:linear-gradient(135deg,#FF8C03,#E67A00) !important;color:#fff !important;
     border:none !important;text-transform:uppercase;font-weight:700 !important;letter-spacing:.05em;
