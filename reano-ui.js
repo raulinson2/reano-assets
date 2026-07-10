@@ -124,9 +124,11 @@
   function markCart(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/cart')return;
     var rows=document.querySelectorAll('.cart-row, .cart-item, [data-cart-row]');
-    var emptyMsg=/no tienes nada|carrito.*vac|your cart is empty/i.test(document.body.innerText);
-    if(rows.length===0 || emptyMsg){ document.body.classList.add('rt-cart-empty'); buildEmptyCart(); }
-    else { document.body.classList.remove('rt-cart-empty'); }
+    if(rows.length===0){ document.body.classList.add('rt-cart-empty'); buildEmptyCart(); }
+    else {
+      document.body.classList.remove('rt-cart-empty');
+      var b=document.getElementById('rt-cart-empty-box'); if(b) b.remove();
+    }
   }
 
   function run(){ injectCSS(); markTienda(); markCart(); }
