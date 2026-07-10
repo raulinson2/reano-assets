@@ -64,8 +64,9 @@
   div:has(> .cart-container) > div:has(> .cart-summary){grid-column:2;grid-row:1 / span 8;width:100% !important}
   .cart-row{align-items:center;width:100% !important;max-width:100% !important;position:relative;box-sizing:border-box}
   .cart-row > *{min-width:0}
-  /* el precio traia un ancho fijo de 512px que desbordaba la tarjeta */
-  .cart-row-price{width:auto !important;flex:0 0 auto !important;margin-left:auto !important;text-align:right;white-space:nowrap}
+  /* el precio traia un min-width de 512px que desbordaba la tarjeta */
+  .cart-row > .cart-row-price, .cart-row-price{min-width:0 !important;width:auto !important;
+    flex:0 0 auto !important;margin-left:auto !important;text-align:right;white-space:nowrap}
   .cart-container{min-width:0;width:100% !important}
   .cart-summary{width:100% !important;box-sizing:border-box}
   .cart-container::before{content:"Tu carrito";display:block;font-family:'Montserrat',system-ui,sans-serif;
