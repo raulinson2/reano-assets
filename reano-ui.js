@@ -58,8 +58,12 @@
   .rt-cart-hero, .rt-cart-extra, .rt-cart-card{display:none !important}
   div:has(> .cart-container){display:grid !important;grid-template-columns:minmax(0,1.55fr) minmax(360px,1fr);
     gap:30px;align-items:start;max-width:1180px;margin:0 auto !important;padding:26px 20px 70px;box-sizing:border-box}
-  .cart-row{align-items:center}
-  div:has(> .cart-summary){width:100% !important}
+  /* colocacion explicita: items a la izquierda, resumen a la derecha */
+  div:has(> .cart-container) > *{grid-column:1;min-width:0}
+  div:has(> .cart-container) > .cart-container{grid-column:1;grid-row:1}
+  div:has(> .cart-container) > div:has(> .cart-summary){grid-column:2;grid-row:1 / span 8;width:100% !important}
+  .cart-row{align-items:center;width:100% !important;max-width:100% !important;position:relative;box-sizing:border-box}
+  .cart-container{min-width:0;width:100% !important}
   .cart-summary{width:100% !important;box-sizing:border-box}
   .cart-container::before{content:"Tu carrito";display:block;font-family:'Montserrat',system-ui,sans-serif;
     font-size:26px;font-weight:800;letter-spacing:-.01em;margin:0 0 18px;color:#1a1610}
