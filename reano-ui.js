@@ -60,8 +60,8 @@
   /* galeria: colapsar el alto reservado vacio y pulir la imagen */
   .product-gallery, .product-gallery-slides{height:auto !important;min-height:0 !important}
   .product-gallery-slides-item{position:relative !important}
-  .product-gallery-slides-item-image{width:100% !important;height:auto !important;border-radius:16px;
-    box-shadow:0 22px 44px -20px rgba(0,0,0,.45)}
+  .product-gallery-slides-item-image, .product-gallery-slides img{width:100% !important;height:auto !important;
+    border-radius:16px;box-shadow:0 22px 44px -20px rgba(0,0,0,.45)}
   /* recortar el vacio bajo el bloque de compra */
   .product-detail{min-height:0 !important;padding-bottom:34px !important}
   .product-detail .content{min-height:0 !important}
@@ -199,20 +199,17 @@
     }
   }
 
-  // Header: distribuir controles (toggle de tema separado, al final) sin reconstruir nada
-  function headerControls(){
-    var cart=document.querySelector('header a[href="/cart"], .rt-nav a[href="/cart"], a.rt-cart-link');
-    if(!cart) return;
-    var cluster=cart.parentElement; if(!cluster) return;
-    var cs=getComputedStyle(cluster);
-    if(cs.display.indexOf('flex')===-1){ cluster.style.display='flex'; cluster.style.alignItems='center'; }
-    cluster.style.gap='14px';
-    var toggle=null;
-    cluster.querySelectorAll('button').forEach(function(b){ if(!toggle && b.querySelector('svg') && !(b.textContent||'').trim()) toggle=b; });
-    if(toggle){ toggle.style.order='99'; toggle.style.marginLeft='6px'; }
-    cart.style.order='40';
-    var cta=cluster.querySelector('.rt-nav-cta, a[href*="wa.me"]');
-    if(cta){ cta.style.order='50'; }
+  // Con el SHELL activo, los componentes legacy deben quedar ocultos SIEMPRE.
+  // Un stylesheet del builder legacy los revive saltándose el CSS de la inyección,
+  // así que se rematan con estilo inline !important (gana a cualquier cascada).
+  function hideLegacyShell(){
+    if(!document.documentElement.classList.contains('rt-shell-on')) return;
+    if(!document.getElementById('rt2-header')) return; // el shell aún no montó: no ocultar nada
+    ['.rt-nav','header.fixed','nav.fixed','footer.rea-stuck','.rt-footer'].forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        if(el.style.getPropertyValue('display')!=='none') el.style.setProperty('display','none','important');
+      });
+    });
   }
 
   // Nosotros: agregar Yummy Corporate y Yummy Rides a Certificaciones & Aliados
@@ -403,7 +400,7 @@
     window.open('https://wa.me/584247309699?text='+msg,'_blank');
   }
 
-  function run(){ injectCSS(); markTienda(); markCart(); headerControls(); aliadosYummy(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
