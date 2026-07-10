@@ -62,10 +62,11 @@
   }
   function chipOf(card){
     if(!card) return null;
-    var right=card.querySelector('.rt-right')||card, chip=null;
-    var els=right.querySelectorAll('*');
+    var right=card.querySelector('.rt-right')||card;
+    var pill=right.querySelector('.rt-pill'); if(pill) return pill;
+    var els=right.querySelectorAll('*'), chip=null;
     for(var i=0;i<els.length;i++){ var t=(els[i].textContent||'').trim();
-      if(t.length>2 && t.length<24 && /^(SUSPENDIDA|SUSPENDIDO|CANCELADA|CANCELADO|OPERA|CONTINGENCIA|FLEX)/.test(t)) chip=els[i]; }
+      if(t.length>2 && t.length<24 && /^(suspendid|cancelad|opera|contingencia|flex)/i.test(t)) chip=els[i]; }
     return chip;
   }
   function setNodeText(el, txt){
@@ -87,7 +88,7 @@
     var apply=function(el){ if(!el||!el.style) return;
       if(kind==='conti'){ el.style.background='rgba(240,140,0,.16)'; el.style.color='#f08c00'; el.style.borderColor='rgba(240,140,0,.4)'; }
       else { el.style.background='rgba(65,229,117,.14)'; el.style.color='#2fbf62'; el.style.borderColor='rgba(65,229,117,.4)'; } };
-    setNodeText(chip, kind==='conti' ? 'CONTINGENCIA' : 'OPERA');
+    setNodeText(chip, kind==='conti' ? 'Contingencia' : 'Opera');
     apply(chip);
   }
   function moveCard(name, destWord){
@@ -153,10 +154,10 @@
     var head=card.querySelector('.rt-m-head');
     var CONTI={'Aerocaribe':1,'Estelar (nac.)':1,'Avior (nac.)':1,'Bluestar':1};
     if(head){
-      var tEl=null, cEl=null, hs=head.querySelectorAll('*');
+      var tEl=null, cEl=head.querySelector('.rt-pill'), hs=head.querySelectorAll('*');
       for(var i=0;i<hs.length;i++){ var t=(hs[i].textContent||'').trim();
         if(t==='SASCA Airlines') tEl=hs[i];
-        if(t.length>2 && t.length<24 && /^(SUSPENDIDA|SUSPENDIDO|CANCELADA|CANCELADO)/.test(t)) cEl=hs[i]; }
+        if(!cEl && t.length>2 && t.length<24 && /^(suspendid|cancelad)/i.test(t)) cEl=hs[i]; }
       if(tEl && lastName==='Bluestar') setNodeText(tEl,'Bluestar');
       if(cEl){
         if(CONTI[lastName]) styleChip(cEl,'conti');
