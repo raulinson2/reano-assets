@@ -36,10 +36,13 @@
   .rt-footer .rt-soc-link:hover, footer.rea-stuck .rt-soc-link:hover{color:#FF8C03 !important}
   .rt-footer > div:last-child, footer.rea-stuck > div:last-child{color:#7d838d !important}
 
-  /* ===== TIENDA: fondo fotografico sutil detras del showcase ===== */
-  #rt-paquetes-showcase{position:relative}
-  #rt-paquetes-showcase > *:not(#rt-tienda-bg){position:relative;z-index:1}
-  html:not(.dark) #rt-tienda-bg{opacity:.20 !important}
+  /* ===== TIENDA: fondo fotografico infinito (fixed a toda la pagina) ===== */
+  #rt-tienda-bg::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(12,12,14,.68),rgba(12,12,14,.84))}
+  html:not(.dark) #rt-tienda-bg::after{background:linear-gradient(180deg,rgba(255,252,248,.78),rgba(255,252,248,.9))}
+  body.rt-tienda #sections{position:relative;z-index:1}
+  body.rt-tienda .page-section{background:transparent !important}
+  body.rt-tienda footer{position:relative;z-index:1}
 
   /* ===== PRODUCTO: breadcrumb legible en oscuro ===== */
   html.dark [class*="readcrumb"], html.dark [class*="readcrumb"] a,
@@ -106,15 +109,49 @@
   function markTienda(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda')return;
     document.body.classList.add('rt-tienda');
-    var host=document.getElementById('rt-paquetes-showcase');
-    if(host && !document.getElementById('rt-tienda-bg')){
+    if(!document.getElementById('rt-tienda-bg')){
       var bg=document.createElement('div');bg.id='rt-tienda-bg';
-      bg.setAttribute('style','position:absolute;inset:0;z-index:0;pointer-events:none;'
-        +'background:url('+IMG+') center 30%/cover no-repeat;opacity:.15;'
-        +'-webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);'
-        +'mask-image:linear-gradient(to bottom,#000 55%,transparent 100%)');
-      host.insertBefore(bg,host.firstChild);
+      bg.setAttribute('style','position:fixed;inset:0;z-index:0;pointer-events:none;'
+        +'background:url('+IMG+') center/cover no-repeat');
+      document.body.appendChild(bg);
     }
+  }
+
+  // Header: distribuir controles (toggle de tema separado, al final) sin reconstruir nada
+  function headerControls(){
+    var cart=document.querySelector('header a[href="/cart"], .rt-nav a[href="/cart"], a.rt-cart-link');
+    if(!cart) return;
+    var cluster=cart.parentElement; if(!cluster) return;
+    var cs=getComputedStyle(cluster);
+    if(cs.display.indexOf('flex')===-1){ cluster.style.display='flex'; cluster.style.alignItems='center'; }
+    cluster.style.gap='14px';
+    var toggle=null;
+    cluster.querySelectorAll('button').forEach(function(b){ if(!toggle && b.querySelector('svg') && !(b.textContent||'').trim()) toggle=b; });
+    if(toggle){ toggle.style.order='99'; toggle.style.marginLeft='6px'; }
+    cart.style.order='40';
+    var cta=cluster.querySelector('.rt-nav-cta, a[href*="wa.me"]');
+    if(cta){ cta.style.order='50'; }
+  }
+
+  // Nosotros: agregar Yummy Corporate y Yummy Rides a Certificaciones & Aliados
+  function aliadosYummy(){
+    if(location.pathname.indexOf('/nosotros')!==0) return;
+    if(document.getElementById('rt-yummy-corp')) return;
+    var grid=document.querySelector('.cert-grid'); if(!grid) return;
+    var tpl=grid.querySelector('.cert'); if(!tpl) return;
+    function leafs(el){ var out=[]; (function w(e){ if(!e.children||e.children.length===0){ out.push(e); return; } for(var i=0;i<e.children.length;i++) w(e.children[i]); })(el); return out; }
+    function mk(id,src,title,sub){
+      var c=tpl.cloneNode(true); c.id=id;
+      var im=c.querySelector('img');
+      if(im){ im.src=src; im.alt=title; im.removeAttribute('srcset'); im.style.objectFit='contain'; im.style.background='#fff'; im.style.borderRadius='10px'; im.style.padding='3px'; }
+      var ls=leafs(c).filter(function(l){ return l.tagName!=='IMG' && (l.textContent||'').trim().length>0; });
+      if(ls[0]) ls[0].textContent=title;
+      if(ls[1]) ls[1].textContent=sub;
+      for(var i=2;i<ls.length;i++){ ls[i].textContent=''; }
+      return c;
+    }
+    grid.appendChild(mk('rt-yummy-corp','https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/yummy-logo.png','Yummy Corporate','Alianza de traslados corporativos'));
+    grid.appendChild(mk('rt-yummy-rides','https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/yummy-rides-logo.png','Yummy Rides','Traslados para tus viajes'));
   }
 
   function buildEmptyCart(){
@@ -142,7 +179,7 @@
     }
   }
 
-  function run(){ injectCSS(); markTienda(); markCart(); }
+  function run(){ injectCSS(); markTienda(); markCart(); headerControls(); aliadosYummy(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
