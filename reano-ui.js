@@ -205,10 +205,18 @@
   function hideLegacyShell(){
     if(!document.documentElement.classList.contains('rt-shell-on')) return;
     if(!document.getElementById('rt2-header')) return; // el shell aún no montó: no ocultar nada
-    ['.rt-nav','header.fixed','nav.fixed','footer.rea-stuck','.rt-footer'].forEach(function(sel){
+    ['.rt-nav','header.fixed','nav.fixed','footer.rea-stuck','.rt-footer','footer.w-full','footer.border-t'].forEach(function(sel){
       document.querySelectorAll(sel).forEach(function(el){
         if(el.style.getPropertyValue('display')!=='none') el.style.setProperty('display','none','important');
       });
+    });
+    // Red de seguridad: el único footer del sitio es el del shell (div#rt2-footer,
+    // shadow DOM). Cualquier <footer> del documento con la data legal es un duplicado
+    // embebido en el contenido de alguna página (variantes con clases distintas).
+    document.querySelectorAll('footer').forEach(function(el){
+      if(el.style.getPropertyValue('display')==='none') return;
+      if(/RIF\s*J-?50849288|MINTUR|Reaño Travels/i.test(el.textContent||''))
+        el.style.setProperty('display','none','important');
     });
   }
 
