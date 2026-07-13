@@ -179,6 +179,17 @@
   .rt-pax-ok{display:none;margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(65,229,117,.12);
     border:1px solid rgba(65,229,117,.4);color:#2fbf62;font-weight:700;font-size:13.5px}
   .rt-pax-note{margin-top:10px;font-size:11.5px;color:#8b929c;text-align:center}
+
+  /* Traslados: sello de respaldo Yummy (alianza aprobada 13/07) */
+  #rt-yummy-tras{display:flex;align-items:center;gap:11px;margin:14px 0 4px;
+    background:rgba(255,140,3,.08);border:1px solid rgba(255,140,3,.30);
+    border-radius:12px;padding:10px 13px}
+  .rt-ytr-logos{display:flex;gap:6px;flex-shrink:0}
+  .rt-ytr-logos img{height:22px;width:auto;object-fit:contain;background:#fff;
+    border-radius:6px;padding:2px 6px}
+  .rt-ytr-t{font-size:12.5px;line-height:1.45;color:#cfd0d6;text-align:left}
+  .rt-ytr-t b{color:#FF8C03}
+  html[data-theme="light"] .rt-ytr-t{color:#4a4b52}
   `;
 
   function injectCSS(){
@@ -186,6 +197,32 @@
     var old=document.getElementById('rt-ui-css'); if(old) old.remove();
     var st=document.createElement('style');st.id='rt-ui-css3';st.textContent=CSS;
     (document.head||document.documentElement).appendChild(st);
+  }
+
+  // Servicios: sello de respaldo Yummy en la tarjeta de Traslados
+  // (alianza Yummy Corporate aprobada el 13/07 — da seguridad y respaldo al cliente)
+  function trasladosYummy(){
+    if(location.pathname.indexOf('/servicios')!==0) return;
+    if(document.getElementById('rt-yummy-tras')) return;
+    var card=null;
+    document.querySelectorAll('article').forEach(function(a){
+      if(card) return;
+      var t=(a.innerText||'');
+      if(/traslados/i.test(t) && /puerta a puerta|choferes/i.test(t)) card=a;
+    });
+    if(!card) return;
+    var body=card.querySelector('.p-6')||card;
+    var band=document.createElement('div');
+    band.id='rt-yummy-tras';
+    band.innerHTML=
+      '<span class="rt-ytr-logos">'
+      +'<img src="https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/yummy-logo.png" alt="Yummy Corporate" loading="lazy">'
+      +'<img src="https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/yummy-rides-logo.png" alt="Yummy Rides" loading="lazy">'
+      +'</span>'
+      +'<span class="rt-ytr-t"><b>Alianza oficial Yummy</b> — conductores verificados, '
+      +'monitoreo en tiempo real y respaldo corporativo en cada traslado.</span>';
+    var cta=body.querySelector('a');
+    if(cta) body.insertBefore(band, cta); else body.appendChild(band);
   }
 
   function markTienda(){
@@ -408,7 +445,7 @@
     window.open('https://wa.me/584247309699?text='+msg,'_blank');
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
