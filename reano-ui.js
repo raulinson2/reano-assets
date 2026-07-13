@@ -207,6 +207,7 @@
     var card=null;
     document.querySelectorAll('article').forEach(function(a){
       if(card) return;
+      if(a.querySelector('article')) return; // envoltorios fuera: solo tarjetas hoja
       var t=(a.innerText||'');
       if(/traslados/i.test(t) && /puerta a puerta|choferes/i.test(t)) card=a;
     });
