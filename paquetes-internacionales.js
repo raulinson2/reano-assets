@@ -173,26 +173,26 @@
   function tryScroll(n){ if(scrollToIntl()) return; if(n>0) setTimeout(function(){ tryScroll(n-1); }, 350); }
   function hashScroll(){ if(onTienda() && location.hash==='#paquetes-internacionales') tryScroll(12); }
 
-  // Inserta el enlace "Internacional" tras cada link a /tienda (menu shadow + light DOM). Idempotente.
+  // Inserta el enlace "Internacional" tras el link a /tienda, SOLO en el header shadow
+  // (nav de escritorio ".links" + menu movil ".mob"). Idempotente por hermano inmediato.
   function navLink(){
-    var roots=[document];
-    var sh=document.getElementById('rt2-header'); if(sh && sh.shadowRoot) roots.push(sh.shadowRoot);
-    roots.forEach(function(root){
-      root.querySelectorAll('a[href="/tienda"]').forEach(function(t){
-        var box=t.parentNode; if(!box) return;
-        if(box.querySelector && box.querySelector('a[data-rtintl]')) return;
-        var a=document.createElement('a');
-        a.setAttribute('data-rtintl','1');
-        a.setAttribute('href','/tienda#paquetes-internacionales');
-        a.textContent='🌍 Internacional';
-        a.addEventListener('click', function(e){
-          if(onTienda()){ e.preventDefault();
-            try{ history.replaceState(null,'','/tienda#paquetes-internacionales'); }catch(x){}
-            tryScroll(10);
-          }
-        });
-        box.insertBefore(a, t.nextSibling);
+    var sh=document.getElementById('rt2-header');
+    var root=sh && sh.shadowRoot; if(!root) return;
+    root.querySelectorAll('a[href="/tienda"]').forEach(function(t){
+      var box=t.parentNode; if(!box) return;
+      var nx=t.nextElementSibling;
+      if(nx && nx.getAttribute && nx.getAttribute('data-rtintl')) return;
+      var a=document.createElement('a');
+      a.setAttribute('data-rtintl','1');
+      a.setAttribute('href','/tienda#paquetes-internacionales');
+      a.textContent='🌍 Internacional';
+      a.addEventListener('click', function(e){
+        if(onTienda()){ e.preventDefault();
+          try{ history.replaceState(null,'','/tienda#paquetes-internacionales'); }catch(x){}
+          tryScroll(10);
+        }
       });
+      box.insertBefore(a, t.nextSibling);
     });
   }
 
