@@ -163,14 +163,16 @@
     m.innerHTML=h; m.classList.add('on');
   }
 
-  function scrollToIntl(smooth){
+  function scrollToIntl(){
     var s=document.getElementById('rt-intl'); if(!s) return false;
-    var y=s.getBoundingClientRect().top+window.scrollY-70;
-    try{ window.scrollTo({top:y, behavior: smooth?'smooth':'auto'}); }
-    catch(e){ window.scrollTo(0,y); }
+    // El sitio tiene scroll-behavior:smooth global que anula un scroll programatico -> forzar auto y restaurar.
+    var de=document.documentElement, prev=de.style.scrollBehavior;
+    de.style.scrollBehavior='auto';
+    window.scrollTo(0, s.getBoundingClientRect().top+window.scrollY-70);
+    de.style.scrollBehavior=prev;
     return true;
   }
-  function tryScroll(n){ if(scrollToIntl(true)) return; if(n>0) setTimeout(function(){ tryScroll(n-1); }, 300); }
+  function tryScroll(n){ if(scrollToIntl()) return; if(n>0) setTimeout(function(){ tryScroll(n-1); }, 300); }
   // Al llegar por el hash: reafirma el scroll varias veces hasta que la seccion quede arriba
   // (Squarespace reacomoda el layout al cargar y pierde un scroll unico).
   function hashScroll(){
