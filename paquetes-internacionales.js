@@ -188,6 +188,12 @@
   }
 
   var HERO_INTL='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/intl-acropolis.jpg';
+  // Mata cualquier enlace "Internacional" que una version vieja (cacheada) haya metido en el header.
+  function killNavLink(){
+    var sh=document.getElementById('rt2-header');
+    var root=sh && sh.shadowRoot; if(!root) return;
+    root.querySelectorAll('a[data-rtintl]').forEach(function(a){ a.remove(); });
+  }
   // En el HOME, clona la tarjeta ancha de "Servicios Destacados" para "Paquetes Internacionales"
   // que lleva a /tienda#paquetes-internacionales. Idempotente. NO toca el header.
   function homeCard(){
@@ -218,6 +224,7 @@
   }
 
   function mount(){
+    killNavLink();
     homeCard();
     if(!onTienda()){ var old=document.getElementById('rt-intl'); if(old) old.remove(); return; }
     if(document.getElementById('rt-intl')) return;
@@ -237,5 +244,5 @@
   window.addEventListener('hashchange', hashScroll);
   setTimeout(function(){ mount(); hashScroll(); }, 600);
   setTimeout(function(){ mount(); hashScroll(); }, 1600);
-  setTimeout(homeCard, 3000);
+  setTimeout(function(){ killNavLink(); homeCard(); }, 3000);
 })();
