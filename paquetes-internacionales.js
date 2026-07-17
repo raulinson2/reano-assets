@@ -163,15 +163,27 @@
     m.innerHTML=h; m.classList.add('on');
   }
 
-  function scrollToIntl(){
-    var s=document.getElementById('rt-intl');
-    if(!s) return false;
-    try{ s.scrollIntoView({behavior:'smooth',block:'start'}); }
-    catch(e){ window.scrollTo(0, s.getBoundingClientRect().top+window.scrollY-70); }
+  function scrollToIntl(smooth){
+    var s=document.getElementById('rt-intl'); if(!s) return false;
+    var y=s.getBoundingClientRect().top+window.scrollY-70;
+    try{ window.scrollTo({top:y, behavior: smooth?'smooth':'auto'}); }
+    catch(e){ window.scrollTo(0,y); }
     return true;
   }
-  function tryScroll(n){ if(scrollToIntl()) return; if(n>0) setTimeout(function(){ tryScroll(n-1); }, 350); }
-  function hashScroll(){ if(onTienda() && location.hash==='#paquetes-internacionales') tryScroll(12); }
+  function tryScroll(n){ if(scrollToIntl(true)) return; if(n>0) setTimeout(function(){ tryScroll(n-1); }, 300); }
+  // Al llegar por el hash: reafirma el scroll varias veces hasta que la seccion quede arriba
+  // (Squarespace reacomoda el layout al cargar y pierde un scroll unico).
+  function hashScroll(){
+    if(!(onTienda() && location.hash==='#paquetes-internacionales')) return;
+    var n=0;
+    (function go(){ n++;
+      var s=document.getElementById('rt-intl');
+      if(s){ var top=s.getBoundingClientRect().top;
+        if(Math.abs(top-70)>45) scrollToIntl(false);
+        if(n<9) setTimeout(go, 450);
+      } else if(n<25){ setTimeout(go, 300); }
+    })();
+  }
 
   // Inserta el enlace "Internacional" tras el link a /tienda, SOLO en el header shadow
   // (nav de escritorio ".links" + menu movil ".mob"). Idempotente por hermano inmediato.
