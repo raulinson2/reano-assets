@@ -1,11 +1,15 @@
-/* Reano Travels - parche del tablero Estado de Aerolineas (13-jul-2026)
+/* Reano Travels - parche del tablero Estado de Aerolineas (17-jul-2026)
    Actualiza en runtime el tablero nativo de /estado-aerolineas:
    - Aerocaribe, Estelar (nac.), Avior (nac.) y SASCA en Contingencia con rutas y horarios.
    - SASCA reanuda el 17/07: Los Roques diario desde Maracay (Tacarigua) + traslado gratis El Rosal.
    - Turpial: nuevas rutas El Vigia (VLN vie/dom · PMV lun/jue, hasta 28/09). Rutaca: 4h/5h en VLN.
    - Estelar reprograma jul/ago via VLN. Air Europa: cancelados 17/19/24/26/31 jul + 7/14 ago CCS.
    - Nueva tarjeta Bluestar (Los Roques desde el 16/07, Charallave OMZ).
-   - Popups (modal) con detalle enriquecido; fecha "Actualizado: 13 jul". */
+   - NUEVO 17/07: Laser nacional desde el Aeropuerto Libertador de Maracay (Palo Negro), 17/07-31/08,
+     Maracaibo/Barcelona/Porlamar/El Vigia desde $90. Venezolana nacional desde Maracay + Panama (18/07).
+     Avior: nueva ruta Maracaibo-Curazao (16/07). Estelar: Valencia-Madrid, jueves 3/10/17 sep.
+     American/oneworld: waiver ampliado (afectados hasta 16/08, reprogramar hasta 19/08, radio 300 mi).
+   - Popups (modal) con detalle enriquecido; fecha "Actualizado: 17 jul". */
 (function(){
   if(window.__rtAeroFix) return; window.__rtAeroFix=1;
   function onBoard(){ var p=(location.pathname.replace(/\/+$/,'')||'/'); return p==='/estado-aerolineas'||p==='/vuelos'; }
@@ -22,7 +26,11 @@
     'GOL':'Caracas cancelado hasta el 31/08 · reprogramación sin penalidad, cambio de ruta o reembolso',
     'Air Europa':'Madrid ⇄ Valencia (UX071/072) en días alternos · CANCELADOS 17, 19, 24, 26 y 31 jul · Caracas: 7 y 14 ago · cambios gratis hasta el 31/10',
     'Laser Airlines (int.)':'Desde Barcelona (BLA): Madrid ya disponible · Sto. Domingo mié y dom · Bogotá mar·jue·sáb · exonerado el cobro por temporalidad (MIA/MAD)',
-    'TAP Air Portugal':'Regresa el 13/07 vía Valencia (VLN)'
+    'TAP Air Portugal':'Regresa el 13/07 vía Valencia (VLN)',
+    'Laser Airlines (nac.)':'Nacionales desde el Aeropuerto Libertador de Maracay (Palo Negro), 17/07–31/08 · Maracaibo, Barcelona, Porlamar y El Vigía · desde $90 ida y vuelta',
+    'American Airlines':'Caracas suspendido · waiver ampliado: afectados hasta el 16/08, reprogramar hasta el 19/08 · cambios de origen/destino (radio 300 mi) sin cargo · aplica a oneworld',
+    'Avior Airlines':'Barcelona ⇄ Bogotá y Medellín · NUEVO Maracaibo ⇄ Curazao desde el 16/07',
+    'Venezolana':'Nacionales desde Maracay (Palo Negro) desde el 20/07 · Internacional Panamá desde el 18/07'
   };
   var OLD = {
     'Aerocaribe':'Vuelos cancelados',
@@ -34,12 +42,15 @@
     'GOL':'reanudación por confirmar',
     'Air Europa':'7, 9, 11 y 12',
     'Laser Airlines (int.)':'afectados 25/06',
-    'TAP Air Portugal':'Vuelos cancelados'
+    'TAP Air Portugal':'Vuelos cancelados',
+    'Laser Airlines (nac.)':'En reactivación',
+    'American Airlines':'gestionar antes del 11/07',
+    'Avior Airlines':'Barcelona ⇄ Bogotá y Medellín'
   };
   var DET = {
     'Aerocaribe':["Plan de contingencia Ruta Los Roques desde el Aeropuerto Caracas (Charallave).","Ida 8:00 a.m. · Retorno desde Los Roques 5:00 p.m.","Preséntate 1 hora y 30 minutos antes del vuelo.","Horarios sujetos a modificaciones por la naturaleza de la reactivación; se notificará oportunamente.","Coordina por WhatsApp +58 416-623.74.84 · @aerocaribevzla · aerocaribe.aero"],
-    'Estelar (nac.)':["Comunicado 13/07: reprogramando de manera progresiva ÚNICAMENTE los vuelos de julio y agosto por la ruta de Valencia (VLN).","Domésticos vía Valencia: San Antonio (SVZ), Puerto Ordaz (PZO) y Porlamar (PMV).","Madrid también opera vía Valencia (ver Internacionales).","Equipaje de los vuelos del 24/06: retíralo en Torre Estelar, Las Mercedes (Caracas), de 8:00 am a 5:00 pm.","Su división Estelar Latinoamérica sí opera (ver Internacionales)."],
-    'Avior (nac.)':["Vuelos de contingencia desde Barcelona (BLA), ya en sistema para la venta.","Barcelona–Barquisimeto–Margarita (lun, mié y vie; +domingos desde el 19/07): BLA-BRM 7:00 am · BRM-MAR 9:00 am · MAR-BRM 11:00 am · BRM-BLA 12:40 pm.","Barcelona–Las Piedras–Margarita (mar y jue, desde el 16/07): BLA-LSP 7:00 am · LSP-MAR 9:00 am · MAR-LSP 11:00 am · LSP-BLA 1:00 pm.","Barcelona ⇄ El Vigía (miércoles, desde el 22/07): BLA-VIG 9:00 am · VIG-BLA 11:30 am.","Internacional también activo: Bogotá, Medellín y Curazao (ver Internacionales)."],
+    'Estelar (nac.)':["Comunicado 13/07: reprogramando de manera progresiva ÚNICAMENTE los vuelos de julio y agosto por la ruta de Valencia (VLN).","Domésticos vía Valencia: San Antonio (SVZ), Puerto Ordaz (PZO) y Porlamar (PMV).","Vuelos especiales Valencia (Aeropuerto Arturo Michelena) → Madrid: jueves 3, 10 y 17 de septiembre · VLC 22:00 → MAD 13:15(+1) · regreso MAD 14:40 → VLC 19:00.","Equipaje de los vuelos del 24/06: retíralo en Torre Estelar, Las Mercedes (Caracas), de 8:00 am a 5:00 pm.","Su división Estelar Latinoamérica sí opera (ver Internacionales)."],
+    'Avior (nac.)':["Vuelos de contingencia desde Barcelona (BLA), ya en sistema para la venta.","Barcelona–Barquisimeto–Margarita (lun, mié y vie; +domingos desde el 19/07): BLA-BRM 7:00 am · BRM-MAR 9:00 am · MAR-BRM 11:00 am · BRM-BLA 12:40 pm.","Barcelona–Las Piedras–Margarita (mar y jue, desde el 16/07): BLA-LSP 7:00 am · LSP-MAR 9:00 am · MAR-LSP 11:00 am · LSP-BLA 1:00 pm.","Barcelona ⇄ El Vigía (miércoles, desde el 22/07): BLA-VIG 9:00 am · VIG-BLA 11:30 am.","Internacional también activo: Bogotá, Medellín y Curazao — NUEVO Maracaibo ⇄ Curazao desde el 16/07 (ver Internacionales)."],
     'Bluestar':["Reanudación progresiva hacia Los Roques desde el jueves 16 de julio.","Salida desde el Aeropuerto Caracas Óscar Machado Zuloaga: un vuelo diario · 8:00 a.m. · retorno 4:00 p.m.","Chequeo 1 hora y 30 minutos antes de la salida.","Reserva por sistema KIU o canales oficiales de reservas.","Boletos de vuelos entre el 25/06 y el 31/07: reprogramación sin penalidad por WhatsApp.","El aeropuerto cuenta con estacionamiento."],
     'SASCA Airlines':["Comunicado 13/07: reanuda operaciones DIARIAS hacia Los Roques desde el viernes 17 de julio.","Ruta de contingencia desde el Aeropuerto Nacional de Aragua «Tacarigua», en Maracay.","Traslado terrestre GRATUITO (ida y vuelta) desde El Rosal, Caracas, hasta el aeropuerto de Maracay.","Reprogramaciones: su equipo está contactando progresivamente a pasajeros y agencias aliadas.","Boletos de vuelos cancelados: válidos por 1 año.","Atención: +58 412-339.17.05 · @sascaair — también te gestionamos la reserva."],
     'Turpial Airlines':["Vuelos nacionales operan vía Valencia (VLN).","NUEVA RUTA Valencia ⇄ El Vigía, del 19 de julio al 28 de septiembre — viernes: VLN→VIG 10:00–11:00 am · VIG→VLN 12:00–1:00 pm; domingos: VLN→VIG 1:30–2:30 pm · VIG→VLN 3:30–4:30 pm.","NUEVA RUTA Porlamar ⇄ El Vigía, del 16 de julio al 28 de septiembre — lunes: PMV→VIG 11:00 am–12:30 pm · VIG→PMV 1:30–3:00 pm; jueves: PMV→VIG 12:00–1:30 pm · VIG→PMV 2:30–4:00 pm.","Reconéctate con los Andes venezolanos — te reservamos tu asiento."],
@@ -48,7 +59,11 @@
     'GOL':["Vuelos con destino u origen Caracas cancelados hasta el 31 de agosto de 2026 (comunicado del 8/07).","Reprogramación de fecha sin penalidad ni diferencia tarifaria (sujeto a disponibilidad) para volar hasta 1 año después de la emisión.","Cambio de ruta sin cargos adicionales (sujeto a disponibilidad y diferencias tarifarias).","Reembolso de la tarifa y de los impuestos aplicables.","Agencias (GDS): waiver SKCHG DUE CLD G3-[vuelo]/[fecha] en endorsement + OSI y SSR · soporte CRC B2B.","Si tienes boleto GOL, te ayudamos a revisar tus opciones."],
     'Air Europa':["Comunicado 13/07 — CANCELADOS Madrid ⇄ Valencia (UX071/UX072): 17, 19, 24, 26 y 31 de julio.","CANCELADOS Madrid ⇄ Caracas (UX071/UX072): 7 y 14 de agosto.","El resto de las fechas de julio opera en días alternos vía Valencia; las conexiones se mantienen.","Boletos emitidos hasta el 25/06: cambio de fecha sin costo (misma cabina) para viajar hasta el 31/10/2026.","Cambio de ruta sin costo, misma cabina, hacia/desde Medellín (MDE), Bogotá (BOG), Panamá (PTY) o Valencia (VLN).","También puedes optar por un vale reembolsable o el reembolso.","Te gestionamos el cambio o la protección de tu boleto Air Europa."],
     'Laser Airlines (int.)':["Madrid (MAD) vía Barcelona (BLA): disponible en sistema (KIU) para viajar del 1/07 al 31/08 · BLA→MAD 17:00 · check-in desde las 10:45 am · clases T/W/L (turista) y D (ejecutiva).","Santo Domingo (SDQ): miércoles y domingos · QL2968 BLA 10:00 → SDQ 11:50 · QL2969 SDQ 13:20 → BLA 14:50.","Bogotá (BOG): martes, jueves y sábados · QL2980 BLA 09:00 → BOG 10:00 · QL2981 BOG 11:30 → BLA 14:30.","NUEVO (9/07): exonerado el cobro por temporalidad en MIA y MAD — misma clase y viaje iniciando hasta el 31/07. Períodos: MIA 25/06–1/07 · SDQ 26/06–5/07 · BOG 26/06–8/07 · MAD 24/06–6/07.","Afectados que mantengan su fecha: revalidación sin costo y con prioridad en la salida.","Call center 0501-52737-00 · WhatsApp +58 412-266.26.37."],
-    'TAP Air Portugal':["Retoma sus operaciones a Venezuela el 13 de julio a través de Valencia (VLN).","Boletos e itinerarios disponibles por los canales oficiales y tu agencia.","Te ayudamos a reservar o reacomodar tu vuelo TAP."]
+    'TAP Air Portugal':["Retoma sus operaciones a Venezuela el 13 de julio a través de Valencia (VLN).","Boletos e itinerarios disponibles por los canales oficiales y tu agencia.","Te ayudamos a reservar o reacomodar tu vuelo TAP."],
+    'Laser Airlines (nac.)':["Protocolo de contingencia: vuelos nacionales desde y hacia el Aeropuerto Libertador de Maracay (Palo Negro, Edo. Aragua), del 17/07 al 31/08.","Barcelona (BLA): QL970 MYC 07:00 → BLA 08:00 · QL971 BLA 09:00 → MYC 10:00 · QL974 MYC 15:30 → BLA 16:30 · QL975 BLA 17:30 → MYC 18:30 (las frecuencias QL972/QL973 están suspendidas temporalmente).","Porlamar (PMV): QL907 PMV 07:30 → MYC 08:40 · QL904 MYC 14:30 → PMV 15:40 · QL905 PMV 16:40 → MYC 17:50 · QL906 MYC 18:50 → PMV 20:00.","Maracaibo (MAR): QL942 MYC 11:00 → MAR 12:10 · QL943 MAR 13:10 → MYC 14:20.  El Vigía (VIG): QL920 MYC 10:00 → VIG 11:10 · QL921 VIG 12:10 → MYC 13:20.","Tarifas desde $90 ida y vuelta · clases turista H/M/Y y ejecutiva C (aplican solo a boletos nuevos).","El Aeropuerto Libertador cuenta con recepción, estacionamiento, sala de espera climatizada y transporte al área de check-in.","Call center 0501-52737-00 · WhatsApp +58 412-266.26.37 — o te gestionamos la reserva."],
+    'American Airlines':["Travel Notice — Actualización 6 (13/07): política especial de excepción por el sismo de Caracas (CCS).","Boletos emitidos hasta el 23/06 · viajes afectados del 25/06 al 16/08 · nuevas fechas de viaje hasta el 19/08.","Cambios de origen/destino permitidos dentro de un radio de 300 millas; cambios de ciudad de conexión y co-terminal permitidos.","Sin cargo por el cambio; sin reembolso, salvo vuelo cancelado o demorado (vía GDS/ARC/BSP).","Aplica también a los socios Joint Business de oneworld: Iberia, British Airways, Finnair, Japan Airlines y Qantas (vuelos propios y en código compartido).","Agencias: autogestión en SalesLink (waiver Travel Notice) · endoso TNADVE/24JUN26A.","Te ayudamos a revisar y reacomodar tu boleto American / oneworld."],
+    'Avior Airlines':["Internacionales desde Barcelona (BLA): Bogotá y Medellín (ver también las rutas nacionales de Avior).","NUEVA RUTA Maracaibo ⇄ Curazao, desde el 16 de julio.","Barcelona ⇄ Curazao y Margarita ⇄ Curazao también activas desde el 16/07 (martes y jueves).","Te gestionamos tu vuelo Avior."],
+    'Venezolana':["Vuelos nacionales de contingencia desde el Aeropuerto Libertador de Maracay (Palo Negro), como alternativa más cercana a Caracas.","Maracaibo ⇄ Maracay (desde $90 i/v): MAR-MYC 1101 06:00–07:00 (L·M·V) · 1101 08:00–09:00 (J·D) · 1103 16:00–16:45 (V)  ||  MYC-MAR 1104 17:00 (L) · 1102 09:00 (M) · 1104 18:30 (J·D) · 1102 14:00 y 1104 19:00 (V).","Maracay ⇄ Porlamar (desde $90 i/v): MYC-PMV 1131 09:00–09:45 (L·V) · 1131 10:30–11:15 (J·D)  ||  PMV-MYC 1132 10:45–11:30 (L·V) · 1132 16:00–16:45 (J·D).","INTERNACIONAL Panamá, desde el 18/07 (martes y sábado): Maracaibo ⇄ Panamá (vuelos 412/413) · Barquisimeto ⇄ Panamá (vuelos 422/423).","Reserva: WhatsApp +58 424-639.02.81 · 0212-819.06.00 · venezolana.aero — o te la gestionamos nosotros."]
   };
 
   function leafs(el){ var out=[]; (function w(e){ if(!e.children||e.children.length===0){ out.push(e); return; } for(var i=0;i<e.children.length;i++) w(e.children[i]); })(el); return out; }
@@ -93,6 +108,19 @@
     });
     return done;
   }
+  // Reemplaza el primer leaf (en cualquier tarjeta) que contenga oldSnip. Idempotente:
+  // tras el reemplazo el snippet ya no existe. Necesario para tarjetas con nombre repetido
+  // (hay dos "Venezolana": nacional e internacional, en pestañas distintas).
+  function replaceAnywhere(oldSnip, txt){
+    var done=false;
+    document.querySelectorAll('.rt-card').forEach(function(c){
+      if(done) return;
+      leafs(c.querySelector('.rt-left')||c).forEach(function(l){
+        if(done) return;
+        if((l.textContent||'').indexOf(oldSnip)!==-1){ l.textContent=txt; done=true; }
+      });
+    });
+  }
   function styleChip(chip, kind){
     if(!chip) return;
     var apply=function(el){ if(!el||!el.style) return;
@@ -129,7 +157,7 @@
     dest.insertBefore(c, dest.firstChild);
   }
   function updateSummaries(){
-    ['GOL','Air Europa','Laser Airlines (int.)','Turpial Airlines','Rutaca Airlines'].forEach(function(n){
+    ['GOL','Air Europa','Laser Airlines (int.)','Turpial Airlines','Rutaca Airlines','Laser Airlines (nac.)','American Airlines','Avior Airlines'].forEach(function(n){
       var card=cardByName(n); if(!card) return;
       if(card.getAttribute('data-rtfx-s')) return;
       if(setSummary(card, OLD[n], R[n])) card.setAttribute('data-rtfx-s','1');
@@ -145,7 +173,13 @@
   }
   function fixDate(){
     var u=document.getElementById('rt-updated-txt');
-    if(u && u.textContent!=='Actualizado: 13 jul') u.textContent='Actualizado: 13 jul';
+    if(u && u.textContent!=='Actualizado: 17 jul') u.textContent='Actualizado: 17 jul';
+  }
+  function patchVenezolana(){
+    replaceAnywhere('Desde Barquisimeto (6/07): Maracaibo (lun-mar-jue-vie-dom) y Porlamar (lun-jue-dom) · con horarios',
+      'Nacionales desde el Aeropuerto Libertador de Maracay (Palo Negro) desde el 20/07: Maracaibo y Porlamar (desde $90) · también desde Barquisimeto');
+    replaceAnywhere('Barquisimeto ⇄ Panamá · mar y vie desde el 6/07 · vuelos 422/423',
+      'Panamá desde el 18/07 (mar y sáb): Maracaibo ⇄ Panamá (412/413) y Barquisimeto ⇄ Panamá (422/423)');
   }
 
   var lastName='';
@@ -189,6 +223,7 @@
     moveCard('TAP Air Portugal','operan');
     ensureBluestar();
     updateSummaries();
+    patchVenezolana();
     fixCounts();
     fixDate();
   }
