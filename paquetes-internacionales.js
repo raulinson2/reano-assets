@@ -187,31 +187,38 @@
     })();
   }
 
-  // Inserta el enlace "Internacional" tras el link a /tienda, SOLO en el header shadow
-  // (nav de escritorio ".links" + menu movil ".mob"). Idempotente por hermano inmediato.
-  function navLink(){
-    var sh=document.getElementById('rt2-header');
-    var root=sh && sh.shadowRoot; if(!root) return;
-    root.querySelectorAll('a[href="/tienda"]').forEach(function(t){
-      var box=t.parentNode; if(!box) return;
-      var nx=t.nextElementSibling;
-      if(nx && nx.getAttribute && nx.getAttribute('data-rtintl')) return;
-      var a=document.createElement('a');
-      a.setAttribute('data-rtintl','1');
-      a.setAttribute('href','/tienda#paquetes-internacionales');
-      a.textContent='🌍 Internacional';
-      a.addEventListener('click', function(e){
-        if(onTienda()){ e.preventDefault();
-          try{ history.replaceState(null,'','/tienda#paquetes-internacionales'); }catch(x){}
-          tryScroll(10);
-        }
-      });
-      box.insertBefore(a, t.nextSibling);
+  var HERO_INTL='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/intl-acropolis.jpg';
+  // En el HOME, clona la tarjeta ancha de "Servicios Destacados" para "Paquetes Internacionales"
+  // que lleva a /tienda#paquetes-internacionales. Idempotente. NO toca el header.
+  function homeCard(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/') return;
+    var src=null;
+    document.querySelectorAll('div').forEach(function(el){
+      if(!src && /col-span-12/.test(el.className) && /Experiencias y Eventos/.test(el.textContent) && el.textContent.length<420) src=el;
     });
+    if(!src) return;
+    var grid=src.parentElement; if(!grid) return;
+    if(grid.querySelector('[data-rtintlcard]')) return;
+    var c=src.cloneNode(true);
+    c.setAttribute('data-rtintlcard','1');
+    var title=null; c.querySelectorAll('h1,h2,h3').forEach(function(x){ if(/Experiencias y Eventos/.test(x.textContent)) title=x; });
+    if(title) title.textContent='Paquetes Internacionales';
+    var desc=null; c.querySelectorAll('p').forEach(function(x){ if(/Especialistas en paquetes/.test(x.textContent)) desc=x; });
+    if(desc) desc.textContent='Europa y Colombia a tu medida: vuelos, hotel, traslados y todas las actividades. Nosotros lo armamos todo, tú disfrutas.';
+    c.querySelectorAll('*').forEach(function(el){ if(el.children.length===0){ var t=(el.textContent||'').trim();
+      if(t==='Eventos') el.textContent='Europa'; else if(t==='Paquetes') el.textContent='Colombia'; } });
+    var big=c.querySelector('.glass-orange .material-symbols-outlined'); if(big) big.textContent='public';
+    var cta=null; c.querySelectorAll('a').forEach(function(a){ if(/Ver Paquetes/i.test(a.textContent)) cta=a; });
+    if(cta){ cta.setAttribute('href','/tienda#paquetes-internacionales');
+      var ci=cta.querySelector('.material-symbols-outlined'); if(ci) ci.textContent='arrow_forward'; }
+    var bg=c.querySelector('[class*="bg-cover"]');
+    if(bg){ var st=(bg.getAttribute('style')||'').replace(/background-image\s*:\s*url\([^)]*\)\s*;?/i,'');
+      bg.setAttribute('style', "background-image:url('"+HERO_INTL+"');"+st); }
+    grid.appendChild(c);
   }
 
   function mount(){
-    navLink();
+    homeCard();
     if(!onTienda()){ var old=document.getElementById('rt-intl'); if(old) old.remove(); return; }
     if(document.getElementById('rt-intl')) return;
     css();
@@ -230,5 +237,5 @@
   window.addEventListener('hashchange', hashScroll);
   setTimeout(function(){ mount(); hashScroll(); }, 600);
   setTimeout(function(){ mount(); hashScroll(); }, 1600);
-  setTimeout(navLink, 3000);
+  setTimeout(homeCard, 3000);
 })();
