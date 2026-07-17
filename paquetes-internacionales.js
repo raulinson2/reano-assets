@@ -163,7 +163,41 @@
     m.innerHTML=h; m.classList.add('on');
   }
 
+  function scrollToIntl(){
+    var s=document.getElementById('rt-intl');
+    if(!s) return false;
+    try{ s.scrollIntoView({behavior:'smooth',block:'start'}); }
+    catch(e){ window.scrollTo(0, s.getBoundingClientRect().top+window.scrollY-70); }
+    return true;
+  }
+  function tryScroll(n){ if(scrollToIntl()) return; if(n>0) setTimeout(function(){ tryScroll(n-1); }, 350); }
+  function hashScroll(){ if(onTienda() && location.hash==='#paquetes-internacionales') tryScroll(12); }
+
+  // Inserta el enlace "Internacional" tras cada link a /tienda (menu shadow + light DOM). Idempotente.
+  function navLink(){
+    var roots=[document];
+    var sh=document.getElementById('rt2-header'); if(sh && sh.shadowRoot) roots.push(sh.shadowRoot);
+    roots.forEach(function(root){
+      root.querySelectorAll('a[href="/tienda"]').forEach(function(t){
+        var box=t.parentNode; if(!box) return;
+        if(box.querySelector && box.querySelector('a[data-rtintl]')) return;
+        var a=document.createElement('a');
+        a.setAttribute('data-rtintl','1');
+        a.setAttribute('href','/tienda#paquetes-internacionales');
+        a.textContent='🌍 Internacional';
+        a.addEventListener('click', function(e){
+          if(onTienda()){ e.preventDefault();
+            try{ history.replaceState(null,'','/tienda#paquetes-internacionales'); }catch(x){}
+            tryScroll(10);
+          }
+        });
+        box.insertBefore(a, t.nextSibling);
+      });
+    });
+  }
+
   function mount(){
+    navLink();
     if(!onTienda()){ var old=document.getElementById('rt-intl'); if(old) old.remove(); return; }
     if(document.getElementById('rt-intl')) return;
     css();
@@ -176,8 +210,11 @@
   }
 
   if(document.readyState!=='loading') mount(); else document.addEventListener('DOMContentLoaded', mount);
-  var mo=new MutationObserver(function(){ if(onTienda() && !document.getElementById('rt-intl')) mount(); });
+  var mo=new MutationObserver(function(){ mount(); });
   mo.observe(document.documentElement,{childList:true,subtree:true});
-  window.addEventListener('popstate', function(){ setTimeout(mount,60); });
-  setTimeout(mount,600); setTimeout(mount,1600);
+  window.addEventListener('popstate', function(){ setTimeout(function(){ mount(); hashScroll(); }, 80); });
+  window.addEventListener('hashchange', hashScroll);
+  setTimeout(function(){ mount(); hashScroll(); }, 600);
+  setTimeout(function(){ mount(); hashScroll(); }, 1600);
+  setTimeout(navLink, 3000);
 })();
