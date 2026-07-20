@@ -369,7 +369,7 @@
     if(!grid || !grid.querySelector('.rts-card')) return;
     var a=document.createElement('a');
     a.className='rts-card'; a.id='rt-arjona-store'; a.href=ARJONA_URL;
-    a.innerHTML='<span class="rts-ribbon">>Ultimo cupo<#218;ltimo cupo</span>'+
+    a.innerHTML='<span class="rts-ribbon">&#218;ltimo cupo</span>'+
       '<div class="rts-img"><img src="https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@b362d98/arjona-hero.jpg" alt="Ricardo Arjona en Bogota" loading="eager"></div>'+
       '<div class="rts-body"><h2 class="rts-name">Ricardo Arjona &#183; Bogot&#225;</h2>'+
       '<p class="rts-cat">Paquete Concierto</p>'+
