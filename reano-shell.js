@@ -26,7 +26,6 @@
   var LOGO_LIGHT = 'https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/logo-reano-original.png'; /* letras oscuras (fondo claro) */
   var LINKS = [
     ['Vuelos', '/estado-aerolineas'],
-    ['Paquetes', '/tienda#paquetes-internacionales'],
     ['Conciertos', '/conciertos'],
     ['Tienda', '/tienda'],
     ['Hoteles', '/hoteles'],
@@ -119,7 +118,7 @@
     ':host([data-th=light]) .mob a{color:#2a2620}',
     '.mob a.on{color:#FF8C03}',
     '.mob .cta{display:inline-block;margin-top:14px;border-bottom:0}',
-    '@media(max-width:940px){.links{display:none}.burger{display:flex}.cta.desk{display:none}}'
+    '@media(max-width:940px){.links{display:none}.burger{display:flex}.cta.desk{display:none}.ctrl{margin-left:auto}}'
   ].join('\n');
 
   function buildHeader() {
