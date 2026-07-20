@@ -9,7 +9,10 @@
      Maracaibo/Barcelona/Porlamar/El Vigia desde $90. Venezolana nacional desde Maracay + Panama (18/07).
      Avior: nueva ruta Maracaibo-Curazao (16/07). Estelar: Valencia-Madrid, jueves 3/10/17 sep.
      American/oneworld: waiver ampliado (afectados hasta 16/08, reprogramar hasta 19/08, radio 300 mi).
-   - Popups (modal) con detalle enriquecido; fecha "Actualizado: 17 jul". */
+   - Popups (modal) con detalle enriquecido; fecha "Actualizado: 20 jul".
+   - Update 20/07: Venezolana itinerario nacional oficial (SVBL Palo Negro) con horarios
+     precisos MAR⇄MYC y MYC⇄PMV + contacto nuevo; Estelar septiembre 3 vuelos/sem MAD⇄VLN;
+     LASER protocolo Palo Negro detallado. (Copa RD E-Ticket → en base de conocimiento.) */
 (function(){
   if(window.__rtAeroFix) return; window.__rtAeroFix=1;
   function onBoard(){ var p=(location.pathname.replace(/\/+$/,'')||'/'); return p==='/estado-aerolineas'||p==='/vuelos'; }
