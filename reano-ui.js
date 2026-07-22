@@ -361,6 +361,30 @@
   // Cuarta tarjeta de Arjona en la vitrina de conciertos de /tienda. Va primera
   // por urgencia (cupo unico) y no la pinta el modulo del store, asi que la
   // insertamos aqui clonando la estructura .rts-card tal cual.
+  /* Puente /tienda -> /paquetes. Los paquetes se mudaron a su propia pagina el
+     22-jul-2026 y en la tienda no quedaba ningun enlace visible hacia ellos:
+     solo se llegaba por el menu. Esta franja cierra ese hueco. */
+  function puentePaquetes(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda') return;
+    if(document.getElementById('rt-puente-paq')) return;
+    var host=document.querySelector('#sections'); if(!host) return;
+    var s=document.createElement('section');
+    s.id='rt-puente-paq';
+    s.style.cssText='background:#0d0d10;padding:56px 22px;text-align:center;'+
+      'font-family:Montserrat,system-ui,sans-serif';
+    s.innerHTML=
+      '<h2 style="color:#fff;font-size:30px;font-weight:900;letter-spacing:-.5px;margin:0 0 10px">'+
+      '&#191;Buscas un viaje completo?</h2>'+
+      '<p style="color:#9aa1ab;font-size:15.5px;line-height:1.6;max-width:520px;margin:0 auto 24px">'+
+      'Europa, Colombia y todo Venezuela: vuelos, hotel, traslados y actividades, '+
+      'armados a tu medida. Te lo cotizamos sin compromiso.</p>'+
+      '<a href="/paquetes" style="display:inline-block;background:linear-gradient(135deg,#FF8C03,#E67A00);'+
+      'color:#fff;font-size:13.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;'+
+      'text-decoration:none;padding:15px 34px;border-radius:999px;'+
+      'box-shadow:0 8px 22px -8px rgba(255,140,3,.6)">Ver paquetes</a>';
+    host.appendChild(s);
+  }
+
   function arjonaTienda(){
     if(location.pathname.indexOf('/tienda')!==0) return;
     if(location.pathname.indexOf('/tienda/p/')===0) return; // ficha de producto, no vitrina
@@ -535,7 +559,7 @@
     window.open('https://wa.me/584247309699?text='+msg,'_blank');
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaComprar(); arjonaTienda(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaComprar(); arjonaTienda(); puentePaquetes(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* Los bloques que pinta paquetes-showcase.js pueden tardar mas de 4,2 s en
