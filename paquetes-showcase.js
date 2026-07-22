@@ -22,7 +22,10 @@
     if(!onTienda())return;
     if(document.getElementById("rt-paquetes-showcase"))return;
     var host=document.querySelector("#sections");if(!host)return;
-    if(!host.querySelector(".product-list-section, .page-section"))return;
+    /* Antes se exigia ademas .product-list-section/.page-section porque el bloque
+       vivia dentro de /tienda y habia que esperar a que el store pintara. Ahora
+       /paquetes es una pagina propia y en blanco: esa comprobacion la dejaba
+       vacia para siempre. El filtro por ruta de onTienda() ya es suficiente. */
     var wrap=document.createElement("section");
     wrap.id="rt-paquetes-showcase";wrap.className="rt-paq";
     wrap.innerHTML=dec(INNER_B64);
