@@ -7,7 +7,10 @@
   if(window.__rtIntl) return; window.__rtIntl=1;
   var CDN='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/';
   var WA='https://wa.me/584247309699?text=';
-  function onTienda(){ var p=(location.pathname.replace(/\/+$/,'')||'/'); return p==='/tienda'; }
+  /* 22-jul-2026: los paquetes se mudaron de /tienda a su propia pagina /paquetes.
+     /tienda queda solo para lo que se compra con carrito; asi no hay contenido
+     duplicado entre las dos paginas y cada una tiene un proposito claro. */
+  function onTienda(){ var p=(location.pathname.replace(/\/+$/,'')||'/'); return p==='/paquetes'; }
 
   var PKG=[
     { id:'euro-maxima', tag:'PAQUETE 01', name:'Euro Máxima', sub:'España · Grecia · Turquía',
@@ -215,7 +218,7 @@
       if(t==='Eventos') el.textContent='Europa'; else if(t==='Paquetes') el.textContent='Colombia'; } });
     var big=c.querySelector('.glass-orange .material-symbols-outlined'); if(big) big.textContent='public';
     var cta=null; c.querySelectorAll('a').forEach(function(a){ if(/Ver Paquetes/i.test(a.textContent)) cta=a; });
-    if(cta){ cta.setAttribute('href','/tienda#paquetes-internacionales');
+    if(cta){ cta.setAttribute('href','/paquetes');
       var ci=cta.querySelector('.material-symbols-outlined'); if(ci) ci.textContent='arrow_forward'; }
     var bg=c.querySelector('[class*="bg-cover"]');
     if(bg){ var st=(bg.getAttribute('style')||'').replace(/background-image\s*:\s*url\([^)]*\)\s*;?/i,'');
