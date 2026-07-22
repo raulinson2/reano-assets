@@ -559,19 +559,59 @@
     window.open('https://wa.me/584247309699?text='+msg,'_blank');
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaComprar(); arjonaTienda(); puentePaquetes(); productPage(); fiftyCard(); paxForm(); }
+  /* Portada de /paquetes. La pagina es un lienzo en blanco de Squarespace: sin
+     esto el contenido arrancaba en y=34 y quedaba TAPADO por el header fijo
+     (64 px), y ademas la pagina no tenia titulo propio: empezaba de golpe con
+     "Paquetes Internacionales" sin presentacion. */
+  function paquetesPortada(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/paquetes') return;
+    var host=document.querySelector('#sections'); if(!host) return;
+    if(document.getElementById('rt-paq-portada')) return;
+    var s=document.createElement('section');
+    s.id='rt-paq-portada';
+    s.style.cssText='background:#0d0d10;padding:132px 22px 54px;text-align:center;'+
+      'font-family:Montserrat,system-ui,sans-serif';
+    s.innerHTML=
+      '<span style="display:inline-block;border:1px solid rgba(255,140,3,.55);color:#FF8C03;'+
+      'font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;'+
+      'padding:8px 20px;border-radius:999px;margin-bottom:22px">Cat&#225;logo Rea&#241;o</span>'+
+      '<h1 style="color:#fff;font-size:clamp(40px,8vw,74px);font-weight:900;font-style:italic;'+
+      'letter-spacing:-2px;line-height:1;margin:0 0 16px">PAQUETES</h1>'+
+      '<p style="color:#9aa1ab;font-size:16px;line-height:1.6;max-width:560px;margin:0 auto">'+
+      'Nacionales e internacionales, armados a tu medida: vuelos, hotel, traslados '+
+      'y actividades. Te lo cotizamos sin compromiso.</p>';
+    host.insertBefore(s, host.firstChild);
+  }
+
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaComprar(); arjonaTienda(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
-  /* Los bloques que pinta paquetes-showcase.js pueden tardar mas de 4,2 s en
-     conexiones lentas. Sin estos reintentos, arjonaTienda() encontraba la
-     rejilla vacia y la tarjeta destacada NO se insertaba nunca: un bug de
-     carrera que aparecia y desaparecia segun la velocidad de la conexion.
-     run() es idempotente (cada funcion se autolimita), asi que reintentar
-     es seguro. Se corta a los ~18 s para no dejar un temporizador vivo. */
-  var rtIntentos = 0;
-  var rtLoop = setInterval(function(){
-    run();
-    if(++rtIntentos >= 20) clearInterval(rtLoop);
-  }, 700);
+  /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
+     lentas, y sin reintentos la tarjeta destacada no se insertaba nunca
+     (bug de carrera que aparecia segun la velocidad de la conexion).
+     Pero reintentar 20 veces a ciegas hacia trabajo inutil durante 14 s en
+     TODAS las paginas. Ahora se observan las mutaciones del DOM y se para en
+     cuanto el trabajo esta hecho: cero coste cuando no hay nada que hacer. */
+  var rtListo = function(){
+    var enTienda = (location.pathname.replace(/\/+$/,'')||'/') === '/tienda';
+    if(!enTienda) return true;                       /* solo /tienda depende de la rejilla */
+    return !!document.getElementById('rt-arjona-store');
+  };
+  if(!rtListo() && window.MutationObserver){
+    var rtPend = 0, rtTope;
+    var rtObs = new MutationObserver(function(){
+      /* CLAVE: sin este freno, run() se ejecutaria en cada mutacion del DOM
+         (cientos por segundo mientras Squarespace hidrata) y seria mucho peor
+         que el bucle que sustituye. Se agrupa en un solo pase cada 300 ms. */
+      if(rtPend) return;
+      rtPend = setTimeout(function(){
+        rtPend = 0;
+        run();
+        if(rtListo()){ rtObs.disconnect(); clearTimeout(rtTope); }
+      }, 300);
+    });
+    rtObs.observe(document.documentElement, {childList:true, subtree:true});
+    rtTope = setTimeout(function(){ rtObs.disconnect(); }, 20000); /* tope duro */
+  }
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
 })();
