@@ -372,10 +372,10 @@
     a.innerHTML='<span class="rts-ribbon">&#218;ltimo cupo</span>'+
       '<div class="rts-img"><img src="https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@b362d98/arjona-hero.jpg" alt="Ricardo Arjona en Bogota" loading="eager"></div>'+
       '<div class="rts-body"><h2 class="rts-name">Ricardo Arjona &#183; Bogot&#225;</h2>'+
-      '<p class="rts-cat">Paquete Concierto</p>'+
+      '<p class="rts-cat">Entrada Platea 102 &#183; show agotado</p>'+
       '<div class="rts-pricerow"><span class="rts-plab">Precio final</span>'+
-      '<span class="rts-price">US$ 850</span></div>'+
-      '<span class="rts-btn">Ver paquete <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></span></div>';
+      '<span class="rts-price">US$ 550</span></div>'+
+      '<span class="rts-btn">Ver entrada <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></span></div>';
     grid.insertBefore(a, grid.firstElementChild);
   }
 
