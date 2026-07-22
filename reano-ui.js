@@ -567,6 +567,16 @@
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/paquetes') return;
     var host=document.querySelector('#sections'); if(!host) return;
     if(document.getElementById('rt-paq-portada')) return;
+    /* La inyeccion FOOTER mete un .rt-herowrap con el logo como primer hijo de
+       la primera seccion de cada pagina. En una portada propia como esta aterriza
+       suelto arriba a la izquierda; ademas sobra, porque la portada ya lleva su
+       propia marca. Se oculta SOLO aqui dentro. */
+    if(!document.getElementById('rt-paq-portada-css')){
+      var st=document.createElement('style');
+      st.id='rt-paq-portada-css';
+      st.textContent='#rt-paq-portada .rt-herowrap{display:none!important}';
+      (document.head||document.documentElement).appendChild(st);
+    }
     var s=document.createElement('section');
     s.id='rt-paq-portada';
     s.style.cssText='background:#0d0d10;padding:132px 22px 54px;text-align:center;'+
