@@ -475,7 +475,11 @@
     };
     try{ var q=JSON.parse(localStorage.getItem('rt-crm-queue')||'[]'); q.push(payload); localStorage.setItem('rt-crm-queue', JSON.stringify(q)); }catch(e){}
     if(window.RT_CRM_ENDPOINT){
-      try{ fetch(window.RT_CRM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){}); }catch(e){}
+      // OJO: 'text/plain' + no-cors a proposito. Con 'application/json' el navegador
+      // dispara un preflight OPTIONS, y Apps Script NO responde a OPTIONS: el lead se
+      // perderia en silencio. Con text/plain es una "peticion simple", va directa.
+      // El servidor igual lee el cuerpo con JSON.parse(e.postData.contents).
+      try{ fetch(window.RT_CRM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(function(){}); }catch(e){}
     }
     var okBox=document.getElementById('rt-pax-ok'); if(okBox) okBox.style.display='block';
     var msg='🧾 *Datos del pasajero — Reaño Travels*%0A'
