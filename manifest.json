@@ -1,0 +1,34 @@
+{
+  "name": "Reaño Travels & Tours",
+  "short_name": "Reaño Travels",
+  "description": "Agencia de viajes venezolana: paquetes nacionales e internacionales, entradas a conciertos y viajes a medida.",
+  "lang": "es-VE",
+  "start_url": "https://www.reanotravel.com/",
+  "scope": "https://www.reanotravel.com/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d0d10",
+  "theme_color": "#FF8C03",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/logo-reano-original.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tienda",
+      "url": "https://www.reanotravel.com/tienda"
+    },
+    {
+      "name": "Estado de aerolíneas",
+      "url": "https://www.reanotravel.com/estado-aerolineas"
+    },
+    {
+      "name": "Contacto",
+      "url": "https://www.reanotravel.com/contacto"
+    }
+  ]
+}
