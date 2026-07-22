@@ -399,8 +399,56 @@
     sec.style.setProperty('display','none','important');
   }
 
-  // ===== CARRITO: formulario de pasajero (obligatorio para emitir) — CRM-ready =====
-  // Para conectar el CRM: definir window.RT_CRM_ENDPOINT = 'https://...' antes de este script.
+  // ===== CARRITO: formulario de pasajero (obligatorio para emitir) — CRM =====
+  // El lead viaja a un Formulario de Google ("Registro de leads de la web") cuyas
+  // respuestas caen en una pestana del sheet "CRM Reano Travels — Contactos".
+  //
+  // Por que un Formulario y no Apps Script: el endpoint de Forms acepta envios
+  // anonimos sin ninguna autorizacion OAuth. Un Apps Script exige que el dueno
+  // apruebe una ventana de consentimiento de Google, imposible de automatizar.
+  //
+  // Es un POST "simple" (FormData + no-cors): sin preflight CORS, va directo.
+  // Si algun dia se autoriza un Apps Script, basta definir window.RT_CRM_ENDPOINT
+  // y este codigo lo usara ADEMAS del formulario.
+  var RT_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeDqlPGbV0JP_DECXgHWGylMjuNaKKYLgzWjaNVynDnXaDNmw/formResponse';
+  var RT_F = {                       /* verificado campo a campo el 21-jul-2026 */
+    nombre:   'entry.480636068',
+    telefono: 'entry.1003615195',
+    email:    'entry.1724292813',
+    pais:     'entry.2014855189',
+    ciudad:   'entry.1405811678',
+    doc:      'entry.663150483',
+    carrito:  'entry.44686000',
+    subtotal: 'entry.473752615',
+    json:     'entry.950446269'
+  };
+
+  function crmEnviar(payload){
+    var p = payload.pasajero || {};
+    try{
+      var fd = new FormData();
+      /* el formulario recoge el correo como campo propio y es obligatorio:
+         si el cliente no dejo email, se manda un marcador para no perder el lead */
+      fd.append('emailAddress', p.email || 'sin-email@reanotravel.com');
+      fd.append(RT_F.nombre,   p.nombre || '');
+      fd.append(RT_F.telefono, p.telefono || '');
+      fd.append(RT_F.email,    p.email || '');
+      fd.append(RT_F.pais,     p.pais || '');
+      fd.append(RT_F.ciudad,   p.ciudad || '');
+      fd.append(RT_F.doc,      ((p.tipoDocumento||'')+' '+(p.numeroDocumento||'')).trim());
+      fd.append(RT_F.carrito,  (payload.carrito||[]).map(function(x){
+        return (x.item||'')+(x.precio?' ('+x.precio+')':'');
+      }).join(' | '));
+      fd.append(RT_F.subtotal, payload.subtotal || '');
+      fd.append(RT_F.json,     JSON.stringify(payload).slice(0, 4000));
+      fetch(RT_FORM, {method:'POST', mode:'no-cors', body:fd}).catch(function(){});
+    }catch(e){}
+
+    /* endpoint propio opcional (Apps Script), si alguna vez se activa */
+    if(window.RT_CRM_ENDPOINT){
+      try{ fetch(window.RT_CRM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(function(){}); }catch(e){}
+    }
+  }
   function paxForm(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/cart') return;
     if(document.body.classList.contains('rt-cart-empty')) return;
@@ -474,13 +522,7 @@
       carrito:items, subtotal:subtotal
     };
     try{ var q=JSON.parse(localStorage.getItem('rt-crm-queue')||'[]'); q.push(payload); localStorage.setItem('rt-crm-queue', JSON.stringify(q)); }catch(e){}
-    if(window.RT_CRM_ENDPOINT){
-      // OJO: 'text/plain' + no-cors a proposito. Con 'application/json' el navegador
-      // dispara un preflight OPTIONS, y Apps Script NO responde a OPTIONS: el lead se
-      // perderia en silencio. Con text/plain es una "peticion simple", va directa.
-      // El servidor igual lee el cuerpo con JSON.parse(e.postData.contents).
-      try{ fetch(window.RT_CRM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(function(){}); }catch(e){}
-    }
+    crmEnviar(payload);
     var okBox=document.getElementById('rt-pax-ok'); if(okBox) okBox.style.display='block';
     var msg='🧾 *Datos del pasajero — Reaño Travels*%0A'
       +'Nombre: '+encodeURIComponent(payload.pasajero.nombre)+'%0A'
