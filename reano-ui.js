@@ -538,5 +538,16 @@
   function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaComprar(); arjonaTienda(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
+  /* Los bloques que pinta paquetes-showcase.js pueden tardar mas de 4,2 s en
+     conexiones lentas. Sin estos reintentos, arjonaTienda() encontraba la
+     rejilla vacia y la tarjeta destacada NO se insertaba nunca: un bug de
+     carrera que aparecia y desaparecia segun la velocidad de la conexion.
+     run() es idempotente (cada funcion se autolimita), asi que reintentar
+     es seguro. Se corta a los ~18 s para no dejar un temporizador vivo. */
+  var rtIntentos = 0;
+  var rtLoop = setInterval(function(){
+    run();
+    if(++rtIntentos >= 20) clearInterval(rtLoop);
+  }, 700);
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
 })();
