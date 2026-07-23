@@ -337,6 +337,43 @@
     });
   }
 
+  /* ===== /conciertos: la noche no se cortaba en el hero =====
+     El hero es oscuro y teatral, y justo debajo la cartelera caia a crema:
+     el corte partia la pagina en dos y, peor, .cx-poster::after desvanece el
+     afiche hacia var(--color-surface) -- que en claro es BLANCO. Fotos de
+     concierto (oscuras por naturaleza) desvanecidas hacia blanco es lo que
+     hacia que Karol G, BTS y Morat se vieran apagados y sucios.
+     Aqui la franja de la cartelera hereda la paleta nocturna del hero: como
+     redeclaramos las variables en el contenedor, las reglas que ya existen
+     (tarjeta, borde, sombra, y el propio degradado del afiche) se vuelven
+     oscuras solas, sin tocar el bloque de codigo de la pagina.
+     Solo /conciertos: /paquetes se queda claro y editorial a proposito. */
+  function conciertosNoche(){
+    if(location.pathname.indexOf('/conciertos')!==0) return;
+    var card=document.querySelector('.cx-card');
+    if(!card) return;                        /* la cartelera aun no se pinta */
+    var band=card.closest('section') || card.parentElement;
+    if(!band || band.classList.contains('rt-noche')) return;
+
+    if(!document.getElementById('rt-noche-css')){
+      var s=document.createElement('style'); s.id='rt-noche-css';
+      s.textContent=
+        '.rt-noche{--color-surface:#17161a;--color-bg:#0f0f12;--color-text:#f3f0ec;'
+       +'--color-border:rgba(255,255,255,.10);--cshadow:rgba(0,0,0,.55);'
+       +'background:#0f0f12;color:var(--color-text);padding:56px 0 64px;'
+       /* sangrado a todo el ancho sin sacar la seccion de su contenedor */
+       +'clip-path:inset(0 -100vmax);box-shadow:0 0 0 100vmax #0f0f12}'
+       +'.rt-noche h1,.rt-noche h2,.rt-noche h3,.rt-noche h4{color:#f7f4f1}'
+       +'.rt-noche p,.rt-noche li{color:#c6c1ba}'
+       /* el afiche respira: el velo arranca mas arriba y muere en la tarjeta */
+       +'.rt-noche .cx-poster::after{background:linear-gradient(to top,#17161a,rgba(23,22,26,0) 78%)}'
+       +'.rt-noche .cx-card{border-color:rgba(255,255,255,.10)}'
+       +'.rt-noche .cx-card:hover{border-color:rgba(255,107,26,.55)}';
+      (document.head||document.documentElement).appendChild(s);
+    }
+    band.classList.add('rt-noche');
+  }
+
   /* Puente /tienda -> /paquetes. Los paquetes se mudaron a su propia pagina el
      22-jul-2026 y en la tienda no quedaba ningun enlace visible hacia ellos:
      solo se llegaba por el menu. Esta franja cierra ese hueco. */
@@ -551,7 +588,7 @@
     host.insertBefore(s, host.firstChild);
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosNoche(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
@@ -561,8 +598,11 @@
      TODAS las paginas. Ahora se observan las mutaciones del DOM y se para en
      cuanto el trabajo esta hecho: cero coste cuando no hay nada que hacer. */
   var rtListo = function(){
-    var enTienda = (location.pathname.replace(/\/+$/,'')||'/') === '/tienda';
-    if(!enTienda) return true;                       /* solo /tienda depende de la rejilla */
+    var ruta = location.pathname.replace(/\/+$/,'')||'/';
+    /* La cartelera de /conciertos la pinta el bloque de codigo de la pagina,
+       asi que la franja nocturna solo se puede aplicar cuando ya existe. */
+    if(ruta.indexOf('/conciertos')===0) return !!document.querySelector('.rt-noche');
+    if(ruta !== '/tienda') return true;              /* el resto no depende de la rejilla */
     return !!(document.getElementById('rt-puente-paq') && document.getElementById('rt-fifty'));
   };
   if(!rtListo() && window.MutationObserver){
