@@ -213,8 +213,13 @@
   .rt-cx-hero .glass p,
   .rt-cx-hero .glass li,
   .rt-cx-hero .glass span:not([class*="text-primary"]){color:var(--text-muted)!important}
+  /* Los nombres de los asesores van en negrita y deben seguir siendo lo mas
+     oscuro de la tarjeta. Se escribe span.font-bold (y no solo .font-bold)
+     para empatar en peso con la regla de arriba: si no, el texto suave le
+     ganaba por especificidad y los nombres salian grises. */
   .rt-cx-hero .glass h1,.rt-cx-hero .glass h2,.rt-cx-hero .glass h3,
   .rt-cx-hero .glass h4,.rt-cx-hero .glass b,.rt-cx-hero .glass strong,
+  .rt-cx-hero .glass span.font-bold,
   .rt-cx-hero .glass .font-bold{color:var(--color-text)!important}
   .rt-cx-hero .glass [class*="text-card-title"]{color:var(--brand-primary)!important}
   .rt-cx-hero .glass [class*="text-primary"]{color:var(--brand-primary)!important}
