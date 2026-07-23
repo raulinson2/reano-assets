@@ -191,6 +191,38 @@
   .rt-ytr-t{font-size:12.5px;line-height:1.45;color:#cfd0d6;text-align:left}
   .rt-ytr-t b{color:#FF8C03}
   html[data-theme="light"] .rt-ytr-t{color:#4a4b52}
+
+  /* ===== /nosotros: el logo del hero, centrado =====
+     La inyeccion trae .rt-herowrap{text-align:left!important}, que en la
+     portada de inicio es correcto (ahi todo el hero va alineado a la
+     izquierda). En /nosotros el resto del hero SI esta centrado —el sello,
+     el titular, el parrafo y los tres numeros caen todos en el eje— y solo
+     el logo se quedaba pegado a la izquierda, descuadrado contra ellos.
+     Se corrige nada mas en esta pagina; el inicio no se toca. */
+  html.rt-nos .rt-herowrap{text-align:center!important}
+
+  /* ===== /contacto: tarjeta blanca sobre hero oscuro =====
+     El hero de contacto es una foto con un velo oscuro encima, asi que la
+     inyeccion pinta de blanco TODO su texto (h1,h2,p,li,a) y de melocoton
+     los acentos. Correcto para lo que va sobre la foto.
+     Pero "Habla con un asesor" no va sobre la foto: es una tarjeta .glass
+     con fondo blanco al 85%. La regla general le llegaba igual y dejaba
+     texto blanco sobre blanco —contraste 1.0, literalmente invisible— y
+     los iconos en melocoton a 1.8. Aqui se devuelven los colores del tema
+     dentro de la tarjeta, que es el unico sitio donde el fondo es claro. */
+  .rt-cx-hero .glass p,
+  .rt-cx-hero .glass li,
+  .rt-cx-hero .glass span:not([class*="text-primary"]){color:var(--text-muted)!important}
+  .rt-cx-hero .glass h1,.rt-cx-hero .glass h2,.rt-cx-hero .glass h3,
+  .rt-cx-hero .glass h4,.rt-cx-hero .glass b,.rt-cx-hero .glass strong,
+  .rt-cx-hero .glass .font-bold{color:var(--color-text)!important}
+  .rt-cx-hero .glass [class*="text-card-title"]{color:var(--brand-primary)!important}
+  .rt-cx-hero .glass [class*="text-primary"]{color:var(--brand-primary)!important}
+  .rt-cx-hero .glass a:not(.btn){color:var(--color-text)!important}
+  /* Los iconos de chat estaban en verde WhatsApp (#25D366): sobre blanco dan
+     contraste 2.0 y ademas ya se decidio que el acento de la marca es el
+     naranja, no el verde del canal. */
+  .rt-cx-hero .glass .material-symbols-outlined{color:var(--brand-primary)!important}
   `;
 
   function injectCSS(){
@@ -563,25 +595,89 @@
        la primera seccion de cada pagina. En una portada propia como esta aterriza
        suelto arriba a la izquierda; ademas sobra, porque la portada ya lleva su
        propia marca. Se oculta SOLO aqui dentro. */
+    var CDN='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/';
+    /* Las cuatro fotos son las de los propios paquetes, no fotos de banco:
+       la portada ensena lo que de verdad se vende mas abajo. */
+    var FOTOS=[
+      {f:'losroques.jpg',      t:'Los Roques'},
+      {f:'canaima.jpg',        t:'Canaima'},
+      {f:'intl-colosseum.jpg', t:'Roma'},
+      {f:'margarita.jpg',      t:'Margarita'}
+    ];
     if(!document.getElementById('rt-paq-portada-css')){
       var st=document.createElement('style');
       st.id='rt-paq-portada-css';
-      st.textContent='#rt-paq-portada .rt-herowrap{display:none!important}';
+      st.textContent=
+        '#rt-paq-portada .rt-herowrap{display:none!important}'
+       +'#rt-paq-portada{position:relative;isolation:isolate;overflow:hidden;'
+         +'background:#0d0d10;padding:126px 22px 64px;text-align:center;'
+         +'font-family:Montserrat,system-ui,sans-serif}'
+       /* Mosaico de fondo: cuatro fotos en fila, cada una con su deriva lenta.
+          Van detras de un velo oscuro para que el titular siempre se lea. */
+       +'#rt-paq-portada .rt-pp-mosaico{position:absolute;inset:0;z-index:0;display:flex}'
+       +'#rt-paq-portada .rt-pp-foto{flex:1;background-size:cover;background-position:center;'
+         +'opacity:0;transform:scale(1.12);'
+         +'animation:rtPpEntra 1.1s cubic-bezier(.22,.61,.36,1) forwards,'
+         +'rtPpDeriva 26s ease-in-out infinite alternate 1.1s}'
+       +'#rt-paq-portada .rt-pp-foto:nth-child(2){animation-delay:.12s,1.22s}'
+       +'#rt-paq-portada .rt-pp-foto:nth-child(3){animation-delay:.24s,1.34s}'
+       +'#rt-paq-portada .rt-pp-foto:nth-child(4){animation-delay:.36s,1.46s}'
+       +'#rt-paq-portada .rt-pp-velo{position:absolute;inset:0;z-index:1;'
+         +'background:linear-gradient(180deg,rgba(13,13,16,.72) 0%,rgba(13,13,16,.80) 45%,rgba(13,13,16,.96) 100%)}'
+       +'#rt-paq-portada .rt-pp-txt{position:relative;z-index:2}'
+       /* Entrada escalonada del texto. Sin JS: la animacion arranca sola. */
+       +'#rt-paq-portada .rt-pp-txt>*{opacity:0;animation:rtPpSube .7s cubic-bezier(.22,.61,.36,1) forwards}'
+       +'#rt-paq-portada .rt-pp-sello{animation-delay:.15s}'
+       +'#rt-paq-portada h1{animation-delay:.28s}'
+       +'#rt-paq-portada .rt-pp-sub{animation-delay:.40s}'
+       +'#rt-paq-portada .rt-pp-tags{animation-delay:.52s}'
+       +'#rt-paq-portada .rt-pp-sello{display:inline-block;border:1px solid rgba(255,140,3,.55);'
+         +'color:#FF8C03;font-size:11.5px;font-weight:800;letter-spacing:.2em;'
+         +'text-transform:uppercase;padding:8px 20px;border-radius:999px;margin-bottom:22px}'
+       +'#rt-paq-portada h1{color:#fff;font-size:clamp(40px,8vw,74px);font-weight:900;'
+         +'font-style:italic;letter-spacing:-2px;line-height:1;margin:0 0 16px;'
+         +'text-shadow:0 6px 26px rgba(0,0,0,.55)}'
+       +'#rt-paq-portada .rt-pp-sub{color:#d6d2ce;font-size:16px;line-height:1.6;'
+         +'max-width:580px;margin:0 auto}'
+       +'#rt-paq-portada .rt-pp-tags{display:flex;flex-wrap:wrap;gap:9px;'
+         +'justify-content:center;margin:26px 0 0}'
+       +'#rt-paq-portada .rt-pp-tags span{background:rgba(255,255,255,.08);'
+         +'border:1px solid rgba(255,255,255,.16);color:#efeae6;font-size:12px;'
+         +'font-weight:700;letter-spacing:.06em;padding:7px 14px;border-radius:999px;'
+         +'backdrop-filter:blur(4px)}'
+       +'@keyframes rtPpEntra{to{opacity:1;transform:scale(1.02)}}'
+       +'@keyframes rtPpDeriva{to{transform:scale(1.12) translateY(-10px)}}'
+       +'@keyframes rtPpSube{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}'
+       /* En movil el mosaico de 4 columnas deja tiras de 90px donde no se
+          reconoce nada: se queda solo la primera foto, a pantalla completa. */
+       +'@media(max-width:640px){#rt-paq-portada{padding:112px 18px 48px}'
+         +'#rt-paq-portada .rt-pp-foto:nth-child(n+2){display:none}}'
+       /* Quien pidio menos movimiento en su sistema no ve ninguno: el
+          contenido aparece ya colocado, sin deriva ni desvanecidos. */
+       +'@media(prefers-reduced-motion:reduce){'
+         +'#rt-paq-portada .rt-pp-foto,#rt-paq-portada .rt-pp-txt>*{'
+         +'animation:none!important;opacity:1!important;transform:none!important}}';
       (document.head||document.documentElement).appendChild(st);
     }
     var s=document.createElement('section');
     s.id='rt-paq-portada';
-    s.style.cssText='background:#0d0d10;padding:132px 22px 54px;text-align:center;'+
-      'font-family:Montserrat,system-ui,sans-serif';
     s.innerHTML=
-      '<span style="display:inline-block;border:1px solid rgba(255,140,3,.55);color:#FF8C03;'+
-      'font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;'+
-      'padding:8px 20px;border-radius:999px;margin-bottom:22px">Cat&#225;logo Rea&#241;o</span>'+
-      '<h1 style="color:#fff;font-size:clamp(40px,8vw,74px);font-weight:900;font-style:italic;'+
-      'letter-spacing:-2px;line-height:1;margin:0 0 16px">PAQUETES</h1>'+
-      '<p style="color:#9aa1ab;font-size:16px;line-height:1.6;max-width:560px;margin:0 auto">'+
-      'Nacionales e internacionales, armados a tu medida: vuelos, hotel, traslados '+
-      'y actividades. Te lo cotizamos sin compromiso.</p>';
+      '<div class="rt-pp-mosaico" aria-hidden="true">'+
+        FOTOS.map(function(o){
+          return '<div class="rt-pp-foto" style="background-image:url('+CDN+o.f+')"></div>';
+        }).join('')+
+      '</div>'+
+      '<div class="rt-pp-velo" aria-hidden="true"></div>'+
+      '<div class="rt-pp-txt">'+
+        '<span class="rt-pp-sello">Cat&#225;logo Rea&#241;o</span>'+
+        '<h1>PAQUETES</h1>'+
+        '<p class="rt-pp-sub">Nacionales e internacionales, armados a tu medida: vuelos, '+
+        'hotel, traslados y actividades. Te lo cotizamos sin compromiso.</p>'+
+        '<div class="rt-pp-tags">'+
+          FOTOS.map(function(o){ return '<span>'+o.t+'</span>'; }).join('')+
+          '<span>y m&#225;s</span>'+
+        '</div>'+
+      '</div>';
     host.insertBefore(s, host.firstChild);
   }
 
