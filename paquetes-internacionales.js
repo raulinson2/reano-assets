@@ -16,7 +16,11 @@
     { id:'euro-maxima', tag:'PAQUETE 01', name:'Euro Máxima', sub:'España · Grecia · Turquía',
       nights:'10 noches', img:CDN+'intl-acropolis.jpg', desde:'2.610',
       ruta:'Barcelona 2n · Atenas 3n · Estambul 3n · Madrid 2n',
-      hl:['⚽ Camp Nou y Santiago Bernabéu','🏛️ La Acrópolis de Atenas','🕌 Santa Sofía y el Gran Bazar'],
+      /* Los dos tours de Europa abrian con la MISMA linea (los estadios), que
+         es justo lo que tienen en comun: puestas una al lado de la otra las
+         tarjetas parecian el mismo paquete. Ahora cada una arranca por lo que
+         solo ella tiene y los estadios cierran la lista. */
+      hl:['🕌 Estambul: Europa y Asia en un mismo día','🏛️ La Acrópolis de Atenas','⚽ Camp Nou y Santiago Bernabéu'],
       cities:[
         ['Barcelona','2 noches','El Camp Nou, la Sagrada Familia y el arte de Gaudí.'],
         ['Atenas','3 noches','La Acrópolis y la cuna de la historia occidental.'],
@@ -28,7 +32,7 @@
     { id:'euro-clasica', tag:'PAQUETE 02', name:'Euro Clásica', sub:'España · Francia · Italia',
       nights:'10 noches', img:CDN+'intl-colosseum.jpg', desde:'2.690',
       ruta:'Barcelona 2n · París 3n · Roma 3n · Madrid 2n',
-      hl:['⚽ Camp Nou y Santiago Bernabéu','🗼 Torre Eiffel y el Louvre','🏛️ El Coliseo y el Vaticano'],
+      hl:['🗼 Torre Eiffel y el Louvre','🏛️ El Coliseo y el Vaticano','⚽ Camp Nou y Santiago Bernabéu'],
       cities:[
         ['Barcelona','2 noches','El Camp Nou y la magia modernista de Gaudí.'],
         ['París','3 noches','La Torre Eiffel, el Louvre y la ciudad del amor.'],
@@ -77,7 +81,7 @@
     +'#rt-intl .ph .ov .t{font-size:10px;font-weight:800;letter-spacing:2px;opacity:.95;}'
     +'#rt-intl .ph .ov .n{font-size:21px;font-weight:800;line-height:1.05;}'
     +'#rt-intl .ph .ov .s{font-size:12px;font-weight:600;opacity:.95;}'
-    +'#rt-intl .ph .bg{position:absolute;right:12px;top:12px;background:linear-gradient(135deg,#FF8A1E,#E85D9A);color:#fff;border-radius:11px;padding:6px 11px;text-align:center;box-shadow:0 6px 16px rgba(232,93,154,.4);}'
+    +'#rt-intl .ph .bg{position:absolute;right:12px;top:12px;background:linear-gradient(135deg,#FFA02E,#E8620A);color:#fff;border-radius:11px;padding:6px 11px;text-align:center;box-shadow:0 6px 16px rgba(232,93,154,.4);}'
     +'#rt-intl .ph .bg em{display:block;font-size:8px;font-weight:800;letter-spacing:1.5px;font-style:normal;opacity:.95;}'
     +'#rt-intl .ph .bg b{display:block;font-size:20px;font-weight:800;line-height:1;}'
     +'#rt-intl .ph .bg i{font-size:7.5px;font-style:normal;opacity:.95;}'
@@ -86,8 +90,12 @@
     +'#rt-intl .hl{list-style:none;padding:0;margin:0 0 14px;}'
     +'#rt-intl .hl li{font-size:13px;color:var(--ink);padding:4px 0;border-bottom:1px dashed var(--line);}'
     +'#rt-intl .btns{margin-top:auto;display:flex;gap:8px;}'
-    +'#rt-intl .wa{flex:1;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-size:13px;font-weight:800;border-radius:30px;padding:11px;text-align:center;text-decoration:none;border:none;cursor:pointer;}'
-    +'#rt-intl .det{background:transparent;border:1.5px solid var(--o);color:var(--o2);font-size:13px;font-weight:800;border-radius:30px;padding:11px 15px;cursor:pointer;white-space:nowrap;}'
+    /* El boton principal va en naranja de marca, no en verde WhatsApp: la
+       tarjeta tenia el verde gritando mas fuerte que el color de Reano y, con
+       la insignia rosa al lado, competian tres acentos por la misma mirada.
+       El canal se sigue diciendo con todas sus letras en el texto del boton. */
+    +'#rt-intl .wa{flex:1;background:linear-gradient(135deg,var(--o),var(--o2));color:#fff;font-size:13px;font-weight:800;border-radius:30px;padding:11px;text-align:center;text-decoration:none;border:none;cursor:pointer;}'
+    +'#rt-intl .det{background:transparent;border:1.5px solid #d8d3dd;color:var(--ink);font-size:13px;font-weight:800;border-radius:30px;padding:11px 15px;cursor:pointer;white-space:nowrap;}'
     +'#rt-intl .note{text-align:center;font-size:12px;color:var(--soft);margin-top:16px;}'
     +'#rt-intl .note b{color:var(--o2);}'
     // modal
@@ -101,7 +109,7 @@
     +'#rt-intl-modal .mh .tt{position:absolute;left:20px;bottom:14px;color:#fff;}'
     +'#rt-intl-modal .mh .tt .n{font-size:24px;font-weight:800;line-height:1.05;}'
     +'#rt-intl-modal .mh .tt .s{font-size:13px;font-weight:600;opacity:.95;}'
-    +'#rt-intl-modal .mh .bg{position:absolute;right:16px;top:14px;background:linear-gradient(135deg,#FF8A1E,#E85D9A);color:#fff;border-radius:12px;padding:7px 13px;text-align:center;}'
+    +'#rt-intl-modal .mh .bg{position:absolute;right:16px;top:14px;background:linear-gradient(135deg,#FFA02E,#E8620A);color:#fff;border-radius:12px;padding:7px 13px;text-align:center;}'
     +'#rt-intl-modal .mh .bg em{display:block;font-size:8px;font-weight:800;letter-spacing:1.5px;font-style:normal;}'
     +'#rt-intl-modal .mh .bg b{display:block;font-size:22px;font-weight:800;line-height:1;}'
     +'#rt-intl-modal .mh .bg i{font-size:7.5px;font-style:normal;}'
@@ -120,7 +128,7 @@
     +'#rt-intl-modal ul.ninc li:before{content:"✕";color:#d6336c;}'
     +'#rt-intl-modal .pay{background:linear-gradient(120deg,rgba(247,148,30,.1),rgba(232,93,154,.1));border-radius:14px;padding:12px 15px;margin-top:16px;font-size:12.5px;line-height:1.5;}'
     +'#rt-intl-modal .pay b{color:var(--r2);}'
-    +'#rt-intl-modal .mwa{display:block;margin-top:16px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-size:15px;font-weight:800;border-radius:30px;padding:13px;text-align:center;text-decoration:none;}';
+    +'#rt-intl-modal .mwa{display:block;margin-top:16px;background:linear-gradient(135deg,var(--o),var(--o2));color:#fff;font-size:15px;font-weight:800;border-radius:30px;padding:13px;text-align:center;text-decoration:none;}';
     document.head.appendChild(s);
   }
 

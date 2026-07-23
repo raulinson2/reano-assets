@@ -133,7 +133,8 @@
   .rt-fifty-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .rt-fifty-pp{display:inline-flex;align-items:center;gap:8px;background:#ffc439;color:#111;font-weight:800;font-size:14px;
     padding:12px 22px;border-radius:999px;text-decoration:none}
-  .rt-fifty-wa{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#25D366,#1ebe5a);color:#fff;
+  /* Naranja de marca, no verde WhatsApp: el canal ya se nombra en el texto. */
+  .rt-fifty-wa{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#FF8C03,#E67A00);color:#fff;
     font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;text-decoration:none}
   .rt-fifty-pp:hover,.rt-fifty-wa:hover{filter:brightness(1.06)}
   .rt-fifty-fine{margin-top:14px;font-size:12px;color:#8b929c}
