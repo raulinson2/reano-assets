@@ -336,31 +336,6 @@
     });
   }
 
-  // ===== ARJONA (vence 26-jul-2026): cerrar los caminos de compra =====
-  // El producto ya existe y es publico, asi que el boton "Comprar en la Tienda"
-  // de su tarjeta en /conciertos deja de sobrar: se re-muestra (el bloque
-  // rt-arjona-css lo ocultaba cuando aun no habia producto) y se apunta directo
-  // a la ficha en vez de al listado generico.
-  var ARJONA_URL = '/tienda/p/morat-yem-paquete-concierto-9wwlj';
-
-  function arjonaComprar(){
-    if(location.pathname.indexOf('/conciertos')!==0) return;
-    var card=document.getElementById('rt-arjona-card');
-    if(!card) return;
-    var a=null;
-    card.querySelectorAll('a').forEach(function(el){
-      if(!a && /comprar/i.test(el.textContent||'')) a=el;
-    });
-    if(!a) return;
-    if(a.getAttribute('href')!==ARJONA_URL) a.setAttribute('href',ARJONA_URL);
-    // El script del store ya deja un display:flex inline SIN prioridad, que pierde
-    // contra el !important de rt-arjona-css. Hay que mirar la prioridad, no el valor.
-    if(a.style.getPropertyPriority('display')!=='important') a.style.setProperty('display','flex','important');
-  }
-
-  // Cuarta tarjeta de Arjona en la vitrina de conciertos de /tienda. Va primera
-  // por urgencia (cupo unico) y no la pinta el modulo del store, asi que la
-  // insertamos aqui clonando la estructura .rts-card tal cual.
   /* Puente /tienda -> /paquetes. Los paquetes se mudaron a su propia pagina el
      22-jul-2026 y en la tienda no quedaba ningun enlace visible hacia ellos:
      solo se llegaba por el menu. Esta franja cierra ese hueco. */
@@ -383,24 +358,6 @@
       'text-decoration:none;padding:15px 34px;border-radius:999px;'+
       'box-shadow:0 8px 22px -8px rgba(255,140,3,.6)">Ver paquetes</a>';
     host.appendChild(s);
-  }
-
-  function arjonaTienda(){
-    if(location.pathname.indexOf('/tienda')!==0) return;
-    if(location.pathname.indexOf('/tienda/p/')===0) return; // ficha de producto, no vitrina
-    if(document.getElementById('rt-arjona-store')) return;
-    var grid=document.querySelector('#rtstore-root .rts-grid');
-    if(!grid || !grid.querySelector('.rts-card')) return;
-    var a=document.createElement('a');
-    a.className='rts-card'; a.id='rt-arjona-store'; a.href=ARJONA_URL;
-    a.innerHTML='<span class="rts-ribbon">&#218;ltimo cupo</span>'+
-      '<div class="rts-img"><img src="https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@b362d98/arjona-hero.jpg" alt="Ricardo Arjona en Bogota" loading="eager"></div>'+
-      '<div class="rts-body"><h2 class="rts-name">Ricardo Arjona &#183; Bogot&#225;</h2>'+
-      '<p class="rts-cat">Entrada Platea 102 &#183; show agotado</p>'+
-      '<div class="rts-pricerow"><span class="rts-plab">Precio final</span>'+
-      '<span class="rts-price">US$ 550</span></div>'+
-      '<span class="rts-btn">Ver entrada <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></span></div>';
-    grid.insertBefore(a, grid.firstElementChild);
   }
 
   // ===== TIENDA: seccion "Reserva con 50%" -> card destacada independiente =====
@@ -593,7 +550,7 @@
     host.insertBefore(s, host.firstChild);
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaComprar(); arjonaTienda(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
@@ -605,7 +562,7 @@
   var rtListo = function(){
     var enTienda = (location.pathname.replace(/\/+$/,'')||'/') === '/tienda';
     if(!enTienda) return true;                       /* solo /tienda depende de la rejilla */
-    return !!document.getElementById('rt-arjona-store');
+    return !!(document.getElementById('rt-puente-paq') && document.getElementById('rt-fifty'));
   };
   if(!rtListo() && window.MutationObserver){
     var rtPend = 0, rtTope;
