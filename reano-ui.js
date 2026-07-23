@@ -367,6 +367,16 @@
        +'.rt-noche p,.rt-noche li{color:#c6c1ba}'
        /* el afiche respira: el velo arranca mas arriba y muere en la tarjeta */
        +'.rt-noche .cx-poster::after{background:linear-gradient(to top,#17161a,rgba(23,22,26,0) 78%)}'
+       /* Las fotos de concierto son oscuras de origen (escenario de noche) y a
+          190px de alto no se distingue al artista. Se levantan aqui en vez de
+          reeditar los JPG: si manana cambian la foto, sigue funcionando. */
+       +'.rt-noche .cx-poster>div{filter:brightness(1.28) contrast(1.05) saturate(1.15)}'
+       +'.rt-noche .cx-card:hover .cx-poster>div{filter:brightness(1.4) contrast(1.07) saturate(1.2)}'
+       /* el ticker de artistas quedaba como una franja blanca entre dos
+          secciones oscuras; solo vive en /conciertos, asi que va sin scope */
+       +'.cx-marq{background:#141317!important;border-top:1px solid rgba(255,255,255,.08);'
+       +'border-bottom:1px solid rgba(255,255,255,.08)}'
+       +'.cx-marq,.cx-marq *{color:#e8e3dc}'
        +'.rt-noche .cx-card{border-color:rgba(255,255,255,.10)}'
        +'.rt-noche .cx-card:hover{border-color:rgba(255,107,26,.55)}';
       (document.head||document.documentElement).appendChild(s);
