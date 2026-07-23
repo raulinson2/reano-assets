@@ -337,17 +337,15 @@
     });
   }
 
-  /* ===== /conciertos: la noche no se cortaba en el hero =====
-     El hero es oscuro y teatral, y justo debajo la cartelera caia a crema:
-     el corte partia la pagina en dos y, peor, .cx-poster::after desvanece el
-     afiche hacia var(--color-surface) -- que en claro es BLANCO. Fotos de
-     concierto (oscuras por naturaleza) desvanecidas hacia blanco es lo que
-     hacia que Karol G, BTS y Morat se vieran apagados y sucios.
-     Aqui la franja de la cartelera hereda la paleta nocturna del hero: como
-     redeclaramos las variables en el contenedor, las reglas que ya existen
-     (tarjeta, borde, sombra, y el propio degradado del afiche) se vuelven
-     oscuras solas, sin tocar el bloque de codigo de la pagina.
-     Solo /conciertos: /paquetes se queda claro y editorial a proposito. */
+  /* ===== /conciertos: realce de afiches, SIN romper el tema =====
+     23-jul-2026, 2a version. La 1a forzaba la cartelera a oscuro siempre para
+     que la noche del hero no se cortara. Error: en modo CLARO quedaba una
+     franja negra debajo de una cabecera crema y la pagina se veia partida y
+     rota. El sitio ya tiene su interruptor claro/oscuro y esta seccion debe
+     OBEDECERLO, no imponerse.
+     Aqui queda solo lo que sirve en los dos modos (el realce del afiche, que
+     son fotos de escenario nocturno y a 190px no se distinguia al artista) y
+     lo nocturno se aplica unicamente cuando el sitio YA esta en oscuro. */
   function conciertosNoche(){
     if(location.pathname.indexOf('/conciertos')!==0) return;
     var card=document.querySelector('.cx-card');
@@ -358,27 +356,16 @@
     if(!document.getElementById('rt-noche-css')){
       var s=document.createElement('style'); s.id='rt-noche-css';
       s.textContent=
-        '.rt-noche{--color-surface:#17161a;--color-bg:#0f0f12;--color-text:#f3f0ec;'
-       +'--color-border:rgba(255,255,255,.10);--cshadow:rgba(0,0,0,.55);'
-       +'background:#0f0f12;color:var(--color-text);padding:56px 0 64px;'
-       /* sangrado a todo el ancho sin sacar la seccion de su contenedor */
-       +'clip-path:inset(0 -100vmax);box-shadow:0 0 0 100vmax #0f0f12}'
-       +'.rt-noche h1,.rt-noche h2,.rt-noche h3,.rt-noche h4{color:#f7f4f1}'
-       +'.rt-noche p,.rt-noche li{color:#c6c1ba}'
-       /* el afiche respira: el velo arranca mas arriba y muere en la tarjeta */
-       +'.rt-noche .cx-poster::after{background:linear-gradient(to top,#17161a,rgba(23,22,26,0) 78%)}'
-       /* Las fotos de concierto son oscuras de origen (escenario de noche) y a
-          190px de alto no se distingue al artista. Se levantan aqui en vez de
-          reeditar los JPG: si manana cambian la foto, sigue funcionando. */
-       +'.rt-noche .cx-poster>div{filter:brightness(1.28) contrast(1.05) saturate(1.15)}'
-       +'.rt-noche .cx-card:hover .cx-poster>div{filter:brightness(1.4) contrast(1.07) saturate(1.2)}'
-       /* el ticker de artistas quedaba como una franja blanca entre dos
-          secciones oscuras; solo vive en /conciertos, asi que va sin scope */
-       +'.cx-marq{background:#141317!important;border-top:1px solid rgba(255,255,255,.08);'
-       +'border-bottom:1px solid rgba(255,255,255,.08)}'
-       +'.cx-marq,.cx-marq *{color:#e8e3dc}'
-       +'.rt-noche .cx-card{border-color:rgba(255,255,255,.10)}'
-       +'.rt-noche .cx-card:hover{border-color:rgba(255,107,26,.55)}';
+       /* NEUTRO: vale igual en claro y en oscuro. Se levantan los JPG desde
+          CSS en vez de reeditarlos: si manana cambian la foto sigue sirviendo. */
+        '.rt-noche .cx-poster>div{filter:brightness(1.18) contrast(1.04) saturate(1.1)}'
+       +'.rt-noche .cx-card:hover .cx-poster>div{filter:brightness(1.3) contrast(1.06) saturate(1.15)}'
+       /* SOLO EN OSCURO: aqui si conviene continuar la noche del hero, porque
+          la cabecera y el resto de la pagina ya estan oscuros. */
+       +'html.dark .rt-noche{--color-surface:#17161a;--color-bg:#0f0f12;'
+       +'--color-border:rgba(255,255,255,.10);--cshadow:rgba(0,0,0,.55)}'
+       +'html.dark .rt-noche .cx-poster::after{background:linear-gradient(to top,#17161a,rgba(23,22,26,0) 78%)}'
+       +'html.dark .rt-noche .cx-card:hover{border-color:rgba(255,107,26,.55)}';
       (document.head||document.documentElement).appendChild(s);
     }
     band.classList.add('rt-noche');
