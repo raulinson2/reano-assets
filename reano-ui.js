@@ -336,26 +336,6 @@
     });
   }
 
-  /* ===== ARJONA: paquete VENDIDO el 23-jul-2026 =====
-     La tarjeta de /conciertos no vive en este repo: la inyecta un
-     <script id="rt-arjona-2026"> que esta dentro del bloque de codigo de esa
-     pagina en Squarespace, junto a su <style id="rt-arjona-css">. Mientras ese
-     bloque siga ahi, seguiria anunciando un cupo que ya no existe, asi que aqui
-     se retiran sus tres rastros. El <style> propio evita el parpadeo entre que
-     el script de la pagina pinta la tarjeta y nosotros la quitamos.
-     BORRAR esta funcion cuando se limpie el bloque a mano en el editor. */
-  function arjonaFuera(){
-    if(location.pathname.indexOf('/conciertos')!==0) return;   /* solo vive ahi */
-    if(!document.getElementById('rt-arjona-off')){
-      var s=document.createElement('style'); s.id='rt-arjona-off';
-      s.textContent='#rt-arjona-card{display:none!important}';
-      (document.head||document.documentElement).appendChild(s);
-    }
-    ['rt-arjona-card','rt-arjona-css','rt-arjona-2026'].forEach(function(id){
-      var el=document.getElementById(id); if(el) el.remove();
-    });
-  }
-
   /* Puente /tienda -> /paquetes. Los paquetes se mudaron a su propia pagina el
      22-jul-2026 y en la tienda no quedaba ningun enlace visible hacia ellos:
      solo se llegaba por el menu. Esta franja cierra ese hueco. */
@@ -570,7 +550,7 @@
     host.insertBefore(s, host.firstChild);
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); arjonaFuera(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
