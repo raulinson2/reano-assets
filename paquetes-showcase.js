@@ -21,7 +21,13 @@
   function inject(){
     if(!onTienda())return;
     if(document.getElementById("rt-paquetes-showcase"))return;
-    var host=document.querySelector("#sections");if(!host)return;
+    /* #sections solo existe en la plantilla de /tienda. En /paquetes el contenido
+       cuelga de <main id="page">, asi que exigir #sections dejaba la seccion sin
+       montar NUNCA: la pagina prometia "nacionales e internacionales" y solo
+       pintaba los internacionales, con ~680px de hueco blanco hasta el pie.
+       Misma cadena de respaldo que usa paquetes-internacionales.js. */
+    var host=document.querySelector("#sections")||document.getElementById("page")||document.querySelector("main");
+    if(!host)return;
     /* Antes se exigia ademas .product-list-section/.page-section porque el bloque
        vivia dentro de /tienda y habia que esperar a que el store pintara. Ahora
        /paquetes es una pagina propia y en blanco: esa comprobacion la dejaba
@@ -33,7 +39,24 @@
     wire(wrap);
   }
   if(document.readyState!=="loading")inject();else document.addEventListener("DOMContentLoaded",inject);
-  var mo=new MutationObserver(function(){inject();});
-  try{mo.observe(document.documentElement,{childList:true,subtree:true});}catch(e){}
+  /* Sin freno, inject() corria en CADA mutacion del DOM (cientos por segundo
+     mientras Squarespace hidrata). Se agrupa en un pase cada 300 ms y el
+     observer se apaga en cuanto la seccion ya esta montada, con tope duro de
+     20 s para no quedar observando de por vida en el resto de las paginas. */
+  function listo(){ return !onTienda() || !!document.getElementById("rt-paquetes-showcase"); }
+  if(!listo()){
+    var moPend=0, moTope;
+    var mo=new MutationObserver(function(){
+      if(moPend)return;
+      moPend=setTimeout(function(){
+        moPend=0; inject();
+        if(listo()){ mo.disconnect(); clearTimeout(moTope); }
+      },300);
+    });
+    try{
+      mo.observe(document.documentElement,{childList:true,subtree:true});
+      moTope=setTimeout(function(){ mo.disconnect(); },20000);
+    }catch(e){}
+  }
   window.addEventListener("popstate",function(){setTimeout(inject,80);});
 })();

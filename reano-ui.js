@@ -345,6 +345,7 @@
      el script de la pagina pinta la tarjeta y nosotros la quitamos.
      BORRAR esta funcion cuando se limpie el bloque a mano en el editor. */
   function arjonaFuera(){
+    if(location.pathname.indexOf('/conciertos')!==0) return;   /* solo vive ahi */
     if(!document.getElementById('rt-arjona-off')){
       var s=document.createElement('style'); s.id='rt-arjona-off';
       s.textContent='#rt-arjona-card{display:none!important}';
