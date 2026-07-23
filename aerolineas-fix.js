@@ -9,10 +9,13 @@
      Maracaibo/Barcelona/Porlamar/El Vigia desde $90. Venezolana nacional desde Maracay + Panama (18/07).
      Avior: nueva ruta Maracaibo-Curazao (16/07). Estelar: Valencia-Madrid, jueves 3/10/17 sep.
      American/oneworld: waiver ampliado (afectados hasta 16/08, reprogramar hasta 19/08, radio 300 mi).
-   - Popups (modal) con detalle enriquecido; fecha "Actualizado: 20 jul".
+   - Popups (modal) con detalle enriquecido; fecha "Actualizado: 23 jul".
    - Update 20/07: Venezolana itinerario nacional oficial (SVBL Palo Negro) con horarios
      precisos MAR⇄MYC y MYC⇄PMV + contacto nuevo; Estelar septiembre 3 vuelos/sem MAD⇄VLN;
-     LASER protocolo Palo Negro detallado. (Copa RD E-Ticket → en base de conocimiento.) */
+     LASER protocolo Palo Negro detallado. (Copa RD E-Ticket → en base de conocimiento.)
+   - Update 23/07: Turkish con detalle definitivo (waiver 132497 para vuelos vigentes +
+     vuelos IST-CCS cancelados con INVOL DUE TO FX + tasa de salida en Bogotá 162.400 COP).
+     Air Europa: operativa por VLN ampliada hasta el 23/08. Fecha "Actualizado: 23 jul". */
 (function(){
   if(window.__rtAeroFix) return; window.__rtAeroFix=1;
   function onBoard(){ var p=(location.pathname.replace(/\/+$/,'')||'/'); return p==='/estado-aerolineas'||p==='/vuelos'; }
@@ -27,13 +30,14 @@
     'Turpial Airlines':'Nacionales vía Valencia · NUEVO El Vigía: desde Valencia (vie·dom, 19/07–28/09) y desde Porlamar (lun·jue, 16/07–28/09)',
     'Rutaca Airlines':'Nacionales vía Valencia · preséntate 4 h antes (nac.) y 5 h (int.) en VLN · afectados 24/06: cambio gratis hasta el 30/07',
     'GOL':'Caracas cancelado hasta el 31/08 · reprogramación sin penalidad, cambio de ruta o reembolso',
-    'Air Europa':'Madrid ⇄ Valencia (UX071/072) en días alternos · CANCELADOS 17, 19, 24, 26 y 31 jul · Caracas: 7 y 14 ago · cambios gratis hasta el 31/10',
+    'Air Europa':'Madrid ⇄ Valencia (UX071/072) · operativa por VLN ampliada hasta el 23/08 · CANCELADOS 17, 19, 24, 26 y 31 jul · Caracas: 7 y 14 ago · cambios gratis hasta el 31/10',
     'Laser Airlines (int.)':'Desde Barcelona (BLA): Madrid ya disponible · Sto. Domingo mié y dom · Bogotá mar·jue·sáb · exonerado el cobro por temporalidad (MIA/MAD)',
     'TAP Air Portugal':'Regresa el 13/07 vía Valencia (VLN)',
     'Laser Airlines (nac.)':'Nacionales desde el Aeropuerto Libertador de Maracay (Palo Negro), 17/07–31/08 · Maracaibo, Barcelona, Porlamar y El Vigía · desde $90 ida y vuelta',
     'American Airlines':'Caracas suspendido · waiver ampliado: afectados hasta el 16/08, reprogramar hasta el 19/08 · cambios de origen/destino (radio 300 mi) sin cargo · aplica a oneworld',
     'Avior Airlines':'Barcelona ⇄ Bogotá y Medellín · NUEVO Maracaibo ⇄ Curazao desde el 16/07',
-    'Venezolana':'Nacionales desde Maracay (Palo Negro) desde el 20/07 · Internacional Panamá desde el 18/07'
+    'Venezolana':'Nacionales desde Maracay (Palo Negro) desde el 20/07 · Internacional Panamá desde el 18/07',
+    'Turkish Airlines':'Dos escenarios: vuelos vigentes con waiver 132497 (revalidación sin penalidad hasta el 31/10) · vuelos IST-CCS cancelados (17/08–22/10) · reubicados por Bogotá: atención a la tasa de salida'
   };
   var OLD = {
     'Aerocaribe':'Vuelos cancelados',
@@ -48,7 +52,8 @@
     'TAP Air Portugal':'Vuelos cancelados',
     'Laser Airlines (nac.)':'En reactivación',
     'American Airlines':'gestionar antes del 11/07',
-    'Avior Airlines':'Barcelona ⇄ Bogotá y Medellín'
+    'Avior Airlines':'Barcelona ⇄ Bogotá y Medellín',
+    'Turkish Airlines':'reprogramación por Bogotá, Panamá, México o Cancún'
   };
   var DET = {
     'Aerocaribe':["Plan de contingencia Ruta Los Roques desde el Aeropuerto Caracas (Charallave).","Ida 8:00 a.m. · Retorno desde Los Roques 5:00 p.m.","Preséntate 1 hora y 30 minutos antes del vuelo.","Horarios sujetos a modificaciones por la naturaleza de la reactivación; se notificará oportunamente.","Coordina por WhatsApp +58 416-623.74.84 · @aerocaribevzla · aerocaribe.aero"],
@@ -60,13 +65,14 @@
     'Rutaca Airlines':["Preséntate con mínimo 4 horas (nacionales) y 5 horas (internacionales) de anticipación en Valencia (VLN).","Afectados por la contingencia del 24/06 — cambio de itinerario: boleto válido 1 año · un (1) cambio de fecha gratis si la reemisión y el viaje se completan antes del 30/07 · después solo pagas la diferencia de tarifa.","Nota de Crédito (EMD): validez de 1 año, canjeable por cualquier ruta RUTACA · no reembolsable.","Solicitudes asociadas a la contingencia: enviar antes del 30 de julio · callcenter@flyrutaca.com.","Vuelos totalmente abiertos y disponibles para nuevas compras."],
     'Conviasa':["Vuelos nacionales desde Valencia con operación reforzada.","Desde Maracay (Los Tacariguas): Los Roques, Barcelona, Puerto Ayacucho, Las Piedras, Barquisimeto y Barinas.","Los Roques desde Maracay: lun–sáb 8:30 am y 1:20 pm · dom 9:55 am y 2:10 pm.","Maracay–Barcelona: lun 7:00 am · vie 4:20 pm — Pto. Ayacucho: lun 10:30 am — Las Piedras: lun 2:50 pm · vie 12:30 pm — Barquisimeto: vie 9:30 am — Barinas: sáb 10:00 am.","Porlamar opera con normalidad.","Internacional: México (Cancún y Santa Lucía) y La Habana, próximamente desde Valencia."],
     'GOL':["Vuelos con destino u origen Caracas cancelados hasta el 31 de agosto de 2026 (comunicado del 8/07).","Reprogramación de fecha sin penalidad ni diferencia tarifaria (sujeto a disponibilidad) para volar hasta 1 año después de la emisión.","Cambio de ruta sin cargos adicionales (sujeto a disponibilidad y diferencias tarifarias).","Reembolso de la tarifa y de los impuestos aplicables.","Agencias (GDS): waiver SKCHG DUE CLD G3-[vuelo]/[fecha] en endorsement + OSI y SSR · soporte CRC B2B.","Si tienes boleto GOL, te ayudamos a revisar tus opciones."],
-    'Air Europa':["Comunicado 13/07 — CANCELADOS Madrid ⇄ Valencia (UX071/UX072): 17, 19, 24, 26 y 31 de julio.","CANCELADOS Madrid ⇄ Caracas (UX071/UX072): 7 y 14 de agosto.","El resto de las fechas de julio opera en días alternos vía Valencia; las conexiones se mantienen.","Boletos emitidos hasta el 25/06: cambio de fecha sin costo (misma cabina) para viajar hasta el 31/10/2026.","Cambio de ruta sin costo, misma cabina, hacia/desde Medellín (MDE), Bogotá (BOG), Panamá (PTY) o Valencia (VLN).","También puedes optar por un vale reembolsable o el reembolso.","Te gestionamos el cambio o la protección de tu boleto Air Europa."],
+    'Air Europa':["Comunicado 13/07 — CANCELADOS Madrid ⇄ Valencia (UX071/UX072): 17, 19, 24, 26 y 31 de julio.","CANCELADOS Madrid ⇄ Caracas (UX071/UX072): 7 y 14 de agosto.","La operativa por Valencia se amplió: días alternos con vuelos publicados hasta el 23/08; las conexiones se mantienen. Verifica la fecha exacta en el GDS.","Boletos emitidos hasta el 25/06: cambio de fecha sin costo (misma cabina) para viajar hasta el 31/10/2026.","Cambio de ruta sin costo, misma cabina, hacia/desde Medellín (MDE), Bogotá (BOG), Panamá (PTY) o Valencia (VLN).","También puedes optar por un vale reembolsable o el reembolso.","Te gestionamos el cambio o la protección de tu boleto Air Europa."],
     'Laser Airlines (int.)':["Madrid (MAD) vía Barcelona (BLA): disponible en sistema (KIU) para viajar del 1/07 al 31/08 · BLA→MAD 17:00 · check-in desde las 10:45 am · clases T/W/L (turista) y D (ejecutiva).","Santo Domingo (SDQ): miércoles y domingos · QL2968 BLA 10:00 → SDQ 11:50 · QL2969 SDQ 13:20 → BLA 14:50.","Bogotá (BOG): martes, jueves y sábados · QL2980 BLA 09:00 → BOG 10:00 · QL2981 BOG 11:30 → BLA 14:30.","NUEVO (9/07): exonerado el cobro por temporalidad en MIA y MAD — misma clase y viaje iniciando hasta el 31/07. Períodos: MIA 25/06–1/07 · SDQ 26/06–5/07 · BOG 26/06–8/07 · MAD 24/06–6/07.","Afectados que mantengan su fecha: revalidación sin costo y con prioridad en la salida.","Call center 0501-52737-00 · WhatsApp +58 412-266.26.37."],
     'TAP Air Portugal':["Retoma sus operaciones a Venezuela el 13 de julio a través de Valencia (VLN).","Boletos e itinerarios disponibles por los canales oficiales y tu agencia.","Te ayudamos a reservar o reacomodar tu vuelo TAP."],
     'Laser Airlines (nac.)':["Protocolo de contingencia: vuelos nacionales desde y hacia el Aeropuerto Libertador de Maracay (Palo Negro, Edo. Aragua), del 17/07 al 31/08.","Barcelona (BLA): QL970 MYC 07:00 → BLA 08:00 · QL971 BLA 09:00 → MYC 10:00 · QL974 MYC 15:30 → BLA 16:30 · QL975 BLA 17:30 → MYC 18:30 (las frecuencias QL972/QL973 están suspendidas temporalmente).","Porlamar (PMV): QL907 PMV 07:30 → MYC 08:40 · QL904 MYC 14:30 → PMV 15:40 · QL905 PMV 16:40 → MYC 17:50 · QL906 MYC 18:50 → PMV 20:00.","Maracaibo (MAR): QL942 MYC 11:00 → MAR 12:10 · QL943 MAR 13:10 → MYC 14:20.  El Vigía (VIG): QL920 MYC 10:00 → VIG 11:10 · QL921 VIG 12:10 → MYC 13:20.","Tarifas desde $90 ida y vuelta · clases turista H/M/Y y ejecutiva C (aplican solo a boletos nuevos).","Protocolo en el Aeropuerto Libertador (Palo Negro): el check-in se hace dentro de la Base Aérea El Libertador · llega 2 horas antes · estacionamiento para pernocta con vigilancia privada. A quienes llegan se les recibe en el estacionamiento del Auditorio de la base y se les traslada en autobuses climatizados a la zona de check-in.","Call center 0501-52737-00 · WhatsApp +58 412-266.26.37 — o te gestionamos la reserva."],
     'American Airlines':["Travel Notice — Actualización 6 (13/07): política especial de excepción por el sismo de Caracas (CCS).","Boletos emitidos hasta el 23/06 · viajes afectados del 25/06 al 16/08 · nuevas fechas de viaje hasta el 19/08.","Cambios de origen/destino permitidos dentro de un radio de 300 millas; cambios de ciudad de conexión y co-terminal permitidos.","Sin cargo por el cambio; sin reembolso, salvo vuelo cancelado o demorado (vía GDS/ARC/BSP).","Aplica también a los socios Joint Business de oneworld: Iberia, British Airways, Finnair, Japan Airlines y Qantas (vuelos propios y en código compartido).","Agencias: autogestión en SalesLink (waiver Travel Notice) · endoso TNADVE/24JUN26A.","Te ayudamos a revisar y reacomodar tu boleto American / oneworld."],
     'Avior Airlines':["Internacionales desde Barcelona (BLA): Bogotá y Medellín (ver también las rutas nacionales de Avior).","NUEVA RUTA Maracaibo ⇄ Curazao, desde el 16 de julio.","Barcelona ⇄ Curazao y Margarita ⇄ Curazao también activas desde el 16/07 (martes y jueves).","Te gestionamos tu vuelo Avior."],
-    'Venezolana':["Nuevo itinerario nacional de contingencia desde el Aeropuerto Libertador (SVBL · Palo Negro, Maracay, Edo. Aragua), vigente desde el 20/07/2026.","Maracaibo → Maracay (MAR-MYC): 1101 06:00–07:00 (L·M·V) · 1101 07:00–08:00 (J) · 1101 08:00–09:00 (D) · 1103 15:15–16:00 (V).","Maracay → Maracaibo (MYC-MAR): 1104 17:00–18:00 (L) · 1102 09:00–10:00 (M) · 1102 13:30–14:15 (V) · 1104 18:00–19:00 (J·V·D).","Maracay ⇄ Porlamar: MYC-PMV 1131 09:00–09:45 (L·V) · 1131 09:45–10:30 (J·D)  ||  PMV-MYC 1132 10:45–11:30 (L·V) · 1132 16:15–17:00 (J·D).","INTERNACIONAL Panamá, desde el 18/07 (martes y sábado): Maracaibo ⇄ Panamá (vuelos 412/413) · Barquisimeto ⇄ Panamá (vuelos 422/423).","Atención al pasajero: WhatsApp +58 414-611.25.67 · Central 0212-819.06.00 · asesorcomercial@venezolana.aero · venezolana.aero — o te la gestionamos nosotros."]
+    'Venezolana':["Nuevo itinerario nacional de contingencia desde el Aeropuerto Libertador (SVBL · Palo Negro, Maracay, Edo. Aragua), vigente desde el 20/07/2026.","Maracaibo → Maracay (MAR-MYC): 1101 06:00–07:00 (L·M·V) · 1101 07:00–08:00 (J) · 1101 08:00–09:00 (D) · 1103 15:15–16:00 (V).","Maracay → Maracaibo (MYC-MAR): 1104 17:00–18:00 (L) · 1102 09:00–10:00 (M) · 1102 13:30–14:15 (V) · 1104 18:00–19:00 (J·V·D).","Maracay ⇄ Porlamar: MYC-PMV 1131 09:00–09:45 (L·V) · 1131 09:45–10:30 (J·D)  ||  PMV-MYC 1132 10:45–11:30 (L·V) · 1132 16:15–17:00 (J·D).","INTERNACIONAL Panamá, desde el 18/07 (martes y sábado): Maracaibo ⇄ Panamá (vuelos 412/413) · Barquisimeto ⇄ Panamá (vuelos 422/423).","Atención al pasajero: WhatsApp +58 414-611.25.67 · Central 0212-819.06.00 · asesorcomercial@venezolana.aero · venezolana.aero — o te la gestionamos nosotros."],
+    'Turkish Airlines':["Dos escenarios DISTINTOS que no se combinan, según si tu vuelo fue cancelado o no.","VUELOS AÚN NO CANCELADOS — Waiver 132497: boletos vendidos hasta el 21/07/2026 (fe de errata) · cambio de reserva y de ruta gratis, incluye servicios (asientos, mascotas) · reubicación por Bogotá, Panamá, México o Cancún, o dentro de la misma región IATA.","Revalidación del boleto hasta el 31/10/2026, sin diferencia de tarifa ni penalidad · reembolso total o parcial libre de cargos · código TELEX 132497.","VUELOS YA CANCELADOS IST-CCS-IST — NO aplica el 132497: se usa INVOL DUE TO FX TK[vuelo]/[fecha] (ej. INVOL DUE TO FX TK223/17AUG26). Cancelados: TK223 17→22 ago · TK224 18→23 ago · TK233 19 ago→21 oct · TK234 20 ago→22 oct.","Tasa de salida en Bogotá (reubicados involuntarios): tránsito menor a 24 h EXENTO · 24 h o más paga 162.400 COP, únicamente en EFECTIVO y en pesos colombianos, en el aeropuerto. Lleva el efectivo listo.","Te ayudamos a revisar tu boleto Turkish y a aplicar el waiver correcto según tu caso."]
   };
 
   function leafs(el){ var out=[]; (function w(e){ if(!e.children||e.children.length===0){ out.push(e); return; } for(var i=0;i<e.children.length;i++) w(e.children[i]); })(el); return out; }
@@ -160,7 +166,7 @@
     dest.insertBefore(c, dest.firstChild);
   }
   function updateSummaries(){
-    ['GOL','Air Europa','Laser Airlines (int.)','Turpial Airlines','Rutaca Airlines','Laser Airlines (nac.)','American Airlines','Avior Airlines'].forEach(function(n){
+    ['GOL','Air Europa','Laser Airlines (int.)','Turpial Airlines','Rutaca Airlines','Laser Airlines (nac.)','American Airlines','Avior Airlines','Turkish Airlines'].forEach(function(n){
       var card=cardByName(n); if(!card) return;
       if(card.getAttribute('data-rtfx-s')) return;
       if(setSummary(card, OLD[n], R[n])) card.setAttribute('data-rtfx-s','1');
@@ -176,7 +182,7 @@
   }
   function fixDate(){
     var u=document.getElementById('rt-updated-txt');
-    if(u && u.textContent!=='Actualizado: 20 jul') u.textContent='Actualizado: 20 jul';
+    if(u && u.textContent!=='Actualizado: 23 jul') u.textContent='Actualizado: 23 jul';
   }
   function patchVenezolana(){
     replaceAnywhere('Desde Barquisimeto (6/07): Maracaibo (lun-mar-jue-vie-dom) y Porlamar (lun-jue-dom) · con horarios',
