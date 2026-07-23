@@ -202,8 +202,11 @@
   function homeCard(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/') return;
     var src=null;
-    document.querySelectorAll('div').forEach(function(el){
-      if(!src && /col-span-12/.test(el.className) && /Experiencias y Eventos/.test(el.textContent) && el.textContent.length<420) src=el;
+    // Acotado: solo las tarjetas col-span-12 dentro de #sections, no todos los divs
+    // del documento (esto corria en cada mutacion y disparaba el jank del home).
+    var scope=document.getElementById('sections')||document;
+    scope.querySelectorAll('[class*="col-span-12"]').forEach(function(el){
+      if(!src && /Experiencias y Eventos/.test(el.textContent) && el.textContent.length<420) src=el;
     });
     if(!src) return;
     var grid=src.parentElement; if(!grid) return;
@@ -241,8 +244,30 @@
   }
 
   if(document.readyState!=='loading') mount(); else document.addEventListener('DOMContentLoaded', mount);
-  var mo=new MutationObserver(function(){ mount(); });
-  mo.observe(document.documentElement,{childList:true,subtree:true});
+
+  // ¿Ya no queda nada por montar? En home: la tarjeta clonada existe. En /paquetes:
+  // la seccion #rt-intl existe. En cualquier otra ruta: nada que hacer.
+  function settled(){
+    var p=(location.pathname.replace(/\/+$/,'')||'/');
+    if(p==='/') return !!document.querySelector('[data-rtintlcard]');
+    if(onTienda()) return !!document.getElementById('rt-intl');
+    return true;
+  }
+  // Observer con debounce (un solo pase por rafaga) que se DESCONECTA al terminar.
+  // Antes disparaba mount() en cada mutacion durante la hidratacion de Squarespace
+  // -> escaneaba el home sin parar: era la causa principal del jank/lentitud.
+  var moPend=0, moStop;
+  var mo=new MutationObserver(function(){
+    if(moPend) return;
+    moPend=setTimeout(function(){
+      moPend=0; mount();
+      if(settled()){ mo.disconnect(); clearTimeout(moStop); }
+    }, 300);
+  });
+  if(!settled()){
+    mo.observe(document.documentElement,{childList:true,subtree:true});
+    moStop=setTimeout(function(){ mo.disconnect(); }, 20000); // tope duro de seguridad
+  }
   window.addEventListener('popstate', function(){ setTimeout(function(){ mount(); hashScroll(); }, 80); });
   window.addEventListener('hashchange', hashScroll);
   setTimeout(function(){ mount(); hashScroll(); }, 600);

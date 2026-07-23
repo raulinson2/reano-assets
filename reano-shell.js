@@ -68,6 +68,28 @@
 
   function path() { return (location.pathname.replace(/\/+$/, '') || '/'); }
 
+  /* Un solo criterio de "activo", compartido por desktop y movil, con alias y
+     subrutas. Antes desktop solo contemplaba el prefijo /tienda y el movil solo
+     coincidencia exacta, asi que /vuelos, las subrutas (/conciertos/...) y la
+     ficha de producto no resaltaban igual: el header "cambiaba" segun la seccion. */
+  function activeFor(p, href) {
+    if (href === '/estado-aerolineas') return p === '/estado-aerolineas' || p === '/vuelos';
+    if (href === '/') return p === '/';
+    return p === href || p.indexOf(href + '/') === 0;
+  }
+  var _lastActivePath = null;
+  function refreshActive() {
+    var host = document.getElementById('rt2-header');
+    if (!host || !host.shadowRoot) return;
+    var p = path();
+    if (p === _lastActivePath) return;            // solo recalcula si cambio la ruta
+    _lastActivePath = p;
+    host.shadowRoot.querySelectorAll('.links a, .mob a').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (href && href.charAt(0) === '/') a.classList.toggle('on', activeFor(p, href));
+    });
+  }
+
   /* ---------- HEADER (Shadow DOM) ---------- */
   var HEADER_CSS = [
     '*{box-sizing:border-box;font-family:"Montserrat",system-ui,-apple-system,sans-serif;margin:0;padding:0}',
@@ -131,7 +153,7 @@
     host.setAttribute('data-th', isDark() ? 'dark' : 'light');
     var sr = host.attachShadow({ mode: 'open' });
     var links = LINKS.map(function (l) {
-      var on = (p === l[1]) || (l[1] === '/tienda' && p.indexOf('/tienda') === 0);
+      var on = activeFor(p, l[1]);
       return '<a href="' + l[1] + '"' + (on ? ' class="on"' : '') + '>' + l[0] + '</a>';
     }).join('');
     sr.innerHTML =
@@ -150,7 +172,7 @@
       '  </div>' +
       '</div></div>' +
       '<div class="mob" id="mob">' + LINKS.map(function (l) {
-        return '<a href="' + l[1] + '"' + (p === l[1] ? ' class="on"' : '') + '>' + l[0] + '</a>';
+        return '<a href="' + l[1] + '"' + (activeFor(p, l[1]) ? ' class="on"' : '') + '>' + l[0] + '</a>';
       }).join('') + '<a class="cta" href="' + WA + '" target="_blank" rel="noopener">Cotizar ahora</a></div>';
     document.body.insertBefore(host, document.body.firstChild);
 
@@ -253,5 +275,8 @@
   if (document.readyState !== 'loading') boot();
   else document.addEventListener('DOMContentLoaded', boot);
   [400, 1200, 2600].forEach(function (d) { setTimeout(boot, d); });
-  setInterval(function () { syncBadge(); syncTheme(); }, 2000);
+  // recalcula el resaltado activo en navegacion AJAX de Squarespace (el header
+  // persiste y no se reconstruye) y en back/forward; early-out si la ruta no cambio.
+  window.addEventListener('popstate', refreshActive);
+  setInterval(function () { syncBadge(); syncTheme(); refreshActive(); }, 2000);
 })();
