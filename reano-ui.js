@@ -589,7 +589,13 @@
      "Paquetes Internacionales" sin presentacion. */
   function paquetesPortada(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/paquetes') return;
-    var host=document.querySelector('#sections'); if(!host) return;
+    /* /paquetes NO tiene #sections: su contenedor es main#page. Buscar solo
+       #sections hacia que esta funcion saliera en silencio y la portada no
+       se pintara nunca —el motivo real de que la pagina arrancara pelada—.
+       Se usa la misma cadena de respaldo que ya usa paquetes-showcase.js. */
+    var host=document.querySelector('#sections')||document.getElementById('page')||
+             document.querySelector('main');
+    if(!host) return;
     if(document.getElementById('rt-paq-portada')) return;
     /* La inyeccion FOOTER mete un .rt-herowrap con el logo como primer hijo de
        la primera seccion de cada pagina. En una portada propia como esta aterriza
