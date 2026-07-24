@@ -128,14 +128,14 @@
     ':host([data-th=light]) .cart{color:#2a2620}',
     '.cart:hover{background:rgba(128,128,128,.15)}',
     '.cart svg{width:21px;height:21px}',
-    '.badge{position:absolute;top:0;right:0;min-width:16px;height:16px;border-radius:999px;background:#D2480A;color:#fff;',
+    '.badge{position:absolute;top:0;right:0;min-width:16px;height:16px;border-radius:999px;background:#C2410C;color:#fff;',
     '  font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px}',
     '.badge.zero{display:none}',
-    /* #D2480A: blanco sobre naranja pasa AA (4,5:1); el #FF8C03 daba 2,7. Igual
+    /* #C2410C: blanco sobre naranja pasa AA con holgura (5,2:1); el #FF8C03 daba 2,7. Igual
        que los botones de reano-ui, para que el CTA del header no quede mas claro. */
-    '.cta{background:#D2480A;color:#fff;font-size:12.5px;font-weight:700;',
+    '.cta{background:#C2410C;color:#fff;font-size:12.5px;font-weight:700;',
     '  letter-spacing:.05em;text-transform:uppercase;text-decoration:none;padding:10px 20px;border-radius:999px;',
-    '  white-space:nowrap;box-shadow:0 6px 16px -6px rgba(210,72,10,.6);transition:filter .18s,transform .18s}',
+    '  white-space:nowrap;box-shadow:0 6px 16px -6px rgba(194,65,12,.6);transition:filter .18s,transform .18s}',
     '.cta:hover{filter:brightness(1.07);transform:translateY(-1px)}',
     '.burger{display:none}',
     '.mob{display:none;position:fixed;top:64px;left:0;right:0;padding:10px 18px 22px;',
@@ -224,7 +224,7 @@
     '.pills{display:flex;gap:10px;flex-wrap:wrap}',
     '.pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;text-decoration:none;',
     '  padding:9px 16px;border-radius:999px;transition:filter .18s}',
-    '.pill.solid{background:#D2480A;color:#fff}',
+    '.pill.solid{background:#C2410C;color:#fff}',
     '.pill.line{border:1.5px solid rgba(255,140,3,.55);color:#FF8C03}',
     '.pill:hover{filter:brightness(1.08)}',
     '.h{font-size:11.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#8b929c;margin:4px 0 16px}',

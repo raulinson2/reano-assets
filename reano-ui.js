@@ -256,8 +256,14 @@
      El blanco sobre el naranja de marca (#FF6B1A/#FF8C03) daba 2,85:1 — falla
      AA para el texto de 12-14 px de los botones. No hay ningun naranja "vivo"
      con el que el blanco llegue a 4,5: por luminancia, el naranja tiene que
-     bajar. #D2480A es el punto justo (blanco = 4,49:1) y sigue leyendose como
-     un naranja atardecer, no marron. Se aplica plano a TODOS los botones de
+     bajar. Este naranja empezo en #D2480A, que sobre el papel daba 4,50:1 —
+     pero Lighthouse lo midio en 4,49 y lo reprobo: quedaba justo del lado malo
+     del redondeo. Ahora es #C2410C (blanco = 5,2:1), que pasa con holgura, es
+     el MISMO valor que usa contrastFix() para el texto naranja (un solo naranja
+     profundo en todo el sitio en vez de dos casi iguales) y a ojo es
+     indistinguible del anterior. Leccion: no elegir un color que empate justo
+     con el umbral; el redondeo del auditor decide, y decide en contra.
+     Sigue leyendose como naranja atardecer, no marron. Se aplica plano a TODOS los botones de
      marca (los propios y los nativos de la tienda) para que queden uniformes.
      Los botones amarillos de PayPal (#ffc439, texto oscuro) NO se tocan. */
   /* Prefijo html body: el .btn-primary del sitio lleva su propio !important y,
@@ -267,8 +273,8 @@
   html body .btn-primary,html body .rt-nav .btn-primary,html body header.fixed .btn-primary,html body nav.fixed .btn-primary,
   html body .sqs-add-to-cart-button,html body button.sqs-add-to-cart-button,html body [class*="add-to-cart-button"],
   html body .rt-nav-cta,html body .rt-ce-b1,html body .rt-fifty-wa,html body .rt-pax-submit{
-    background:#D2480A !important;background-image:none !important;border-color:#D2480A !important}
-  .rt-ce-b1,.rt-fifty-wa,.rt-pax-submit,.rt-nav-cta{box-shadow:0 8px 20px -8px rgba(210,72,10,.6) !important}
+    background:#C2410C !important;background-image:none !important;border-color:#C2410C !important}
+  .rt-ce-b1,.rt-fifty-wa,.rt-pax-submit,.rt-nav-cta{box-shadow:0 8px 20px -8px rgba(194,65,12,.6) !important}
 
   /* ===== MICROINTERACCIONES: transiciones suaves + realce al pasar el raton =====
      Solo animan un cambio que YA ocurre al hover, asi que no hay coste cuando no
@@ -976,9 +982,9 @@
      otab, cx-tag, mus-tab, <a> sueltos de las tarjetas de concierto...) y ademas
      el .btn-primary del sitio pelea la cascada. Esta pasada mira el COLOR: si un
      elemento tiene fondo NARANJA VIVO de marca con texto claro encima, le pone el
-     naranja profundo #D2480A por estilo inline (gana a cualquier hoja). El doble
+     naranja profundo #C2410C por estilo inline (gana a cualquier hoja). El doble
      filtro (fondo naranja vivo + texto claro) hace imposible tocar algo que no sea
-     un boton blanco-sobre-naranja. Idempotente: #D2480A ya no es "vivo" (R=210<235),
+     un boton blanco-sobre-naranja. Idempotente: #C2410C ya no es "vivo" (R=194<235),
      no se reprocesa. Vale para ambos temas: blanco sobre naranja falla en los dos. */
   function rtBrightOrangeBg(c){ var r=c[0],g=c[1],b=c[2]; return r>=235 && g>=88 && g<=165 && b<=72 && (r-b)>150; }
   function deepenButtons(){
@@ -993,7 +999,7 @@
       var fg=(cs.color.match(/[\d.]+/g)||[]).map(Number);
       if(fg.length<3 || fg[0]<190 || fg[1]<190 || fg[2]<190) return; /* solo texto claro */
       var r=el.getBoundingClientRect(); if(r.width<8 || r.height<6) return;
-      el.style.setProperty('background-color','#D2480A','important');
+      el.style.setProperty('background-color','#C2410C','important');
       if(/gradient/.test(cs.backgroundImage)) el.style.setProperty('background-image','none','important');
     });
   }
