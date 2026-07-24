@@ -300,6 +300,33 @@
      padding-top empuja el bloque centrado lo justo para despejarlo; en pantallas
      altas apenas se nota. Acotado a la home (body.rt-home) para no tocar otros heros. */
   body.rt-home section[class*="min-h-"]{padding-top:72px;padding-bottom:28px}
+
+  /* ===== Banner de cookies: el ultimo fallo de contraste del sitio =====
+     Lighthouse (movil) deja el sitio en 96 de accesibilidad y el UNICO fallo son
+     los dos botones del banner de consentimiento, que Squarespace pinta con el
+     naranja de marca puro: "ACCEPT ALL" da 3,05:1 (blanco sobre #FF5E1A) y
+     "DECLINE ALL" 2,17:1 (naranja sobre gris) — el minimo AA para texto de 12px
+     es 4,5:1. contrastFix() y deepenButtons() lo saltan a proposito por ser UI
+     nativa de consentimiento, asi que se corrige aqui y solo en color: no se toca
+     el texto, ni el tamano, ni lo que hacen los botones.
+     Se fija el par fondo+texto en ambos (no solo el texto) para que el contraste
+     sea el mismo en claro y en oscuro, sin depender de como pinte Squarespace el
+     banner en cada tema. Aceptar: #C2410C con blanco = 5,2:1. Rechazar: el naranja
+     no alcanza 4,5:1 sobre gris claro ni oscureciendolo, asi que pasa a gris
+     neutro oscuro = 12,3:1 — que ademas es lo convencional para un boton
+     secundario, y deja la opcion de rechazar MAS legible que antes. */
+  .gdpr-cookie-banner button.accept,
+  .gdpr-cookie-banner .sqs-cookie-banner-v2-accept{
+    background:#C2410C !important;background-image:none !important;
+    border-color:#C2410C !important}
+  .gdpr-cookie-banner button.accept,
+  .gdpr-cookie-banner button.accept span{color:#fff !important}
+  .gdpr-cookie-banner button.decline,
+  .gdpr-cookie-banner .sqs-cookie-banner-v2-decline{
+    background:#E8E8E8 !important;background-image:none !important;
+    border-color:#9A9A9A !important}
+  .gdpr-cookie-banner button.decline,
+  .gdpr-cookie-banner button.decline span{color:#262626 !important}
   `;
 
   function injectCSS(){
