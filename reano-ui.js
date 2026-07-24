@@ -794,7 +794,76 @@
     host.insertBefore(s, host.firstChild);
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
+  /* ===== Contraste: el naranja de marca en TEXTO se cae en modo claro =====
+     24-jul-2026. Auditados en vivo los 4 modos: en OSCURO el naranja de marca
+     (#FF5E1A / #FF8C03 / #F08C00) sobre fondo oscuro rinde de sobra, pero en
+     CLARO ese mismo naranja como TEXTO (titulos de seccion, subtitulos, kickers
+     y precios del showcase, pildoras de estado) cae a 2,2-3,1:1 sobre crema o
+     blanco — por debajo del 4,5 de AA, y varios ni siquiera pasan el 3,0 de
+     texto grande. Es el "error entre claro y oscuro" que se reportaba.
+     Ya se corrigio asi el hero de /conciertos el 23-jul (a #C2410C, 4,85:1) y
+     Raul lo acepto; aqui se generaliza el MISMO criterio a todo el sitio.
+
+     Por que JS y no CSS: el mismo naranja sale de muchas fuentes distintas
+     (.text-section-title, .font-section-title, h3.font-bold, .rt-paq-kicker,
+     .rt-opt-r, .hl, .rt-pill...) y no todas las cabeceras naranjas comparten
+     clase (en la home los titulos de seccion son casi negros y NO deben tocarse).
+     No se puede seleccionar "texto naranja sobre fondo claro" por CSS. La pasada
+     mira el color COMPUTADO: si es de la familia naranja de marca, no tiene fondo
+     propio (boton/chip) y su fondo efectivo es claro, lo profundiza. Se limpia y
+     reevalua en cada pasada, asi que el interruptor de tema (que no recarga) lo
+     revierte solo: en oscuro se quitan los colores y vuelve el naranja vivo. */
+  var RT_DEEP='#C2410C';
+  function rtIsBrandOrange(c){
+    var r=c[0],g=c[1],b=c[2];
+    /* naranja claro de marca: R alto, G medio, B casi nulo. Excluye el #C2410C
+       ya profundizado (R=194<210), el rojo de error (B=77>75) y el amarillo
+       PayPal (G=196>155), para no reprocesarlos ni pisarlos. */
+    return r>=210 && g>=70 && g<=155 && b<=75 && (r-b)>150;
+  }
+  function rtBgLum(el){
+    var n=el;
+    while(n && n!==document.documentElement){
+      var bg=(getComputedStyle(n).backgroundColor.match(/[\d.]+/g)||[]).map(Number);
+      if(bg.length>=3 && (bg.length<4 || bg[3]>0.55)){
+        var a=[bg[0],bg[1],bg[2]].map(function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});
+        return .2126*a[0]+.7152*a[1]+.0722*a[2];
+      }
+      n=n.parentElement;
+    }
+    return 1; /* sin fondo opaco: el cuerpo del sitio es claro en modo claro */
+  }
+  function contrastFix(){
+    /* Se limpia SIEMPRE primero: hace la funcion idempotente y hace que un
+       cambio de tema en caliente revierta el efecto sin tocar nada mas. */
+    document.querySelectorAll('[data-rtcfix]').forEach(function(el){
+      el.style.removeProperty('color'); el.removeAttribute('data-rtcfix');
+    });
+    if(document.documentElement.classList.contains('dark')) return; /* solo en claro */
+    document.querySelectorAll('h1,h2,h3,h4,h5,p,a,span,li,b,strong').forEach(function(el){
+      /* solo hojas con texto directo: no recolorear un contenedor entero */
+      if(el.children.length){ var ht=false; for(var i=0;i<el.childNodes.length;i++){ if(el.childNodes[i].nodeType===3 && el.childNodes[i].textContent.trim().length>1){ht=true;break;} } if(!ht) return; }
+      var cs=getComputedStyle(el);
+      /* invisible (nav nativo oculto por el shell, footer duplicado, etc.): fuera */
+      if(cs.display==='none' || cs.visibility==='hidden' || parseFloat(cs.opacity)<0.1) return;
+      var r=el.getBoundingClientRect(); if(r.width<4 || r.height<4) return;
+      /* el banner de cookies es UI de consentimiento nativa de Squarespace: no la tocamos */
+      if(el.closest('[id*="cookie" i],[class*="cookie" i],[id*="consent" i],[class*="consent" i]')) return;
+      var col=(cs.color.match(/[\d.]+/g)||[]).map(Number);
+      if(col.length<3 || !rtIsBrandOrange(col)) return;
+      if(col[3]!==undefined && col[3]<0.5) return;
+      /* fondo propio (color solido o gradiente/imagen) = boton o chip: ahi el
+         blanco va sobre naranja y esta bien; no se toca. */
+      var own=(cs.backgroundColor.match(/[\d.]+/g)||[]).map(Number);
+      if(own.length>=3 && (own.length<4 || own[3]>0.55)) return;
+      if(/gradient|url\(/.test(cs.backgroundImage)) return;
+      if(rtBgLum(el) < 0.4) return; /* sobre fondo oscuro el naranja vivo va bien */
+      el.style.setProperty('color', RT_DEEP, 'important');
+      el.setAttribute('data-rtcfix','1');
+    });
+  }
+
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
@@ -808,6 +877,10 @@
     /* La cartelera de /conciertos la pinta el bloque de codigo de la pagina,
        asi que la franja nocturna solo se puede aplicar cuando ya existe. */
     if(ruta.indexOf('/conciertos')===0) return !!document.querySelector('.rt-noche');
+    /* /paquetes: el showcase (paquetes-showcase.js) se inyecta tarde; hay que
+       mantener vivo el observador para que contrastFix() recoloree su naranja
+       cuando aparezca. Listo cuando el kicker del showcase ya existe. */
+    if(ruta === '/paquetes') return !!document.querySelector('.rt-paq-kicker');
     if(ruta !== '/tienda') return true;              /* el resto no depende de la rejilla */
     return !!(document.getElementById('rt-puente-paq') && document.getElementById('rt-fifty'));
   };
@@ -828,4 +901,12 @@
     rtTope = setTimeout(function(){ rtObs.disconnect(); }, 20000); /* tope duro */
   }
   window.addEventListener('popstate',function(){ setTimeout(run,120); });
+  /* El interruptor de tema (reano-shell) cambia html.dark / data-theme SIN
+     recargar. Se observa ese cambio para revertir/reaplicar el contraste al
+     vuelo. Solo mira atributos de <html> (no el subarbol), asi que los propios
+     cambios de color en linea de contrastFix no lo re-disparan: sin bucle. */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ contrastFix(); })
+      .observe(document.documentElement,{attributes:true,attributeFilter:['class','data-theme']});
+  }
 })();
