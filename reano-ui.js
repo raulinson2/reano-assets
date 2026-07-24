@@ -5,7 +5,10 @@
 (function(){
   if(window.__rtUI3) return; window.__rtUI3=1;
   var WA='https://wa.me/584247309699?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20paquetes%20de%20viaje';
-  var IMG='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/losroques.jpg';
+  /* Bogota: es el destino de TODOS los paquetes de concierto que hoy se venden
+     en la tienda (Karol G, Arirang, Arjona — los tres en el Movistar Arena).
+     La portada ensena lo que de verdad se vende, no una foto de banco. */
+  var IMG='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/intl-bogota.jpg';
 
   var CSS = `
   /* ===== HEADER: margenes tipo max-width 1200 en el header legacy ===== */
@@ -46,13 +49,33 @@
   .rt-footer .rt-soc-link:hover, footer.rea-stuck .rt-soc-link:hover{color:#FF8C03 !important}
   .rt-footer > div:last-child, footer.rea-stuck > div:last-child{color:#7d838d !important}
 
-  /* ===== TIENDA: fondo fotografico infinito (fixed a toda la pagina) ===== */
-  #rt-tienda-bg::after{content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(12,12,14,.68),rgba(12,12,14,.84))}
-  html:not(.dark) #rt-tienda-bg::after{background:linear-gradient(180deg,rgba(255,252,248,.78),rgba(255,252,248,.9))}
-  body.rt-tienda #sections{position:relative;z-index:1}
-  body.rt-tienda .page-section{background:transparent !important}
-  body.rt-tienda footer{position:relative;z-index:1}
+  /* ===== TIENDA: fondo fotografico en el hero =====
+     Aqui habia un #rt-tienda-bg fijo a toda la pagina, y NUNCA se vio. /tienda
+     es UNA sola seccion: el titular y la rejilla de productos comparten bloque,
+     y la hoja de la tienda lo pinta con
+        body.rtstore-on #sections{background:var(--bg)!important}
+     —un ID, que gana por especificidad a cualquier regla de clase—. La foto se
+     descargaba entera y quedaba enterrada debajo. Eso era el "tienda tampoco
+     tiene ningun background": si lo tenia, pero tapado.
+     Se retira ese fondo muerto (dos sistemas de fondo compitiendo, uno perdiendo
+     en silencio) y la foto pasa DENTRO del hero, que es el unico sitio donde no
+     compite con la lectura de los precios. */
+  .rts-hero{position:relative;isolation:isolate;overflow:hidden}
+  /* El :not() es obligatorio: sin el, esta regla le quitaria el position:absolute
+     a la propia foto y al velo, y los dos caerian dentro del flujo del texto. */
+  .rts-hero > *:not(.rt-tp-foto):not(.rt-tp-velo){position:relative;z-index:2}
+  .rt-tp-foto{position:absolute;inset:0;z-index:0;background-position:center 42%;
+    background-size:cover;transform:scale(1.06);
+    animation:rtTpZoom 30s ease-in-out infinite alternate}
+  /* El velo SIGUE AL TEMA. En claro el titular de la tienda es casi negro
+     (rgb(25,23,20)) y el subtitulo gris (rgb(87,81,75)): un velo oscuro los
+     dejaria ilegibles —exactamente el fallo que hubo que corregir en
+     /conciertos—, asi que en claro aclara en vez de oscurecer. */
+  .rt-tp-velo{position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,rgba(12,12,14,.66),rgba(12,12,14,.88))}
+  html:not(.dark) .rt-tp-velo{background:linear-gradient(180deg,rgba(255,252,248,.76),rgba(255,252,248,.93))}
+  @keyframes rtTpZoom{to{transform:scale(1.16)}}
+  @media(prefers-reduced-motion:reduce){.rt-tp-foto{animation:none;transform:scale(1.06)}}
 
   /* ===== PRODUCTO: breadcrumb legible en oscuro ===== */
   html.dark [class*="readcrumb"], html.dark [class*="readcrumb"] a,
@@ -267,12 +290,22 @@
   function markTienda(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda')return;
     document.body.classList.add('rt-tienda');
-    if(!document.getElementById('rt-tienda-bg')){
-      var bg=document.createElement('div');bg.id='rt-tienda-bg';
-      bg.setAttribute('style','position:fixed;inset:0;z-index:0;pointer-events:none;'
-        +'background:url('+IMG+') center/cover no-repeat');
-      document.body.appendChild(bg);
-    }
+    /* El hero lo dibuja la hoja de la tienda, no esta inyeccion: en la primera
+       pasada puede no existir todavia. No pasa nada —el observador vuelve a
+       llamar a run() mientras Squarespace hidrata—, asi que basta con salir. */
+    var hero=document.querySelector('.rts-hero');
+    if(!hero || hero.querySelector('.rt-tp-foto')) return;
+    var foto=document.createElement('div');
+    foto.className='rt-tp-foto';
+    foto.setAttribute('aria-hidden','true');
+    foto.style.backgroundImage='url('+IMG+')';
+    var velo=document.createElement('div');
+    velo.className='rt-tp-velo';
+    velo.setAttribute('aria-hidden','true');
+    /* Se insertan al principio y en este orden para que queden foto -> velo ->
+       contenido, que es como los apila el z-index de arriba. */
+    hero.insertBefore(velo, hero.firstChild);
+    hero.insertBefore(foto, hero.firstChild);
   }
 
   // Con el SHELL activo, los componentes legacy deben quedar ocultos SIEMPRE.
