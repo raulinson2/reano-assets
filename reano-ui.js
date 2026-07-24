@@ -483,7 +483,20 @@
          lechoso. Se apagan con !important porque compiten con una animacion
          (una animacion gana a una declaracion normal, pero no a !important). */
      +'html:not(.dark) header.cx-hero::before{background:none!important;'
-       +'animation:none!important;opacity:0!important}';
+       +'animation:none!important;opacity:0!important}'
+      /* Efecto secundario de aclarar la banda, medido y corregido aqui mismo:
+         el naranja de marca (#FF6B1A) lucia sobre negro (6,5:1) pero sobre
+         crema se cae a 2,7:1 — ilegible. Solo el texto naranja que NO lleva
+         fondo propio (titular, pildora y boton fantasma); los botones y chips
+         naranjas siguen igual, que ahi el blanco va sobre naranja y esta bien.
+         #C2410C es el mismo naranja mas profundo: 4,85:1 sobre el crema y
+         4,54:1 sobre la pildora traslucida, o sea aprobado incluso para el
+         texto pequeno de 12 px. En OSCURO no cambia nada. */
+     +'html:not(.dark) header.cx-hero h1,'
+     +'html:not(.dark) header.cx-hero h1 span,'
+     +'html:not(.dark) header.cx-hero .text-primary{color:#C2410C!important}'
+     +'html:not(.dark) header.cx-hero a[href="#lineup"]{color:#C2410C!important;'
+       +'border-color:#C2410C!important}';
     (document.head||document.documentElement).appendChild(s);
   }
 

@@ -1,7 +1,7 @@
 # Graph Report - reano-assets-work  (2026-07-23)
 
 ## Corpus Check
-- 10 files · ~59,941 words
+- 10 files · ~60,011 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
