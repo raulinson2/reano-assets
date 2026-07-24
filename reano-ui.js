@@ -439,6 +439,16 @@
           excluia la fecha, y la burbuja crecia y se descuadraba de su esquina.
           Aqui se le devuelve la quietud (4 clases ganan a 3 clases + 1 tipo). */
        +'.rt-noche .cx-card:hover .cx-date{transform:none}'
+       /* ===== Y LA RAIZ DEL PROBLEMA, medida el 23-jul en vivo =====
+          El mismo `.cx-poster>div` de la pagina trae `inset:0`, y como la
+          burbuja de fecha tambien es un <div> hijo, ganaba a su propio
+          `top:14px;right:14px` — (0,1,1) le gana a (0,1,0) — y se estiraba a
+          los 363x190 px del afiche COMPLETO. Resultado: su fondo negro al 72%
+          era en realidad un velo sobre cada foto, y por eso "no se distinguia
+          al artista" (el brightness de arriba se habia puesto para compensar
+          un sintoma cuya causa era esta). Devuelta a su esquina: 63x60 px. */
+       +'.rt-noche .cx-poster>.cx-date{inset:auto!important;top:14px!important;'
+         +'right:14px!important}'
        /* SOLO EN OSCURO: aqui si conviene continuar la noche del hero, porque
           la cabecera y el resto de la pagina ya estan oscuros. */
        +'html.dark .rt-noche{--color-surface:#17161a;--color-bg:#0f0f12;'

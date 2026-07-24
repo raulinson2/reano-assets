@@ -1,13 +1,18 @@
 # Graph Report - reano-assets-work  (2026-07-23)
 
 ## Corpus Check
-- 10 files · ~60,122 words
+- 10 files · ~60,223 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 - 107 nodes · 182 edges · 13 communities (9 shown, 4 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `1ba3f937`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - aerolineas-fix.js
