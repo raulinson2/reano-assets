@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "montserrat",
+        "reason": "Montserrat es la tipografia oficial del brand kit de Reano Travels (naranja #FF8C03 + Montserrat), decidida por el dueno",
+        "createdAt": "2026-07-24T00:36:12.934Z"
+      }
+    ]
+  }
+}

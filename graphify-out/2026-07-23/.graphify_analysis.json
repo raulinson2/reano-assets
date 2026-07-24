@@ -1,0 +1,267 @@
+{
+  "communities": {
+    "0": [
+      "aerolineas_fix",
+      "aerolineas_fix_apply",
+      "aerolineas_fix_cardbyname",
+      "aerolineas_fix_chipof",
+      "aerolineas_fix_ensurebluestar",
+      "aerolineas_fix_fixcounts",
+      "aerolineas_fix_fixdate",
+      "aerolineas_fix_fixmodal",
+      "aerolineas_fix_gridof",
+      "aerolineas_fix_leafs",
+      "aerolineas_fix_movecard",
+      "aerolineas_fix_onboard",
+      "aerolineas_fix_patchvenezolana",
+      "aerolineas_fix_replaceanywhere",
+      "aerolineas_fix_setnodetext",
+      "aerolineas_fix_setsummary",
+      "aerolineas_fix_stylechip",
+      "aerolineas_fix_updatesummaries"
+    ],
+    "1": [
+      "reano_ui",
+      "reano_ui_aliadosyummy",
+      "reano_ui_arjonacomprar",
+      "reano_ui_arjonatienda",
+      "reano_ui_buildemptycart",
+      "reano_ui_crmenviar",
+      "reano_ui_fiftycard",
+      "reano_ui_hidelegacyshell",
+      "reano_ui_injectcss",
+      "reano_ui_markcart",
+      "reano_ui_marktienda",
+      "reano_ui_paquetesportada",
+      "reano_ui_paxform",
+      "reano_ui_paxsubmit",
+      "reano_ui_productpage",
+      "reano_ui_puentepaquetes",
+      "reano_ui_run",
+      "reano_ui_trasladosyummy"
+    ],
+    "2": [
+      "manifest",
+      "manifest_background_color",
+      "manifest_description",
+      "manifest_display",
+      "manifest_icons",
+      "manifest_lang",
+      "manifest_name",
+      "manifest_orientation",
+      "manifest_scope",
+      "manifest_short_name",
+      "manifest_shortcuts",
+      "manifest_start_url",
+      "manifest_theme_color"
+    ],
+    "3": [
+      "paquetes_internacionales",
+      "paquetes_internacionales_buildsection",
+      "paquetes_internacionales_css",
+      "paquetes_internacionales_esc",
+      "paquetes_internacionales_hashscroll",
+      "paquetes_internacionales_homecard",
+      "paquetes_internacionales_killnavlink",
+      "paquetes_internacionales_mount",
+      "paquetes_internacionales_ontienda",
+      "paquetes_internacionales_openmodal",
+      "paquetes_internacionales_scrolltointl",
+      "paquetes_internacionales_tryscroll",
+      "paquetes_internacionales_walink"
+    ],
+    "4": [
+      "reano_shell",
+      "reano_shell_applytheme",
+      "reano_shell_boot",
+      "reano_shell_buildfooter",
+      "reano_shell_buildheader",
+      "reano_shell_cartcount",
+      "reano_shell_isdark",
+      "reano_shell_path",
+      "reano_shell_syncbadge",
+      "reano_shell_synctheme"
+    ],
+    "5": [
+      "reano_track",
+      "reano_track_eid",
+      "reano_track_money",
+      "reano_track_onadd",
+      "reano_track_oncheckout",
+      "reano_track_readproduct",
+      "reano_track_send",
+      "reano_track_txt"
+    ],
+    "6": [
+      "aerolineas_update",
+      "aerolineas_update_build",
+      "aerolineas_update_bumpdate",
+      "aerolineas_update_chev",
+      "aerolineas_update_inject",
+      "aerolineas_update_onpage",
+      "aerolineas_update_wire"
+    ],
+    "7": [
+      "arjona_entrada",
+      "arjona_hero",
+      "arjona_oferta",
+      "canaima",
+      "logo_reano_blanco",
+      "logo_reano_original",
+      "readme"
+    ],
+    "8": [
+      "paquetes_showcase",
+      "paquetes_showcase_dec",
+      "paquetes_showcase_inject",
+      "paquetes_showcase_ontienda",
+      "paquetes_showcase_wire"
+    ],
+    "9": [
+      "intl_acropolis",
+      "intl_colosseum"
+    ],
+    "10": [
+      "losroques",
+      "margarita"
+    ],
+    "11": [
+      "yummy_logo",
+      "yummy_rides_logo"
+    ],
+    "12": [
+      "intl_bogota"
+    ]
+  },
+  "cohesion": {
+    "0": 0.2875816993464052,
+    "1": 0.21568627450980393,
+    "2": 0.15384615384615385,
+    "3": 0.32051282051282054,
+    "4": 0.4444444444444444,
+    "5": 0.5357142857142857,
+    "6": 0.5238095238095238,
+    "7": 0.2857142857142857,
+    "8": 0.7,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0
+  },
+  "gods": [
+    {
+      "id": "reano_ui_run",
+      "label": "run()",
+      "degree": 14
+    },
+    {
+      "id": "aerolineas_fix_apply",
+      "label": "apply()",
+      "degree": 9
+    },
+    {
+      "id": "aerolineas_fix_movecard",
+      "label": "moveCard()",
+      "degree": 7
+    },
+    {
+      "id": "aerolineas_fix_ensurebluestar",
+      "label": "ensureBluestar()",
+      "degree": 7
+    },
+    {
+      "id": "aerolineas_fix_stylechip",
+      "label": "styleChip()",
+      "degree": 6
+    },
+    {
+      "id": "paquetes_internacionales_mount",
+      "label": "mount()",
+      "degree": 6
+    },
+    {
+      "id": "aerolineas_fix_leafs",
+      "label": "leafs()",
+      "degree": 5
+    },
+    {
+      "id": "aerolineas_update_inject",
+      "label": "inject()",
+      "degree": 5
+    },
+    {
+      "id": "paquetes_internacionales_buildsection",
+      "label": "buildSection()",
+      "degree": 5
+    },
+    {
+      "id": "reano_shell_buildheader",
+      "label": "buildHeader()",
+      "degree": 5
+    }
+  ],
+  "surprises": [
+    {
+      "source": "README - Reaño Assets Collection",
+      "target": "Arjona Concert Entrada - Marketing Image",
+      "source_files": [
+        "README.md",
+        "arjona-entrada.jpg"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc ↔ image); connects across different repos/directories"
+    },
+    {
+      "source": "README - Reaño Assets Collection",
+      "target": "Canaima National Park Waterfall - Destination Photo",
+      "source_files": [
+        "README.md",
+        "canaima.jpg"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc ↔ image); connects across different repos/directories"
+    },
+    {
+      "source": "README - Reaño Assets Collection",
+      "target": "Reaño Travels Logo - Original Full Version",
+      "source_files": [
+        "README.md",
+        "logo-reano-original.png"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc ↔ image); connects across different repos/directories"
+    },
+    {
+      "source": "Athens Acropolis - International Destination Photo",
+      "target": "Rome Colosseum - International Destination Photo",
+      "source_files": [
+        "intl-acropolis.jpg",
+        "intl-colosseum.jpg"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Reaño Travels Logo - Original Full Version",
+      "target": "Reaño Travels Logo - White Variant",
+      "source_files": [
+        "logo-reano-original.png",
+        "logo-reano-blanco.png"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    }
+  ],
+  "questions": [
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `name`, `short_name`, `description` to the rest of the system?",
+      "why": "22 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

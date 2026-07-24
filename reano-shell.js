@@ -7,8 +7,8 @@
      cualquier header que encuentre: el shadow root les es invisible e
      inmodificable. Si inyectan nodos en el host (light DOM), no se renderizan.
    - Tema: el host lleva data-th="dark|light"; el CSS interno reacciona con
-     :host([data-th=...]). El toggle escribe html.dark + localStorage
-     (rt-theme y reano-theme) para mantener el resto del sitio sincronizado.
+     :host([data-th=...]). El toggle escribe html.dark, html[data-theme] y
+     localStorage 'reano-theme' — la unica llave que el sitio lee de verdad.
    - Logos oficiales autohospedados (variante clara y oscura).
    - Contrato con la inyección HEADER (fallback anti-caída):
        * la inyección pone html.rt-shell-on antes del primer paint y oculta los
@@ -41,8 +41,14 @@
     h.classList.toggle('dark', dark);
     try { h.setAttribute('data-theme', dark ? 'dark' : 'light'); } catch (e) {}
     try {
-      localStorage.setItem('rt-theme', dark ? 'dark' : 'light');
+      /* UNA sola llave. Durante meses se escribieron dos ('rt-theme' y
+         'reano-theme') por si acaso; auditado el 23-jul-2026 en vivo, NADIE
+         lee 'rt-theme': ni un solo script del repo ni ninguno de los 4
+         scripts inline de la pagina (el arranque del bloque de codigo y
+         rt-unify-2026 leen 'reano-theme'). Era escritura huerfana, y dos
+         llaves para un mismo dato solo invitan a que un dia discrepen. */
       localStorage.setItem('reano-theme', dark ? 'dark' : 'light');
+      localStorage.removeItem('rt-theme');   /* barre la que ya quedo guardada */
     } catch (e) {}
     syncTheme();
   }

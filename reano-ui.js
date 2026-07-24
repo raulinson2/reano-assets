@@ -427,9 +427,18 @@
       var s=document.createElement('style'); s.id='rt-noche-css';
       s.textContent=
        /* NEUTRO: vale igual en claro y en oscuro. Se levantan los JPG desde
-          CSS en vez de reeditarlos: si manana cambian la foto sigue sirviendo. */
-        '.rt-noche .cx-poster>div{filter:brightness(1.18) contrast(1.04) saturate(1.1)}'
-       +'.rt-noche .cx-card:hover .cx-poster>div{filter:brightness(1.3) contrast(1.06) saturate(1.15)}'
+          CSS en vez de reeditarlos: si manana cambian la foto sigue sirviendo.
+          El :not(.cx-date) es obligatorio: dentro de .cx-poster hay DOS hijos
+          <div> — la foto y la burbuja de fecha. Sin el filtro, la burbuja
+          (fondo casi negro traslucido) se aclaraba un 18% y perdia contraste
+          contra su propio texto blanco. Solo la foto debe realzarse. */
+        '.rt-noche .cx-poster>div:not(.cx-date){filter:brightness(1.18) contrast(1.04) saturate(1.1)}'
+       +'.rt-noche .cx-card:hover .cx-poster>div:not(.cx-date){filter:brightness(1.3) contrast(1.06) saturate(1.15)}'
+       /* Mismo defecto heredado del bloque de la pagina: su regla de zoom al
+          pasar el raton (.cx-card:hover .cx-poster>div{scale(1.08)}) tampoco
+          excluia la fecha, y la burbuja crecia y se descuadraba de su esquina.
+          Aqui se le devuelve la quietud (4 clases ganan a 3 clases + 1 tipo). */
+       +'.rt-noche .cx-card:hover .cx-date{transform:none}'
        /* SOLO EN OSCURO: aqui si conviene continuar la noche del hero, porque
           la cabecera y el resto de la pagina ya estan oscuros. */
        +'html.dark .rt-noche{--color-surface:#17161a;--color-bg:#0f0f12;'
@@ -439,6 +448,43 @@
       (document.head||document.documentElement).appendChild(s);
     }
     band.classList.add('rt-noche');
+  }
+
+  /* ===== /conciertos: que el HERO obedezca al tema =====
+     23-jul-2026. Sintoma que reportaba Raul: en modo CLARO la pagina se veia
+     partida — cabecera crema, banda negra de 726 px, y otra vez pagina crema.
+     Causa medida en vivo: la inyeccion FOOTER trae un bloque (rt-cx-css, 1.076
+     chars) con
+         .cx-hero{background: <3 degradados>, #131313 !important}
+     SIN condicion de tema, y un ::before de estrellitas blancas. En claro eso
+     dejaba el subtitulo gris (#4a4a4a) sobre casi negro: contraste 2,1:1
+     (AA exige 4,5) y los dos .cx-blob difuminados apoyados en una banda que
+     nunca aclaraba, que es lo que se veia "sucio".
+     Se corrige DESDE AQUI y no cortando la inyeccion de 155.920 chars: basta
+     ganar en especificidad. Aquel selector es (0,1,0); este es (0,2,1), asi
+     que gana aunque el otro lleve !important y vaya despues.
+     En OSCURO no se toca nada: la noche del hero ahi es correcta. */
+  function conciertosHero(){
+    if(location.pathname.indexOf('/conciertos')!==0) return;
+    if(document.getElementById('rt-cxhero-css')) return;
+    if(!document.querySelector('header.cx-hero')) return;   /* aun no se pinta */
+    var s=document.createElement('style'); s.id='rt-cxhero-css';
+    s.textContent=
+      /* La base es la MISMA variable que pinta el resto de la pagina, no un
+         color copiado: si manana cambia la paleta, el hero la sigue solo y no
+         vuelve a aparecer un corte. Los mismos 3 degradados de marca, con el
+         alfa bajado porque sobre crema rinden mucho mas que sobre negro. */
+      'html:not(.dark) header.cx-hero{background:'
+       +'radial-gradient(60% 48% at 12% 18%, rgba(255,107,26,.17), transparent 60%),'
+       +'radial-gradient(55% 45% at 88% 78%, rgba(124,58,237,.13), transparent 62%),'
+       +'radial-gradient(40% 35% at 70% 12%, rgba(255,138,61,.10), transparent 60%),'
+       +'var(--color-bg,#FBF7F1) !important}'
+      /* Las estrellitas son blancas: en claro no se ven y solo dejan un velo
+         lechoso. Se apagan con !important porque compiten con una animacion
+         (una animacion gana a una declaracion normal, pero no a !important). */
+     +'html:not(.dark) header.cx-hero::before{background:none!important;'
+       +'animation:none!important;opacity:0!important}';
+    (document.head||document.documentElement).appendChild(s);
   }
 
   /* Puente /tienda -> /paquetes. Los paquetes se mudaron a su propia pagina el
@@ -725,7 +771,7 @@
     host.insertBefore(s, host.firstChild);
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosNoche(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
