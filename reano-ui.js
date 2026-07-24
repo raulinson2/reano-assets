@@ -251,6 +251,40 @@
      contraste 2.0 y ademas ya se decidio que el acento de la marca es el
      naranja, no el verde del canal. */
   .rt-cx-hero .glass .material-symbols-outlined{color:var(--brand-primary)!important}
+
+  /* ===== BOTONES: naranja mas profundo para AA (24-jul) =====
+     El blanco sobre el naranja de marca (#FF6B1A/#FF8C03) daba 2,85:1 — falla
+     AA para el texto de 12-14 px de los botones. No hay ningun naranja "vivo"
+     con el que el blanco llegue a 4,5: por luminancia, el naranja tiene que
+     bajar. #D2480A es el punto justo (blanco = 4,49:1) y sigue leyendose como
+     un naranja atardecer, no marron. Se aplica plano a TODOS los botones de
+     marca (los propios y los nativos de la tienda) para que queden uniformes.
+     Los botones amarillos de PayPal (#ffc439, texto oscuro) NO se tocan. */
+  .btn-primary,.rt-nav .btn-primary,header.fixed .btn-primary,nav.fixed .btn-primary,
+  .sqs-add-to-cart-button,button.sqs-add-to-cart-button,[class*="add-to-cart-button"],
+  .rt-nav-cta,.rt-ce-b1,.rt-fifty-wa,.rt-pax-submit{
+    background:#D2480A !important;background-image:none !important;border-color:#D2480A !important}
+  .rt-ce-b1,.rt-fifty-wa,.rt-pax-submit,.rt-nav-cta{box-shadow:0 8px 20px -8px rgba(210,72,10,.6) !important}
+
+  /* ===== MICROINTERACCIONES: transiciones suaves + realce al pasar el raton =====
+     Solo animan un cambio que YA ocurre al hover, asi que no hay coste cuando no
+     se interactua. Cada elevacion se apaga con prefers-reduced-motion mas abajo. */
+  .btn-primary,.rt-nav-cta,.rt-ce-b1,.rt-ce-b2,.rt-fifty-pp,.rt-fifty-wa,.rt-pax-submit,
+  .sqs-add-to-cart-button,[class*="add-to-cart-button"],.rt-ce-ico{
+    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,background-color .18s ease}
+  .btn-primary:hover,.rt-nav-cta:hover,.rt-ce-b1:hover,.rt-fifty-pp:hover,.rt-fifty-wa:hover,
+  .rt-pax-submit:hover,.sqs-add-to-cart-button:hover{transform:translateY(-2px);filter:brightness(1.07)}
+  .btn-primary:active,.rt-nav-cta:active,.sqs-add-to-cart-button:active{transform:translateY(0)}
+  /* Tarjetas: elevacion sutil. Se anima solo transform+sombra (no tocan layout). */
+  .rt-fifty,.rts-hero .rt-tp-foto,.cx-card{transition:transform .28s ease,box-shadow .28s ease}
+  .rt-fifty:hover{transform:translateY(-4px);box-shadow:0 30px 60px -30px rgba(255,140,3,.55)}
+
+  @media(prefers-reduced-motion:reduce){
+    .btn-primary,.rt-nav-cta,.rt-ce-b1,.rt-fifty-wa,.rt-pax-submit,.rt-fifty,.cx-card,
+    .sqs-add-to-cart-button,[class*="add-to-cart-button"]{transition:none !important}
+    .btn-primary:hover,.rt-nav-cta:hover,.rt-fifty:hover,.rt-fifty-wa:hover,
+    .sqs-add-to-cart-button:hover{transform:none !important;filter:none !important}
+  }
   `;
 
   function injectCSS(){
@@ -889,7 +923,37 @@
     });
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); }
+  /* ===== /conciertos: sincronizar precio de Karol G + quitar "todo incluido" =====
+     24-jul. El PRODUCTO de la tienda ya cobra $899 (Táchira/San Cristóbal) y
+     $1.199 (Caracas) desde el 22-jul, pero la TARJETA de /conciertos se quedó
+     mostrando los viejos $799/$999 -> el cliente veía un precio y pagaba otro.
+     El toggle San Cristóbal/Caracas NO regenera el precio (spans estáticos,
+     verificado en vivo), así que basta reescribirlos una vez; el reintento de
+     run() los reafirma si la tarjeta se pinta tarde. Solo se tocan los importes
+     EXACTOS de Karol G ($799/$999), que son únicos en la página (BTS y Morat
+     tienen otros), y acotado a su propia tarjeta por si acaso.
+     El badge "Todo incluido" incumple la regla de marca (el paquete es
+     vuelos+hotel+traslados+entradas, SIN comidas) -> "Paquete completo". */
+  function conciertosFix(){
+    if(location.pathname.indexOf('/conciertos')!==0) return;
+    var kh=null;
+    document.querySelectorAll('h1,h2,h3,h4,h5').forEach(function(h){ if(!kh && /Karol\s*G/i.test(h.textContent)) kh=h; });
+    if(kh){
+      var card=kh;
+      for(var i=0;i<8 && card.parentElement;i++){ card=card.parentElement;
+        if(/CRIST|CARACAS/i.test(card.textContent) && /\$799|\$899/.test(card.textContent)) break; }
+      card.querySelectorAll('.text-price-display').forEach(function(s){
+        var t=(s.textContent||'').trim();
+        if(t==='$799') s.textContent='$899';
+        else if(t==='$999') s.textContent='$1,199';
+      });
+    }
+    document.querySelectorAll('.cx-tag').forEach(function(t){
+      if(/todo\s*incluido/i.test(t.textContent||'')) t.textContent='✈️ Paquete completo';
+    });
+  }
+
+  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
