@@ -900,7 +900,13 @@
         var kr=k.getBoundingClientRect();
         if(kr.left<=er.left+2 && kr.right>=er.right-2 && kr.top<=er.top+2 && kr.bottom>=er.bottom-2){
           if(kc.backgroundImage!=='none') return true;
-          if([].some.call(k.querySelectorAll('*'),function(x){ if(getComputedStyle(x).backgroundImage==='none') return false; var xr=x.getBoundingClientRect(); return xr.left<=er.left+2&&xr.right>=er.right-2&&xr.top<=er.top+2&&xr.bottom>=er.bottom-2; })) return true;
+          if(k.tagName==='IMG') return true;
+          /* la foto puede ser un background-image CSS o un <img> real (asi la
+             pinta, p.ej., el hero de /estado-aerolineas): ambos cuentan. */
+          if([].some.call(k.querySelectorAll('img,[style*="background-image"],*'),function(x){
+            if(x.tagName!=='IMG' && getComputedStyle(x).backgroundImage==='none') return false;
+            var xr=x.getBoundingClientRect(); return xr.left<=er.left+2&&xr.right>=er.right-2&&xr.top<=er.top+2&&xr.bottom>=er.bottom-2;
+          })) return true;
         }
       }
       n=par;
@@ -938,6 +944,67 @@
     });
   }
 
+  /* ===== BOTONES: profundizar cualquiera blanco-sobre-naranja-vivo =====
+     24-jul (2a ola). El CSS deepenaba por CLASE, pero hay muchas (rt-tab, rt-fab,
+     otab, cx-tag, mus-tab, <a> sueltos de las tarjetas de concierto...) y ademas
+     el .btn-primary del sitio pelea la cascada. Esta pasada mira el COLOR: si un
+     elemento tiene fondo NARANJA VIVO de marca con texto claro encima, le pone el
+     naranja profundo #D2480A por estilo inline (gana a cualquier hoja). El doble
+     filtro (fondo naranja vivo + texto claro) hace imposible tocar algo que no sea
+     un boton blanco-sobre-naranja. Idempotente: #D2480A ya no es "vivo" (R=210<235),
+     no se reprocesa. Vale para ambos temas: blanco sobre naranja falla en los dos. */
+  function rtBrightOrangeBg(c){ var r=c[0],g=c[1],b=c[2]; return r>=235 && g>=88 && g<=165 && b<=72 && (r-b)>150; }
+  function deepenButtons(){
+    var sel='a,button,input[type="submit"],[role="button"],[class*="btn"],[class*="tab"],[class*="cta"],[class*="fab"],[class*="tag"],[class*="pill"],[class*="opt"]';
+    document.querySelectorAll(sel).forEach(function(el){
+      /* el banner de cookies es UI de consentimiento nativa de Squarespace: fuera */
+      if(el.closest('[id*="cookie" i],[class*="cookie" i],[id*="consent" i],[class*="consent" i]')) return;
+      var cs=getComputedStyle(el);
+      var bg=(cs.backgroundColor.match(/[\d.]+/g)||[]).map(Number);
+      if(bg.length<3 || (bg.length>=4 && bg[3]<0.6)) return;          /* sin fondo solido */
+      if(!rtBrightOrangeBg(bg)) return;                               /* solo naranja vivo */
+      var fg=(cs.color.match(/[\d.]+/g)||[]).map(Number);
+      if(fg.length<3 || fg[0]<190 || fg[1]<190 || fg[2]<190) return; /* solo texto claro */
+      var r=el.getBoundingClientRect(); if(r.width<8 || r.height<6) return;
+      el.style.setProperty('background-color','#D2480A','important');
+      if(/gradient/.test(cs.backgroundImage)) el.style.setProperty('background-image','none','important');
+    });
+  }
+
+  /* ===== Animaciones de ENTRADA (fade-up al aparecer) — FAIL-SAFE =====
+     24-jul. Las tarjetas entran con un desvanecido hacia arriba al asomar en
+     pantalla. FAIL-SAFE en 3 capas para no repetir el desastre historico de
+     "contenido oculto que no revela": (1) la clase que oculta (rt-rv) la pone
+     ESTE JS, no el CSS -> si el .js no carga, nada se oculta; (2) un tope duro a
+     los 2,5 s revela TODO pase lo que pase; (3) se respeta prefers-reduced-motion.
+     Idempotente: cada pasada de run() engancha las tarjetas NUEVAS (showcase que
+     hidrata tarde), sin re-ocultar las ya reveladas. */
+  function revealOnScroll(){
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    if(!('IntersectionObserver' in window)) return;
+    if(!document.getElementById('rt-rv-css')){
+      var st=document.createElement('style'); st.id='rt-rv-css';
+      st.textContent='.rt-rv{opacity:0;transform:translateY(22px);'
+        +'transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}'
+        +'.rt-rv.rt-in{opacity:1;transform:none}';
+      (document.head||document.documentElement).appendChild(st);
+    }
+    if(!window.__rtRvObs){
+      window.__rtRvObs=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('rt-in'); window.__rtRvObs.unobserve(e.target); } });
+      },{threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+      /* tope duro global: a los 2,5 s todo lo que quede oculto se revela */
+      setTimeout(function(){ document.querySelectorAll('.rt-rv:not(.rt-in)').forEach(function(el){ el.classList.add('rt-in'); }); }, 2500);
+    }
+    /* NO se incluye .rt-card (tablero de aerolineas): aerolineas-fix.js clona y
+       mueve esas tarjetas, y ocultarlas se enredaria con ese script. El resto son
+       rejillas de tarjetas estables. */
+    document.querySelectorAll('.cx-card,.rt-fifty,.rt-paq-card,.cert,.product-list-item').forEach(function(el){
+      if(el.classList.contains('rt-rv')) return;
+      el.classList.add('rt-rv'); window.__rtRvObs.observe(el);
+    });
+  }
+
   /* ===== /conciertos: sincronizar precio de Karol G + quitar "todo incluido" =====
      24-jul. El PRODUCTO de la tienda ya cobra $899 (Táchira/San Cristóbal) y
      $1.199 (Caracas) desde el 22-jul, pero la TARJETA de /conciertos se quedó
@@ -970,7 +1037,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
