@@ -269,9 +269,12 @@
   /* ===== MICROINTERACCIONES: transiciones suaves + realce al pasar el raton =====
      Solo animan un cambio que YA ocurre al hover, asi que no hay coste cuando no
      se interactua. Cada elevacion se apaga con prefers-reduced-motion mas abajo. */
+  /* OJO: NO transicionar background-color. Al cargar, mi regla profundiza el
+     naranja pisando la del sitio, y con una transicion de color el boton
+     "parpadea" de naranja vivo a profundo. El hover solo usa filter/transform. */
   .btn-primary,.rt-nav-cta,.rt-ce-b1,.rt-ce-b2,.rt-fifty-pp,.rt-fifty-wa,.rt-pax-submit,
   .sqs-add-to-cart-button,[class*="add-to-cart-button"],.rt-ce-ico{
-    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,background-color .18s ease}
+    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
   .btn-primary:hover,.rt-nav-cta:hover,.rt-ce-b1:hover,.rt-fifty-pp:hover,.rt-fifty-wa:hover,
   .rt-pax-submit:hover,.sqs-add-to-cart-button:hover{transform:translateY(-2px);filter:brightness(1.07)}
   .btn-primary:active,.rt-nav-cta:active,.sqs-add-to-cart-button:active{transform:translateY(0)}
@@ -285,6 +288,14 @@
     .btn-primary:hover,.rt-nav-cta:hover,.rt-fifty:hover,.rt-fifty-wa:hover,
     .sqs-add-to-cart-button:hover{transform:none !important;filter:none !important}
   }
+
+  /* ===== Home: que la pildora del hero no se meta bajo el header fijo =====
+     El hero es min-h-[80vh] con flex items-center: en pantallas de portatil
+     (~768-900px de alto) el contenido centrado sube y su primer elemento (la
+     pildora "DESCUBRE EL MUNDO") queda medio tapado por el header de 80px. Un
+     padding-top empuja el bloque centrado lo justo para despejarlo; en pantallas
+     altas apenas se nota. Acotado a la home (body.rt-home) para no tocar otros heros. */
+  body.rt-home section[class*="min-h-"]{padding-top:72px;padding-bottom:28px}
   `;
 
   function injectCSS(){
@@ -953,7 +964,9 @@
     });
   }
 
-  function run(){ injectCSS(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); }
+  function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
+
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
