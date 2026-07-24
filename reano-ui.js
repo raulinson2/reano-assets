@@ -833,6 +833,31 @@
     }
     return 1; /* sin fondo opaco: el cuerpo del sitio es claro en modo claro */
   }
+  /* ¿El texto esta pintado ENCIMA de una foto/velo? (un hero). rtBgLum no lo ve
+     porque la foto es una capa HERMANA (no un ancestro): camina hasta el crema
+     del body y cree que el fondo es claro. Sin este guardado, el naranja de un
+     titular de hero sobre foto oscura se profundizaba y perdia contraste.
+     Clave: distinguir "texto SOBRE una foto" (hero -> no tocar) de "texto en el
+     cuerpo de una tarjeta que CONTIENE una foto en otra zona" (showcase -> si
+     tocar). Se resuelve por geometria: solo cuenta la capa posicionada, detras
+     del texto, cuyo rectangulo CONTIENE al del texto. En un hero la foto full
+     bleed lo contiene; en una tarjeta la foto va arriba y no lo contiene. */
+  function rtOverDarkLayer(el){
+    var er=el.getBoundingClientRect(); var n=el;
+    for(var d=0; d<6 && n && n!==document.body; d++){
+      var par=n.parentElement; if(!par) break; var kids=par.children;
+      for(var i=0;i<kids.length;i++){ var k=kids[i]; if(k===n) break; /* solo hermanos previos = detras */
+        var kc=getComputedStyle(k); if(kc.position!=='absolute' && kc.position!=='fixed') continue;
+        var kr=k.getBoundingClientRect();
+        if(kr.left<=er.left+2 && kr.right>=er.right-2 && kr.top<=er.top+2 && kr.bottom>=er.bottom-2){
+          if(kc.backgroundImage!=='none') return true;
+          if([].some.call(k.querySelectorAll('*'),function(x){ if(getComputedStyle(x).backgroundImage==='none') return false; var xr=x.getBoundingClientRect(); return xr.left<=er.left+2&&xr.right>=er.right-2&&xr.top<=er.top+2&&xr.bottom>=er.bottom-2; })) return true;
+        }
+      }
+      n=par;
+    }
+    return false;
+  }
   function contrastFix(){
     /* Se limpia SIEMPRE primero: hace la funcion idempotente y hace que un
        cambio de tema en caliente revierta el efecto sin tocar nada mas. */
@@ -857,7 +882,8 @@
       var own=(cs.backgroundColor.match(/[\d.]+/g)||[]).map(Number);
       if(own.length>=3 && (own.length<4 || own[3]>0.55)) return;
       if(/gradient|url\(/.test(cs.backgroundImage)) return;
-      if(rtBgLum(el) < 0.4) return; /* sobre fondo oscuro el naranja vivo va bien */
+      if(rtBgLum(el) < 0.4) return; /* sobre fondo oscuro solido el naranja vivo va bien */
+      if(rtOverDarkLayer(el)) return; /* sobre foto/velo de un hero: el naranja vivo va bien */
       el.style.setProperty('color', RT_DEEP, 'important');
       el.setAttribute('data-rtcfix','1');
     });
