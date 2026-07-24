@@ -260,9 +260,13 @@
      un naranja atardecer, no marron. Se aplica plano a TODOS los botones de
      marca (los propios y los nativos de la tienda) para que queden uniformes.
      Los botones amarillos de PayPal (#ffc439, texto oscuro) NO se tocan. */
-  .btn-primary,.rt-nav .btn-primary,header.fixed .btn-primary,nav.fixed .btn-primary,
-  .sqs-add-to-cart-button,button.sqs-add-to-cart-button,[class*="add-to-cart-button"],
-  .rt-nav-cta,.rt-ce-b1,.rt-fifty-wa,.rt-pax-submit{
+  /* Prefijo html body: el .btn-primary del sitio lleva su propio !important y,
+     segun la pagina, el orden de cascada de Squarespace lo hacia ganar sobre el
+     mio (en /conciertos ganaba el mio, en la home no). Subir especificidad a
+     (0,1,2) lo resuelve en TODAS las paginas, sin depender del orden. */
+  html body .btn-primary,html body .rt-nav .btn-primary,html body header.fixed .btn-primary,html body nav.fixed .btn-primary,
+  html body .sqs-add-to-cart-button,html body button.sqs-add-to-cart-button,html body [class*="add-to-cart-button"],
+  html body .rt-nav-cta,html body .rt-ce-b1,html body .rt-fifty-wa,html body .rt-pax-submit{
     background:#D2480A !important;background-image:none !important;border-color:#D2480A !important}
   .rt-ce-b1,.rt-fifty-wa,.rt-pax-submit,.rt-nav-cta{box-shadow:0 8px 20px -8px rgba(210,72,10,.6) !important}
 
