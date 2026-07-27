@@ -340,6 +340,17 @@
     border-color:#9A9A9A !important}
   .gdpr-cookie-banner button.decline,
   .gdpr-cookie-banner button.decline span{color:#262626 !important}
+
+  /* ===== PESTANAS del tablero (Nacionales / Internacionales / Traslados) =====
+     27-jul-2026. BUG reportado por Raul: al cambiar de pestana quedaban DOS
+     pintadas de naranja a la vez, en claro Y en oscuro. Causa: deepenButtons()
+     estampaba el naranja profundo INLINE sobre la pestana que estaba activa al
+     CARGAR la pagina; ese inline lleva !important y no se despega nunca, asi que
+     al pulsar otra pestana la vieja seguia pareciendo activa. Ahora el color lo
+     pone esta regla, que sigue a aria-selected y por tanto acompana al clic.
+     deepenButtons() salta los [role="tab"] a proposito (ver alli). */
+  .rt-tabs .rt-tab[aria-selected="true"]{background-color:#C2410C !important;color:#fff !important}
+  .rt-tabs .rt-tab[aria-selected="false"]{background-color:transparent !important}
   `;
 
   function injectCSS(){
@@ -1007,6 +1018,11 @@
     document.querySelectorAll(sel).forEach(function(el){
       /* el banner de cookies es UI de consentimiento nativa de Squarespace: fuera */
       if(el.closest('[id*="cookie" i],[class*="cookie" i],[id*="consent" i],[class*="consent" i]')) return;
+      /* 27-jul: las PESTANAS quedan fuera de la pintada inline. Su estado activo
+         cambia con el clic, pero el inline no se despega -> quedaban dos pestanas
+         naranjas a la vez. Se profundizan por CSS via aria-selected (ver la regla
+         .rt-tabs .rt-tab[aria-selected] en el bloque CSS de arriba). */
+      if(el.getAttribute('role')==='tab') return;
       var cs=getComputedStyle(el);
       var bg=(cs.backgroundColor.match(/[\d.]+/g)||[]).map(Number);
       if(bg.length<3 || (bg.length>=4 && bg[3]<0.6)) return;          /* sin fondo solido */

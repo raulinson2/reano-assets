@@ -227,6 +227,42 @@
     if(ul){ ul.innerHTML = DET[lastName].map(function(x){ return '<li>'+x+'</li>'; }).join(''); }
   }
 
+  /* ===== YUMMY RIDES en la pestana "Traslados terrestres" =====
+     27-jul-2026. Raul: "en traslados no mencionas nada de Yummy Rides, si tenemos
+     autorizacion". Cierto: la banda de Yummy que ya existia (trasladosYummy en
+     reano-ui.js) solo corre en /servicios, no en el tablero. El co-branding esta
+     aprobado desde el 13-jul.
+     La tarjeta NO lleva chevron a proposito: el tablero abre una ficha al pulsar
+     las tarjetas de aerolinea y esta no tiene ficha que abrir. Su clic propio va
+     en fase de CAPTURA con stopPropagation, para que un manejador delegado del
+     tablero no intente abrir un modal inexistente. */
+  function yummyTraslados(){
+    if(document.querySelector('[data-rtfx="yummy"]')) return;
+    var grid=gridOf('te llevamos'); if(!grid) return;
+    var c=document.createElement('div');
+    c.className='rt-card';
+    c.setAttribute('data-rtfx','yummy');
+    c.style.cursor='pointer';
+    c.style.borderLeftColor='rgb(65,197,118)';
+    c.innerHTML=
+      '<div class="rt-left">'
+      + '<div class="rt-mono">YR</div>'
+      + '<div><h3>Yummy Rides · aliado oficial</h3>'
+      + '<p class="rt-route">Traslados con conductores verificados y monitoreo en tiempo real · '
+      + 'agenda con 24 a 72 h de anticipacion · cotiza por WhatsApp</p></div>'
+      + '</div>'
+      + '<div class="rt-right"><span class="rt-pill">Aliado</span></div>';
+    var pill=c.querySelector('.rt-pill');
+    if(pill){ pill.style.background='rgba(65,229,117,.14)'; pill.style.color='#2fbf62';
+              pill.style.borderColor='rgba(65,229,117,.4)'; }
+    c.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      window.open('https://wa.me/584247309699?text='+
+        encodeURIComponent('Hola, quiero cotizar un traslado con Yummy Rides.'),'_blank');
+    }, true);
+    grid.insertBefore(c, grid.firstChild);
+  }
+
   function apply(){
     if(!onBoard()) return;
     moveCard('Aerocaribe','contingencia');
