@@ -441,6 +441,31 @@
     .rt-seg-paxh{flex-direction:column;align-items:stretch}
     #rt-seg-add{width:100%}
   }
+
+  /* ===== Campos anadidos al buscador de hoteles ===== */
+  #rt-hot-extra{--ht-c:#fff;--ht-t:#191512;--ht-m:#6b645c;--ht-l:rgba(0,0,0,.14);
+    margin-top:12px;grid-column:1/-1}
+  html.dark #rt-hot-extra{--ht-c:rgba(255,255,255,.06);--ht-t:#eef3f7;--ht-m:#9aa6b2;
+    --ht-l:rgba(255,255,255,.18)}
+  #rt-hot-extra *{box-sizing:border-box}
+  .rt-hot-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .rt-hot-f label{display:block;font-size:12.5px;font-weight:700;color:var(--ht-t);margin-bottom:5px}
+  .rt-hot-f label small{font-weight:500;color:var(--ht-m)}
+  .rt-hot-f select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--ht-l);
+    background:var(--ht-c);color:var(--ht-t);font:inherit}
+  .rt-hot-f select option{background:#fff;color:#191512}
+  html.dark .rt-hot-f select option{background:#171f27;color:#eef3f7}
+  .rt-hot-ed:empty{display:none}
+  .rt-hot-ed{margin-top:12px;border:1px dashed var(--ht-l);border-radius:12px;padding:12px}
+  .rt-hot-edt{display:block;font-size:12.5px;color:var(--ht-m);margin-bottom:9px;line-height:1.5}
+  .rt-hot-edt b{color:var(--ht-t)}
+  .rt-hot-edg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px}
+  .rt-hot-edg label{display:block;font-size:12px;font-weight:700;color:var(--ht-t)}
+  .rt-hot-e{width:100%;margin-top:4px;padding:10px 11px;border-radius:9px;
+    border:1px solid var(--ht-l);background:var(--ht-c);color:var(--ht-t);font:inherit}
+  .rt-hot-av{display:none;margin-top:10px;background:rgba(229,72,77,.12);
+    border:1px solid rgba(229,72,77,.42);color:var(--ht-t);border-radius:10px;
+    padding:10px 13px;font-size:13.5px}
   `;
 
   function injectCSS(){
@@ -676,6 +701,115 @@
       });
     }
     calc();
+  }
+
+  /* ================= BUSCADOR DE HOTELES (/hoteles) =============================
+     27-jul-2026. Raul: "en destino no sale un catalogo, solo me deja escribir; y no
+     me deja poner habitaciones ni ninos/infantes con sus edades".
+     Comprobado antes de tocar: el <form id="h-search"> NO tiene action NI onsubmit
+     y su boton no tiene manejador -> **hoy no hace absolutamente nada** y cada
+     solicitud de hotel se pierde. Por eso esto no es un retoque, es darle salida.
+
+     Se AMPLIA el formulario que ya existe (no se reemplaza): asi conserva su
+     maqueta y su estilo, y si Squarespace lo re-renderiza, run() vuelve a montarlo.
+     Destino: <datalist> con los destinos que Reano mueve de verdad, PERO el campo
+     sigue siendo de texto libre — un catalogo cerrado dejaria fuera al que busca un
+     hotel concreto.
+     Las edades de ninos e infantes son OBLIGATORIAS: sin ellas ningun hotel puede
+     tarifar, y es justo el dato que faltaba y obligaba a repreguntar por WhatsApp. */
+  var HOT_DEST = ['Bogotá','Medellín','Cartagena','Madrid','Barcelona (España)','Roma',
+    'París','Lisboa','Panamá','Miami','Orlando','Nueva York','Punta Cana','Santo Domingo',
+    'Curazao','Aruba','Cancún','Ciudad de México','Buenos Aires','Lima','Santiago de Chile',
+    'Isla de Margarita','Los Roques','Canaima','Mérida','Caracas'];
+
+  function hotelesForm(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/hoteles') return;
+    var f=document.getElementById('h-search'); if(!f) return;
+    if(f.getAttribute('data-rt-hot')) return;
+    var pax=document.getElementById('h-pax'); if(!pax) return;
+    f.setAttribute('data-rt-hot','1');
+
+    /* 1 · catalogo de destinos, sin cerrar el texto libre */
+    var dest=document.getElementById('h-dest');
+    if(dest && !document.getElementById('rt-hot-dl')){
+      var dl=document.createElement('datalist'); dl.id='rt-hot-dl';
+      dl.innerHTML=HOT_DEST.map(function(d){ return '<option value="'+d+'">'; }).join('');
+      document.body.appendChild(dl);
+      dest.setAttribute('list','rt-hot-dl');
+      dest.placeholder='Ciudad, país u hotel — elige o escribe el tuyo';
+    }
+
+    /* 2 · habitaciones, ninos e infantes (con edades) */
+    var box=document.createElement('div');
+    box.id='rt-hot-extra';
+    box.innerHTML=
+      '<div class="rt-hot-g">'
+      + '<div class="rt-hot-f"><label for="rt-hot-hab">Habitaciones</label>'
+      +   '<select id="rt-hot-hab"><option>1</option><option>2</option><option>3</option>'
+      +   '<option>4</option><option>5</option></select></div>'
+      + '<div class="rt-hot-f"><label for="rt-hot-nin">Niños <small>(2 a 11 años)</small></label>'
+      +   '<select id="rt-hot-nin"><option>0</option><option>1</option><option>2</option>'
+      +   '<option>3</option><option>4</option></select></div>'
+      + '<div class="rt-hot-f"><label for="rt-hot-inf">Infantes <small>(0 a 23 meses)</small></label>'
+      +   '<select id="rt-hot-inf"><option>0</option><option>1</option><option>2</option>'
+      +   '<option>3</option></select></div>'
+      + '</div>'
+      + '<div id="rt-hot-edades" class="rt-hot-ed"></div>';
+    pax.closest('div').parentNode.insertBefore(box, pax.closest('div').nextSibling);
+
+    var edBox=box.querySelector('#rt-hot-edades');
+    function pintarEdades(){
+      var n=parseInt(box.querySelector('#rt-hot-nin').value,10);
+      var i=parseInt(box.querySelector('#rt-hot-inf').value,10);
+      if(!n && !i){ edBox.innerHTML=''; return; }
+      var h='<span class="rt-hot-edt">Edad de cada uno <b>al viajar</b> — los hoteles '
+           +'no pueden dar precio sin este dato</span><div class="rt-hot-edg">';
+      for(var k=1;k<=n;k++) h+='<label>Niño '+k+'<input type="number" min="2" max="11" '
+        +'placeholder="años" class="rt-hot-e" data-t="Niño '+k+'"></label>';
+      for(var m=1;m<=i;m++) h+='<label>Infante '+m+'<input type="number" min="0" max="23" '
+        +'placeholder="meses" class="rt-hot-e" data-t="Infante '+m+'" data-m="1"></label>';
+      edBox.innerHTML=h+'</div>';
+    }
+    box.querySelector('#rt-hot-nin').addEventListener('change', pintarEdades);
+    box.querySelector('#rt-hot-inf').addEventListener('change', pintarEdades);
+
+    /* 3 · darle salida: el boton arma la solicitud completa y la manda por WhatsApp */
+    f.addEventListener('submit', function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      var d=(dest&&dest.value||'').trim();
+      var i1=(document.getElementById('h-in')||{}).value;
+      var o1=(document.getElementById('h-out')||{}).value;
+      var faltan=[];
+      if(!d)  faltan.push('el destino');
+      if(!i1) faltan.push('la fecha de entrada');
+      if(!o1) faltan.push('la fecha de salida');
+      var edades=[].slice.call(edBox.querySelectorAll('.rt-hot-e'));
+      var sinEdad=edades.filter(function(e){ return e.value===''; });
+      if(sinEdad.length) faltan.push('la edad de los menores');
+      var av=document.getElementById('rt-hot-av');
+      if(faltan.length){
+        if(!av){ av=document.createElement('p'); av.id='rt-hot-av'; av.className='rt-hot-av';
+                 box.appendChild(av); }
+        av.textContent='Falta '+faltan.join(', ')+'.';
+        av.style.display='block';
+        (sinEdad[0]||dest).focus();
+        return;
+      }
+      if(av) av.style.display='none';
+      var noches=segDias(i1,o1)-1;
+      var det=edades.map(function(e){
+        return e.getAttribute('data-t')+': '+e.value+(e.getAttribute('data-m')?' meses':' años');
+      }).join(', ');
+      var msg='🏨 *Solicitud de hotel — Reaño Travels*%0A'
+        +'Destino: '+encodeURIComponent(d)+'%0A'
+        +'Entrada: '+i1+' · Salida: '+o1+(noches>0?(' ('+noches+' noche'+(noches===1?'':'s')+')'):'')+'%0A'
+        +'Habitaciones: '+box.querySelector('#rt-hot-hab').value+'%0A'
+        +'Adultos: '+encodeURIComponent(pax.options[pax.selectedIndex].text)+'%0A'
+        +'Niños: '+box.querySelector('#rt-hot-nin').value
+        +' · Infantes: '+box.querySelector('#rt-hot-inf').value+'%0A'
+        +(det?('Edades: '+encodeURIComponent(det)+'%0A'):'');
+      window.open('https://wa.me/584247309699?text='+msg,'_blank');
+    }, true);
   }
 
   function markTienda(){
@@ -1392,7 +1526,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
