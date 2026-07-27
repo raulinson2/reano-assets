@@ -466,6 +466,35 @@
   .rt-hot-av{display:none;margin-top:10px;background:rgba(229,72,77,.12);
     border:1px solid rgba(229,72,77,.42);color:var(--ht-t);border-radius:10px;
     padding:10px 13px;font-size:13.5px}
+
+  /* ===== Banda de Holafly (eSIM) ===== */
+  #rt-hfly{--hf-c:#fff;--hf-t:#191512;--hf-m:#6b645c;--hf-l:rgba(0,0,0,.10);--hf-bg:#faf7f4;
+    background:var(--hf-bg);color:var(--hf-t);padding:60px 20px}
+  html.dark #rt-hfly{--hf-c:#171f27;--hf-t:#eef3f7;--hf-m:#9aa6b2;
+    --hf-l:rgba(255,255,255,.12);--hf-bg:#0f151b}
+  #rt-hfly *{box-sizing:border-box}
+  .rt-hfly-in{max-width:1000px;margin:0 auto;display:grid;gap:26px;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center}
+  .rt-hfly-k{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.20em;
+    color:#C2410C;margin-bottom:10px}
+  html.dark .rt-hfly-k{color:#FF8C03}
+  #rt-hfly h2{font-size:clamp(24px,3.4vw,36px);line-height:1.1;font-weight:900;margin:0 0 12px}
+  .rt-hfly-tx p{color:var(--hf-m);line-height:1.65;margin:0 0 14px;max-width:52ch}
+  .rt-hfly-l{list-style:none;padding:0;margin:0;color:var(--hf-t);font-size:14.5px}
+  .rt-hfly-l li{padding-left:24px;position:relative;margin-bottom:7px}
+  .rt-hfly-l li:before{content:"✓";position:absolute;left:0;color:#2fbf62;font-weight:900}
+  .rt-hfly-cta{background:var(--hf-c);border:1px solid var(--hf-l);border-radius:16px;
+    padding:26px;text-align:center}
+  .rt-hfly-off{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-bottom:4px}
+  .rt-hfly-off b{font-size:52px;font-weight:900;line-height:1;color:#C2410C}
+  html.dark .rt-hfly-off b{color:#FF8C03}
+  .rt-hfly-off span{font-size:15px;font-weight:700;color:var(--hf-m)}
+  .rt-hfly-cod{margin:0 0 18px;font-size:14px;color:var(--hf-m)}
+  .rt-hfly-cod b{color:var(--hf-t);letter-spacing:.06em}
+  .rt-hfly-b{display:block;background:#C2410C;color:#fff;text-decoration:none;
+    border-radius:10px;padding:14px 20px;font-weight:800;margin-bottom:10px}
+  .rt-hfly-b:hover{filter:brightness(1.08)}
+  .rt-hfly-cta small{color:var(--hf-m);font-size:12.5px;line-height:1.5;display:block}
   `;
 
   function injectCSS(){
@@ -826,6 +855,44 @@
       if(window.BOOKING_AID) u+='&aid='+encodeURIComponent(window.BOOKING_AID);
       window.open(u,'_blank');
     }, true);
+  }
+
+  /* ================= HOLAFLY — eSIM (alianza Travel Partner) ====================
+     27-jul-2026. Va como ENLACE DE AFILIADO, nunca como articulo del carrito: Raul
+     cobra comision por su enlace (holafly.sjv.io) mas el codigo REANOTRAVELS. Si se
+     vendiera dentro de la tienda, se perderia la comision — que es todo el negocio.
+     Sin logotipo de Holafly: no tenemos el archivo oficial y la regla de marca es
+     usar SIEMPRE isotipos oficiales. Se resuelve con tipografia y color propios.
+     El 5% es el mismo que ya anuncia la pastilla del home: no se inventa otro numero. */
+  var HOLAFLY_URL='https://holafly.sjv.io/qWzvnj';
+  function holaflyBanda(){
+    var p=(location.pathname.replace(/\/+$/,'')||'/');
+    if(p!=='/servicios' && p!=='/vuelos') return;
+    if(document.getElementById('rt-hfly')) return;
+    var host=document.querySelector('#sections')||document.getElementById('page')||document.querySelector('main');
+    if(!host) return;
+    var s=document.createElement('section');
+    s.id='rt-hfly';
+    s.innerHTML=
+      '<div class="rt-hfly-in">'
+      + '<div class="rt-hfly-tx">'
+      +   '<span class="rt-hfly-k">INTERNET EN EL EXTRANJERO</span>'
+      +   '<h2>Llega conectado, sin pagar roaming</h2>'
+      +   '<p>eSIM de <b>Holafly</b> con datos ilimitados en más de 200 destinos. '
+      +   'Se activa antes de salir de casa: escaneas un código y aterrizas con internet, '
+      +   'sin buscar una tienda ni cambiar tu chip.</p>'
+      +   '<ul class="rt-hfly-l"><li>Conservas tu número de WhatsApp</li>'
+      +   '<li>Activación inmediata, sin envío</li>'
+      +   '<li>Soporte en español 24/7</li></ul>'
+      + '</div>'
+      + '<div class="rt-hfly-cta">'
+      +   '<div class="rt-hfly-off"><b>5%</b><span>de descuento</span></div>'
+      +   '<p class="rt-hfly-cod">Con el código <b>REANOTRAVELS</b></p>'
+      +   '<a class="rt-hfly-b" href="'+HOLAFLY_URL+'" target="_blank" rel="noopener">'
+      +   'Ver planes y precios</a>'
+      +   '<small>Te lleva a Holafly, aliado oficial de Reaño Travels.</small>'
+      + '</div></div>';
+    host.appendChild(s);
   }
 
   function markTienda(){
@@ -1542,7 +1609,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
