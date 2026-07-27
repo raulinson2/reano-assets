@@ -351,6 +351,28 @@
      deepenButtons() salta los [role="tab"] a proposito (ver alli). */
   .rt-tabs .rt-tab[aria-selected="true"]{background-color:#C2410C !important;color:#fff !important}
   .rt-tabs .rt-tab[aria-selected="false"]{background-color:transparent !important}
+
+  /* ===== SELECTOR DE VARIANTE de la ficha de producto ("Seccion" / "Salida") =====
+     27-jul-2026. Raul: "no cambia entre claro y oscuro". Cierto: el <select> es
+     nativo de Squarespace y se quedaba con el blanco del sistema, asi que en tema
+     oscuro salia una lista blanca sobre fondo negro. Se estilan el <select> Y sus
+     <option> (en Chrome/Edge la lista desplegada SI hereda el color del option;
+     en Safari/iOS la pinta el sistema y no hay forma de tocarla: aceptado).
+     Todo va acotado a body.rt-pp para no tocar ningun otro desplegable del sitio. */
+  body.rt-pp select.variant-select{
+    width:100%;padding:12px 40px 12px 14px;border-radius:10px;font:inherit;
+    border:1px solid rgba(128,128,128,.30);background-color:#fff;color:#191512;
+    -webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;background-size:18px}
+  body.rt-pp select.variant-select option{background-color:#fff;color:#191512}
+  /* el placeholder "Selecciona Seccion" iba a rgba(255,255,255,.62): ilegible */
+  body.rt-pp select.variant-select.show-placeholder{color:#5d574f}
+  html.dark body.rt-pp select.variant-select{
+    background-color:#171f27;color:#eef3f7;border-color:rgba(255,255,255,.20)}
+  html.dark body.rt-pp select.variant-select option{background-color:#171f27;color:#eef3f7}
+  html.dark body.rt-pp select.variant-select.show-placeholder{color:#aab4bf}
+  body.rt-pp select.variant-select:focus{border-color:#FF8C03;outline:none}
   `;
 
   function injectCSS(){
