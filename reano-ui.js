@@ -4,6 +4,13 @@
    fondo de tienda, pagina de producto, carrito ordenado. */
 (function(){
   if(window.__rtUI3) return; window.__rtUI3=1;
+  /* HIGIENE DE DATOS (27-jul-2026): barre en TODA visita y en cualquier pagina
+     los restos de 'rt-crm-queue', donde una version anterior dejaba guardados
+     en el navegador del cliente su numero de documento, direccion y telefono.
+     Va aqui —y no solo al enviar el formulario— porque quien ya lo tiene
+     guardado puede no volver a pasar nunca por el carrito. Ver el comentario
+     largo en la funcion de envio del formulario de pasajero. */
+  try{ localStorage.removeItem('rt-crm-queue'); }catch(e){}
   var WA='https://wa.me/584247309699?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20paquetes%20de%20viaje';
   /* Bogota: es el destino de TODOS los paquetes de concierto que hoy se venden
      en la tienda (Karol G, Arirang, Arjona — los tres en el Movistar Arena).
@@ -758,7 +765,15 @@
       },
       carrito:items, subtotal:subtotal
     };
-    try{ var q=JSON.parse(localStorage.getItem('rt-crm-queue')||'[]'); q.push(payload); localStorage.setItem('rt-crm-queue', JSON.stringify(q)); }catch(e){}
+    /* 27-jul-2026 — PRIVACIDAD: aqui se guardaba el payload COMPLETO (numero de
+       documento, direccion, telefono, email, si viaja con menores) en el
+       localStorage del NAVEGADOR DEL CLIENTE, bajo 'rt-crm-queue', y no se
+       borraba nunca. Nadie leia esa cola —era escritura muerta—, asi que no
+       servia de respaldo: solo dejaba la cedula del cliente a la vista de
+       quien usara despues esa computadora (cibercafe, PC familiar, oficina).
+       Se elimina la escritura y ademas se BORRA lo que haya quedado guardado
+       de visitas anteriores. El lead sigue viajando al CRM por crmEnviar(). */
+    try{ localStorage.removeItem('rt-crm-queue'); }catch(e){}
     crmEnviar(payload);
     var okBox=document.getElementById('rt-pax-ok'); if(okBox) okBox.style.display='block';
     var msg='🧾 *Datos del pasajero — Reaño Travels*%0A'
