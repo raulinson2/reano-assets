@@ -27,13 +27,15 @@
     'Avior (nac.)':'Desde Barcelona (BLA): Barquisimeto y Margarita (lun·mié·vie, +dom 19/07) · Las Piedras–Margarita (mar·jue, 16/07) · El Vigía (mié, 22/07)',
     'Bluestar':'Los Roques desde Aeropuerto Caracas Óscar Machado Zuloaga · diario 8:00 am / retorno 4:00 pm · desde el 16/07',
     'SASCA Airlines':'Reanuda el 17/07: Los Roques DIARIO desde Maracay (Tacarigua) · traslado terrestre gratis desde El Rosal (Caracas)',
-    'Turpial Airlines':'Nacionales vía Valencia · NUEVO El Vigía: desde Valencia (vie·dom, 19/07–28/09) y desde Porlamar (lun·jue, 16/07–28/09)',
+    'Turpial Airlines':'Nacionales vía Valencia · El Vigía (vie·dom, 19/07–28/09) · NUEVA RUTA Valencia ⇄ Punta Cana: jueves y domingos · equipaje Turista 2×23 kg + 8 kg de mano · Premium 3×23 kg + 8 kg',
+    'Iberia':'Madrid ⇄ Valencia (VLN) · 2 frecuencias semanales, JUEVES y DOMINGO, del 26/07 al 23/08 · los vuelos de Caracas se reprograman automáticamente (IB0191/IB0192) · si el cambio no te sirve: cambios y reembolsos gratis',
+    'Aeropostal':'Valencia ⇄ Porlamar · lun, mar, jue y vie: sale 12:00 pm, regresa 2:00 pm · domingos: sale 2:00 pm, regresa 4:00 pm',
     'Rutaca Airlines':'Nacionales vía Valencia · preséntate 4 h antes (nac.) y 5 h (int.) en VLN · afectados 24/06: cambio gratis hasta el 30/07',
     'GOL':'Caracas cancelado hasta el 31/08 · reprogramación sin penalidad, cambio de ruta o reembolso',
     'Air Europa':'Madrid ⇄ Valencia (UX071/072) · operativa por VLN ampliada hasta el 23/08 · CANCELADOS 17, 19, 24, 26 y 31 jul · Caracas: 7 y 14 ago · cambios gratis hasta el 31/10',
     'Laser Airlines (int.)':'Desde Barcelona (BLA): Madrid ya disponible · Sto. Domingo mié y dom · Bogotá mar·jue·sáb · exonerado el cobro por temporalidad (MIA/MAD)',
     'TAP Air Portugal':'Regresa el 13/07 vía Valencia (VLN)',
-    'Laser Airlines (nac.)':'Nacionales desde el Aeropuerto Libertador de Maracay (Palo Negro), 17/07–31/08 · Maracaibo, Barcelona, Porlamar y El Vigía · desde $90 ida y vuelta',
+    'Laser Airlines (nac.)':'Nacionales desde el Aeropuerto Libertador de Maracay (Palo Negro), 17/07–31/08 · Maracaibo, Barcelona, Porlamar y El Vigía · desde $90 ida y vuelta · NUEVO traslado de mascotas en vuelos nacionales desde Palo Negro (documentación INSAI obligatoria en el chequeo)',
     'American Airlines':'Caracas suspendido · waiver ampliado: afectados hasta el 16/08, reprogramar hasta el 19/08 · cambios de origen/destino (radio 300 mi) sin cargo · aplica a oneworld',
     'Avior Airlines':'Barcelona ⇄ Bogotá y Medellín · NUEVO Maracaibo ⇄ Curazao desde el 16/07',
     'Venezolana':'Nacionales desde Maracay (Palo Negro) desde el 20/07 · Internacional Panamá desde el 18/07',
@@ -45,6 +47,8 @@
     'Avior (nac.)':'Rutas nacionales cancel',
     'SASCA Airlines':'cancelado hasta nuevo aviso',
     'Turpial Airlines':'vuelo especial El Vigía',
+    'Iberia':'reprogramados automáticamente a Valencia',
+    'Aeropostal':'lun–vie y dom',
     'Rutaca Airlines':'Boa Vista',
     'GOL':'reanudación por confirmar',
     'Air Europa':'7, 9, 11 y 12',
@@ -166,7 +170,7 @@
     dest.insertBefore(c, dest.firstChild);
   }
   function updateSummaries(){
-    ['GOL','Air Europa','Laser Airlines (int.)','Turpial Airlines','Rutaca Airlines','Laser Airlines (nac.)','American Airlines','Avior Airlines','Turkish Airlines'].forEach(function(n){
+    ['GOL','Air Europa','Laser Airlines (int.)','Turpial Airlines','Rutaca Airlines','Laser Airlines (nac.)','American Airlines','Avior Airlines','Turkish Airlines','Iberia','Aeropostal'].forEach(function(n){
       var card=cardByName(n); if(!card) return;
       if(card.getAttribute('data-rtfx-s')) return;
       if(setSummary(card, OLD[n], R[n])) card.setAttribute('data-rtfx-s','1');
