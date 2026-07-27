@@ -373,6 +373,74 @@
   html.dark body.rt-pp select.variant-select option{background-color:#171f27;color:#eef3f7}
   html.dark body.rt-pp select.variant-select.show-placeholder{color:#aab4bf}
   body.rt-pp select.variant-select:focus{border-color:#FF8C03;outline:none}
+
+  /* ===== CALCULADORA DE SEGURO (/servicios) — clara, oscura y movil =====
+     Sin anchos fijos: una sola columna en telefono y tres en escritorio via
+     auto-fit, para que no haya que mantener dos maquetas. */
+  #rt-seg{--sg-card:#fff;--sg-tx:#191512;--sg-mu:#6b645c;--sg-ln:rgba(0,0,0,.10);
+    --sg-bg:#faf7f4;background:var(--sg-bg);color:var(--sg-tx);padding:64px 20px 72px}
+  html.dark #rt-seg{--sg-card:#171f27;--sg-tx:#eef3f7;--sg-mu:#9aa6b2;
+    --sg-ln:rgba(255,255,255,.12);--sg-bg:#0f151b}
+  #rt-seg *{box-sizing:border-box}
+  .rt-seg-in{max-width:1000px;margin:0 auto}
+  .rt-seg-k{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.20em;
+    color:#C2410C;margin-bottom:10px}
+  html.dark .rt-seg-k{color:#FF8C03}
+  #rt-seg h2{font-size:clamp(26px,4vw,42px);line-height:1.08;font-weight:900;margin:0 0 12px}
+  .rt-seg-sub{color:var(--sg-mu);margin:0 0 28px;max-width:56ch;line-height:1.6}
+  .rt-seg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .rt-seg-f label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+  .rt-seg-f select,.rt-seg-f input,.rt-seg-edad{width:100%;padding:12px 14px;border-radius:10px;
+    border:1px solid var(--sg-ln);background:var(--sg-card);color:var(--sg-tx);font:inherit}
+  .rt-seg-f select option{background:var(--sg-card);color:var(--sg-tx)}
+  .rt-seg-pax{margin-top:22px;background:var(--sg-card);border:1px solid var(--sg-ln);
+    border-radius:14px;padding:18px}
+  .rt-seg-paxh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px}
+  #rt-seg-add{background:none;border:1px solid var(--sg-ln);color:var(--sg-tx);
+    border-radius:999px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
+  #rt-seg-add:hover{border-color:#FF8C03;color:#C2410C}
+  html.dark #rt-seg-add:hover{color:#FF8C03}
+  .rt-seg-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .rt-seg-row span{font-size:13px;color:var(--sg-mu);min-width:38px}
+  .rt-seg-row .rt-seg-edad{max-width:120px}
+  .rt-seg-del{background:none;border:none;color:var(--sg-mu);font-size:16px;cursor:pointer;
+    padding:6px 10px;border-radius:8px;line-height:1}
+  .rt-seg-del:hover{color:#e5484d;background:rgba(229,72,77,.10)}
+  .rt-seg-pax small{display:block;margin-top:8px;color:var(--sg-mu);font-size:12.5px}
+  .rt-seg-ad{margin-top:18px}
+  .rt-seg-ad>b{display:block;margin-bottom:10px}
+  #rt-seg-adl{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+  .rt-seg-chk{display:flex;align-items:center;gap:10px;background:var(--sg-card);
+    border:1px solid var(--sg-ln);border-radius:10px;padding:11px 14px;cursor:pointer;font-size:14px}
+  .rt-seg-chk span{flex:1}
+  .rt-seg-chk b{color:#C2410C}
+  html.dark .rt-seg-chk b{color:#FF8C03}
+  .rt-seg-out{margin-top:26px}
+  .rt-seg-hint,.rt-seg-est{color:var(--sg-mu);font-size:14px;line-height:1.6}
+  .rt-seg-est{margin-top:16px;background:rgba(240,140,0,.10);border:1px solid rgba(240,140,0,.32);
+    border-radius:10px;padding:12px 14px;color:var(--sg-tx)}
+  .rt-seg-resh{font-size:15px;margin-bottom:14px;color:var(--sg-mu)}
+  .rt-seg-resh b{color:var(--sg-tx)}
+  .rt-seg-res{display:block}
+  .rt-seg-card{background:var(--sg-card);border:1px solid var(--sg-ln);border-radius:14px;
+    padding:18px;margin-bottom:12px}
+  .rt-seg-cabec{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .rt-seg-cabec b{font-size:17px}
+  .rt-seg-eu{font-size:11px;font-weight:800;letter-spacing:.08em;background:#C2410C;color:#fff;
+    padding:4px 9px;border-radius:999px}
+  .rt-seg-nota{color:var(--sg-mu);font-size:13.5px;margin:6px 0 10px;line-height:1.5}
+  .rt-seg-det{margin:0 0 12px;padding-left:18px;color:var(--sg-mu);font-size:13.5px;line-height:1.7}
+  .rt-seg-tot{display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid var(--sg-ln);padding-top:12px;margin-bottom:12px}
+  .rt-seg-tot b{font-size:24px;font-weight:900;color:var(--sg-tx)}
+  .rt-seg-go{width:100%;background:#C2410C;color:#fff;border:none;border-radius:10px;
+    padding:13px 18px;font:inherit;font-weight:800;cursor:pointer}
+  .rt-seg-go:hover{filter:brightness(1.08)}
+  @media(max-width:520px){
+    #rt-seg{padding:44px 16px 52px}
+    .rt-seg-paxh{flex-direction:column;align-items:stretch}
+    #rt-seg-add{width:100%}
+  }
   `;
 
   function injectCSS(){
@@ -407,6 +475,207 @@
       +'monitoreo en tiempo real y respaldo corporativo en cada traslado.</span>';
     var cta=body.querySelector('a');
     if(cta) body.insertBefore(band, cta); else body.appendChild(band);
+  }
+
+  /* ================= CALCULADORA DE SEGURO DE VIAJE (Simply Assistance) =========
+     27-jul-2026. Fuente de los precios: Documentos\IA\ORION\seguros\TARIFARIO-SIMPLY.md
+     (capturado del portal de agencia). NADA de esto es inventado y NO se toca sin
+     actualizar tambien ese archivo: es la fuente unica.
+
+     La regla que hace esto posible: NO hay recargo por edad. Hay tres familias de
+     planes y la edad del viajero decide en cual cae (0-75 / 76-85 / 86-99). Por eso
+     un grupo mixto se puede cotizar exacto: cada viajero en su familia, y se suma.
+
+     Los precios YA incluyen el margen de Raul -> no se recarga nada encima.
+
+     Por que el boton final va a WhatsApp y no al carrito: el precio es por DIA y por
+     PERSONA, y la tienda de Squarespace solo sabe de precios fijos. Cotizar exacto
+     aqui y cerrar por WhatsApp es lo que se puede hacer HOY sin acceso de admin.
+     Cuando existan los productos por plan, este mismo calculo alimenta el carrito.
+
+     Los tramos 76-85 y 86-99 se marcan como ESTIMADO a proposito: las fichas de
+     mayores del portal dicen "Para Mayores aplicaran aumentos" y hasta que Simply
+     lo aclare no se le promete a nadie un precio cerrado. */
+  var SEG_ADIC = [
+    {id:'mas', nom:'Mascota a bordo',                  usd:37.00},
+    {id:'can', nom:'Gastos de cancelación (US$ 3.000)', usd:68.50},
+    {id:'d2',  nom:'Deporte profesional · nivel 2',     usd:68.50},
+    {id:'d3',  nom:'Deporte profesional · nivel 3',     usd:79.00},
+    {id:'d4',  nom:'Deporte profesional · nivel 4',     usd:89.50}
+  ];
+  /* j = 0-75 · s = 76-85 · p = 86-99 · null = ese plan no existe para esa edad */
+  var SEG_NIV = [
+    {cob:'US$ 5.000',   eu:false, nota:'Sin cobertura de preexistencias',
+     j:{n:'SIMPLY 5',        u:1.00}, s:{n:'SIMPLY 5 +75',   u:1.50}, p:{n:'SIMPLY 5 SENIOR PLUS', u:2.00}},
+    {cob:'US$ 10.000',  eu:false, nota:'Preexistencias hasta US$ 200 (solo 0-75)', nac:true,
+     j:{n:'SIMPLY 10 NAC',   u:2.00}, s:{n:'SIMPLY 10 NAC +75', u:3.00}, p:{n:'SIMPLY 10 NAC SENIOR PLUS', u:4.00}},
+    {cob:'US$ 10.000',  eu:false, nota:'Preexistencias hasta US$ 200 (solo 0-75)',
+     j:{n:'SIMPLY 10 INTL',  u:2.00}, s:{n:'SIMPLY 10 INTL +75', u:3.00}, p:{n:'SIMPLY 10 INTL SENIOR PLUS', u:4.00}},
+    {cob:'US$ 43.000',  eu:false, nota:'La mejor relación cobertura/precio · sin preexistencias',
+     j:{n:'SIMPLY 43',       u:2.00}, s:null, p:null},
+    {cob:'US$ 15.000',  eu:false, nota:'Preexistencias hasta US$ 300 (solo 0-75)',
+     j:{n:'SIMPLY 15',       u:2.60}, s:{n:'SIMPLY 15 +75', u:3.90}, p:{n:'SIMPLY 15 SENIOR PLUS', u:5.20}},
+    {cob:'US$/€ 35.000', eu:true,  nota:'Válido para visado Schengen · preexistencias hasta US$ 3.000',
+     j:{n:'SIMPLY 35SS',     u:3.00}, s:{n:'SIMPLY 35 SS SENIOR', u:4.50}, p:{n:'SIMPLY 35 SS SENIOR PLUS', u:6.00}},
+    {cob:'US$ 55.000',  eu:false, nota:'Preexistencias hasta US$ 5.500',
+     j:{n:'SIMPLY 55 SS',    u:3.70}, s:{n:'SIMPLY 55 SS SENIOR', u:5.55}, p:null},
+    {cob:'US$ 75.000',  eu:false, nota:'Preexistencias hasta US$ 7.500',
+     j:{n:'SIMPLY 75SS',     u:4.50}, s:null, p:null},
+    {cob:'US$ 100.000', eu:false, nota:'Preexistencias hasta US$ 10.000',
+     j:{n:'SIMPLY 100SS',    u:5.00}, s:null, p:null},
+    {cob:'US$ 250.000', eu:false, nota:'Preexistencias hasta US$ 12.500',
+     j:{n:'SIMPLY 250SS',    u:15.00}, s:null, p:null},
+    {cob:'US$ 500.000', eu:false, nota:'Preexistencias hasta US$ 15.000',
+     j:{n:'SIMPLY 500SS',    u:19.00}, s:null, p:null},
+    {cob:'US$ 1.000.000', eu:false, nota:'Preexistencias hasta US$ 18.000',
+     j:{n:'SIMPLY 1MSS',     u:22.00}, s:null, p:null}
+  ];
+  function segBanda(edad){ return edad<=75?'j' : (edad<=85?'s':'p'); }
+  function segDias(a,b){
+    if(!a||!b) return 0;
+    var d=(new Date(b+'T00:00:00') - new Date(a+'T00:00:00'))/86400000;
+    return d>=0 ? Math.floor(d)+1 : 0;   /* dia de salida y de regreso, ambos cubiertos */
+  }
+  function segMoney(n){ return 'US$ ' + n.toFixed(2).replace('.',','); }
+
+  function seguroCalc(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/servicios') return;
+    if(document.getElementById('rt-seg')) return;
+    var host=document.querySelector('#sections')||document.getElementById('page')||document.querySelector('main');
+    if(!host) return;
+
+    var wrap=document.createElement('section');
+    wrap.id='rt-seg';
+    wrap.innerHTML=
+      '<div class="rt-seg-in">'
+      + '<span class="rt-seg-k">ASISTENCIA MÉDICA EN VIAJE</span>'
+      + '<h2>Calcula tu seguro en 30 segundos</h2>'
+      + '<p class="rt-seg-sub">Precio exacto, sin esperar respuesta. Cobertura real desde el día '
+      + 'que sales hasta el que regresas.</p>'
+      + '<div class="rt-seg-grid">'
+      +   '<div class="rt-seg-f"><label for="rt-seg-d">Destino</label>'
+      +     '<select id="rt-seg-d"><option value="int">Internacional</option>'
+      +     '<option value="eu">Europa (espacio Schengen)</option>'
+      +     '<option value="nac">Dentro de Venezuela</option></select></div>'
+      +   '<div class="rt-seg-f"><label for="rt-seg-i">Fecha de salida</label>'
+      +     '<input type="date" id="rt-seg-i"></div>'
+      +   '<div class="rt-seg-f"><label for="rt-seg-v">Fecha de regreso</label>'
+      +     '<input type="date" id="rt-seg-v"></div>'
+      + '</div>'
+      + '<div class="rt-seg-pax"><div class="rt-seg-paxh"><b>Viajeros</b>'
+      +   '<button type="button" id="rt-seg-add">+ Añadir viajero</button></div>'
+      +   '<div id="rt-seg-list"></div>'
+      +   '<small>La edad decide el plan que le corresponde a cada viajero. '
+      +   'Se cubre de 0 a 99 años.</small></div>'
+      + '<div class="rt-seg-ad"><b>¿Necesitas algo más?</b><div id="rt-seg-adl"></div></div>'
+      + '<div id="rt-seg-out" class="rt-seg-out"></div>'
+      + '</div>';
+    host.appendChild(wrap);
+
+    var list=wrap.querySelector('#rt-seg-list');
+    function fila(edad){
+      var d=document.createElement('div'); d.className='rt-seg-row';
+      d.innerHTML='<span>Edad</span><input type="number" min="0" max="99" value="'+edad+'" class="rt-seg-edad">'
+                 +'<button type="button" class="rt-seg-del" title="Quitar viajero">✕</button>';
+      list.appendChild(d);
+      d.querySelector('.rt-seg-edad').addEventListener('input', calc);
+      d.querySelector('.rt-seg-del').addEventListener('click', function(){
+        if(list.children.length>1){ d.remove(); calc(); }
+      });
+    }
+    fila(30);
+    wrap.querySelector('#rt-seg-add').addEventListener('click', function(){ fila(30); calc(); });
+
+    var adl=wrap.querySelector('#rt-seg-adl');
+    SEG_ADIC.forEach(function(a){
+      var l=document.createElement('label'); l.className='rt-seg-chk';
+      l.innerHTML='<input type="checkbox" value="'+a.id+'"> <span>'+a.nom+'</span>'
+                 +'<b>'+segMoney(a.usd)+'</b>';
+      adl.appendChild(l);
+      l.querySelector('input').addEventListener('change', calc);
+    });
+    ['#rt-seg-d','#rt-seg-i','#rt-seg-v'].forEach(function(s){
+      wrap.querySelector(s).addEventListener('change', calc);
+    });
+
+    function calc(){
+      var out=wrap.querySelector('#rt-seg-out');
+      var dest=wrap.querySelector('#rt-seg-d').value;
+      var dias=segDias(wrap.querySelector('#rt-seg-i').value, wrap.querySelector('#rt-seg-v').value);
+      var edades=[].slice.call(list.querySelectorAll('.rt-seg-edad'))
+                   .map(function(i){ return parseInt(i.value,10); })
+                   .filter(function(n){ return !isNaN(n) && n>=0 && n<=99; });
+      if(!dias || !edades.length){
+        out.innerHTML='<p class="rt-seg-hint">Elige las fechas y la edad de cada viajero '
+                    + 'para ver el precio.</p>';
+        return;
+      }
+      /* niveles validos para el destino elegido */
+      var nivs=SEG_NIV.filter(function(n){
+        if(dest==='eu')  return n.eu;              /* Schengen exige 30.000 EUR */
+        if(dest==='nac') return !!n.nac || n.cob==='US$ 5.000';
+        return !n.nac;                             /* internacional: todo menos el NAC */
+      });
+      var adics=[].slice.call(adl.querySelectorAll('input:checked')).map(function(i){
+        return SEG_ADIC.filter(function(a){ return a.id===i.value; })[0];
+      });
+      var extra=adics.reduce(function(s,a){ return s+a.usd; },0);
+
+      var html='<div class="rt-seg-res"><div class="rt-seg-resh">'
+             + '<b>'+dias+' día'+(dias===1?'':'s')+'</b> · <b>'+edades.length+' viajero'
+             + (edades.length===1?'':'s')+'</b></div>';
+      var hayEst=false, alguno=false;
+
+      nivs.forEach(function(n){
+        var total=0, det=[], ok=true;
+        edades.forEach(function(e){
+          var b=segBanda(e), pl=n[b];
+          if(!pl){ ok=false; return; }
+          if(b!=='j') hayEst=true;
+          total+=pl.u*dias;
+          det.push(e+' años → '+pl.n+' ('+segMoney(pl.u)+'/día)');
+        });
+        if(!ok) return;
+        alguno=true;
+        total+=extra;
+        html+='<div class="rt-seg-card">'
+            + '<div class="rt-seg-cabec"><b>Cobertura '+n.cob+'</b>'
+            + (n.eu?'<span class="rt-seg-eu">Schengen</span>':'')+'</div>'
+            + '<p class="rt-seg-nota">'+n.nota+'</p>'
+            + '<ul class="rt-seg-det"><li>'+det.join('</li><li>')+'</li>'
+            + (extra?'<li>Adicionales: '+adics.map(function(a){return a.nom;}).join(', ')
+                    +' — '+segMoney(extra)+'</li>':'')
+            + '</ul>'
+            + '<div class="rt-seg-tot"><span>Total</span><b>'+segMoney(total)+'</b></div>'
+            + '<button type="button" class="rt-seg-go" data-t="'+segMoney(total)+'" '
+            + 'data-p="'+det.join(' | ')+'" data-c="'+n.cob+'">Reservar este plan</button>'
+            + '</div>';
+      });
+
+      if(!alguno){
+        html+='<p class="rt-seg-hint">Para las edades que pusiste no hay plan de este '
+            + 'destino con cobertura suficiente. Escríbenos y te lo resolvemos a mano.</p>';
+      }
+      if(hayEst){
+        html+='<p class="rt-seg-est">⚠️ Hay viajeros de 76 años o más. Su tarifa es un '
+            + '<b>estimado</b>: tu asesor te confirma el monto final antes de emitir.</p>';
+      }
+      html+='</div>';
+      out.innerHTML=html;
+
+      out.querySelectorAll('.rt-seg-go').forEach(function(b){
+        b.addEventListener('click', function(){
+          var msg='🩺 *Seguro de viaje — Reaño Travels*%0A'
+                + 'Cobertura: '+encodeURIComponent(b.getAttribute('data-c'))+'%0A'
+                + 'Días: '+dias+'%0A'
+                + 'Viajeros: '+encodeURIComponent(b.getAttribute('data-p'))+'%0A'
+                + (extra?'Adicionales: '+encodeURIComponent(adics.map(function(a){return a.nom;}).join(', '))+'%0A':'')
+                + 'Total: '+encodeURIComponent(b.getAttribute('data-t'));
+          window.open('https://wa.me/584247309699?text='+msg,'_blank');
+        });
+      });
+    }
+    calc();
   }
 
   function markTienda(){
@@ -1123,7 +1392,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
