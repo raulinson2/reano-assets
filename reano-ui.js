@@ -716,7 +716,16 @@
      sigue siendo de texto libre — un catalogo cerrado dejaria fuera al que busca un
      hotel concreto.
      Las edades de ninos e infantes son OBLIGATORIAS: sin ellas ningun hotel puede
-     tarifar, y es justo el dato que faltaba y obligaba a repreguntar por WhatsApp. */
+     tarifar, y es justo el dato que faltaba.
+
+     CORRECCION IMPORTANTE (misma sesion): primero di por hecho que el formulario "no
+     hacia nada" porque no tiene action ni onsubmit. FALSO — el manejador esta puesto
+     con addEventListener desde la inyeccion, y abre Booking.com. Un interceptor con
+     stopPropagation habria MATADO la busqueda. Comprobar los atributos de un <form>
+     NO prueba que no tenga manejadores: hay que buscar addEventListener en la fuente.
+     Ahora se sustituye la URL de Booking por una COMPLETA (habitaciones + ninos +
+     una edad por nino), en vez de la vieja que mandaba siempre no_rooms=1 y
+     group_children=0 y por eso ensenaba un precio que cambiaba al llegar. */
   var HOT_DEST = ['Bogotá','Medellín','Cartagena','Madrid','Barcelona (España)','Roma',
     'París','Lisboa','Panamá','Miami','Orlando','Nueva York','Punta Cana','Santo Domingo',
     'Curazao','Aruba','Cancún','Ciudad de México','Buenos Aires','Lima','Santiago de Chile',
@@ -796,19 +805,26 @@
         return;
       }
       if(av) av.style.display='none';
-      var noches=segDias(i1,o1)-1;
-      var det=edades.map(function(e){
-        return e.getAttribute('data-t')+': '+e.value+(e.getAttribute('data-m')?' meses':' años');
-      }).join(', ');
-      var msg='🏨 *Solicitud de hotel — Reaño Travels*%0A'
-        +'Destino: '+encodeURIComponent(d)+'%0A'
-        +'Entrada: '+i1+' · Salida: '+o1+(noches>0?(' ('+noches+' noche'+(noches===1?'':'s')+')'):'')+'%0A'
-        +'Habitaciones: '+box.querySelector('#rt-hot-hab').value+'%0A'
-        +'Adultos: '+encodeURIComponent(pax.options[pax.selectedIndex].text)+'%0A'
-        +'Niños: '+box.querySelector('#rt-hot-nin').value
-        +' · Infantes: '+box.querySelector('#rt-hot-inf').value+'%0A'
-        +(det?('Edades: '+encodeURIComponent(det)+'%0A'):'');
-      window.open('https://wa.me/584247309699?text='+msg,'_blank');
+      /* Se abre Booking IGUAL que antes — pero con TODO. El buscador original
+         mandaba siempre no_rooms=1 y group_children=0, asi que una familia con
+         ninos veia precios de una habitacion doble sin ellos: el precio real
+         cambiaba al llegar. Booking si acepta habitaciones, ninos y una edad por
+         nino (&age=N repetido), y eso es lo que se le pasa ahora. */
+      var adultos=parseInt(pax.value,10);
+      if(isNaN(adultos)) adultos=parseInt((pax.options[pax.selectedIndex].text||'2'),10)||2;
+      var u='https://www.booking.com/searchresults.es.html?ss='+encodeURIComponent(d)
+          + '&checkin='+i1+'&checkout='+o1
+          + '&group_adults='+adultos
+          + '&no_rooms='+box.querySelector('#rt-hot-hab').value;
+      var edadesBk=edades.map(function(e){
+        var v=parseInt(e.value,10);
+        /* los infantes se piden en MESES y Booking los quiere en anos cumplidos */
+        return e.getAttribute('data-m') ? Math.floor(v/12) : v;
+      });
+      u+='&group_children='+edadesBk.length;
+      edadesBk.forEach(function(a){ u+='&age='+a; });
+      if(window.BOOKING_AID) u+='&aid='+encodeURIComponent(window.BOOKING_AID);
+      window.open(u,'_blank');
     }, true);
   }
 
