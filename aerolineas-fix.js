@@ -293,6 +293,10 @@
   function apply(){
     if(!onBoard()) return;
     avisoMaiquetia();
+    /* 27-jul: yummyTraslados() estaba DEFINIDA pero nunca se llamaba — codigo
+       muerto. La tarjeta de Yummy jamas llego a pintarse en el tablero y yo lo di
+       por hecho. Se detecto verificando en vivo tras publicar, no antes. */
+    yummyTraslados();
     moveCard('Aerocaribe','contingencia');
     moveCard('Estelar (nac.)','contingencia');
     moveCard('Avior (nac.)','contingencia');
