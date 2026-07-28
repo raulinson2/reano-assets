@@ -940,9 +940,18 @@
         html+='<p class="rt-seg-hint">Para las edades que pusiste no hay plan de este '
             + 'destino con cobertura suficiente. Escríbenos y te lo resolvemos a mano.</p>';
       }
+      /* 27-jul-2026 — se QUITA el aviso de "estimado" para los mayores.
+         Yo habia leido el pie del portal («Para Mayores aplicarán aumentos») como si
+         hubiera un recargo pendiente encima de estos precios. Raul lo aclaro: la
+         tarifa de mayores que me paso ES la definitiva, y ese aumento es justamente
+         que el plan de mayores cuesta mas que el estandar (SIMPLY 5 = $1,00 frente a
+         SIMPLY 5 +75 = $1,50). No hay nada que sumar despues.
+         En su lugar se explica POR QUE cambia el precio, que es lo que el cliente se
+         pregunta al ver que su madre paga mas que el. */
       if(hayEst){
-        html+='<p class="rt-seg-est">⚠️ Hay viajeros de 76 años o más. Su tarifa es un '
-            + '<b>estimado</b>: tu asesor te confirma el monto final antes de emitir.</p>';
+        html+='<p class="rt-seg-est">A partir de los 76 años aplica el plan de mayores, '
+            + 'que tiene su propia tarifa y su propia cobertura. <b>El precio de arriba '
+            + 'ya es el definitivo</b> — no se le suma nada después.</p>';
       }
       html+='</div>';
       out.innerHTML=html;
