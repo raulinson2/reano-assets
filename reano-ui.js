@@ -698,20 +698,22 @@
   @media(max-width:520px){ #rt-gift{padding:44px 16px 54px} }
 
   /* ===== BOTONES DE WHATSAPP: contraste =====
-     27-jul-2026, autorizado por Raul ("si tienes que mejorarlo, hazlo").
-     Los botones de texto iban en BLANCO sobre el verde vivo #25D366: contraste
-     1,98:1 cuando el minimo legible es 4,5:1. A pleno sol, en un telefono, ese
-     boton -que es el que mas vende- practicamente no se lee.
-     Se pasa al verde OSCURO de WhatsApp #075E54, que es un color oficial suyo (el
-     de su cabecera), no un invento: sigue leyendose como WhatsApp y con blanco da
-     7,7:1. Se conserva el verde vivo SOLO en el boton flotante, que es un icono
-     -no texto- y ahi el brillo ayuda a encontrarlo; a ese se le pone el icono en
-     BLANCO, porque venia en negro sobre verde y casi no se distinguia. */
-  a[href*="wa.me"]:not(.rt-wa-float-btn):not(.rt-fab),
-  a[href*="whatsapp.com"]:not(.rt-wa-float-btn):not(.rt-fab),
-  .rt-wabtn,.rtp-cta{background-color:#075E54 !important;color:#fff !important}
-  a[href*="wa.me"]:not(.rt-wa-float-btn):not(.rt-fab):hover,
-  .rt-wabtn:hover,.rtp-cta:hover{background-color:#0A7A6C !important}
+     27-jul-2026. El problema real: blanco sobre el verde vivo #25D366 da 1,98:1
+     cuando el minimo legible es 4,5:1. A pleno sol, en un telefono, el boton que
+     mas vende no se lee.
+
+     PRIMER INTENTO, MAL: cambie el FONDO a verde oscuro #075E54 con un selector
+     a[href*="wa.me"]. Dos errores. (1) El selector cogia CUALQUIER enlace a
+     WhatsApp, y las tarjetas de "Tus opciones con el boleto" -que son blancas y
+     enlazan a WhatsApp- se volvieron bloques verde petroleo. (2) Aun sin ese fallo,
+     meter un verde nuevo rompia la paleta del sitio. Raul: "se ve HORRIBLE y no va
+     con los colores empresariales".
+
+     LO CORRECTO: no tocar NINGUN fondo. Se conserva el verde de WhatsApp tal cual
+     -es su marca y encaja con el sitio- y se oscurece el TEXTO, que da 9,4:1.
+     Ademas se hace por COLOR MEDIDO (ver waContraste), no por selector: solo se
+     tocan elementos que YA tienen ese verde de fondo, asi que es imposible pintar
+     una tarjeta que nunca fue verde. Misma tecnica que deepenButtons(). */
   .rt-wa-float-btn{color:#fff !important}
   .rt-wa-float-btn svg,.rt-wa-float-btn i{color:#fff !important;fill:#fff !important}
   /* en movil el flotante tapaba la pastilla de "Estado de las aerolineas" del
@@ -1356,6 +1358,28 @@
         + 'Monto: US$ '+monto+'%0A'
         + 'Para: '+encodeURIComponent(para)+'%0A'
         + (msg?('Dedicatoria: '+encodeURIComponent(msg)):''), '_blank');
+    });
+  }
+
+  /* Oscurece el TEXTO de lo que ya esta pintado del verde vivo de WhatsApp.
+     No toca fondos: el verde se queda igual, que es lo que encaja con el sitio.
+     Se decide por color medido, no por selector, para no poder alcanzar jamas un
+     elemento que no fuera verde. Idempotente: #0B2E26 ya no es texto claro. */
+  function rtVerdeWA(c){ var r=c[0],g=c[1],b=c[2];
+    return g>=170 && g<=235 && r>=10 && r<=90 && b>=60 && b<=150; }
+  function waContraste(){
+    document.querySelectorAll('a,button,[role="button"]').forEach(function(el){
+      if(el.classList.contains('rt-wa-float-btn')) return;   /* el flotante es icono */
+      var cs=getComputedStyle(el);
+      var bg=(cs.backgroundColor.match(/[\d.]+/g)||[]).map(Number);
+      if(bg.length<3 || (bg.length>=4 && bg[3]<0.6)) return; /* sin fondo solido */
+      if(!rtVerdeWA(bg)) return;                             /* solo el verde de WhatsApp */
+      var fg=(cs.color.match(/[\d.]+/g)||[]).map(Number);
+      if(fg.length<3 || fg[0]<190 || fg[1]<190 || fg[2]<190) return; /* solo texto claro */
+      var r=el.getBoundingClientRect(); if(r.width<8 || r.height<6) return;
+      el.style.setProperty('color','#0B2E26','important');
+      el.querySelectorAll('*').forEach(function(h){
+        h.style.setProperty('color','#0B2E26','important'); });
     });
   }
 
@@ -2187,7 +2211,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
