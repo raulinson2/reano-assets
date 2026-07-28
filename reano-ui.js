@@ -776,6 +776,135 @@
   .rt-hero-dot:focus-visible{outline:2px solid #FF8C03;outline-offset:3px}
   @media(max-width:600px){ .rt-hero-dots{margin-top:20px} }
 
+
+  /* ===== ASISTENTE DE COTIZACION (modal) =====
+     Va sobre TODO el sitio, asi que define sus propias variables y no hereda nada.
+     z-index 10050: por encima del header (9990) y del flotante de WhatsApp (9999). */
+  .rt-wiz-ov{--w-c:#fff;--w-t:#191512;--w-m:#6b645c;--w-l:rgba(0,0,0,.12);--w-bg:#faf7f4;
+    position:fixed;inset:0;z-index:10050;background:rgba(10,10,14,.62);
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    font-family:'Montserrat',system-ui,-apple-system,sans-serif;
+    animation:rtWizIn .22s ease}
+  html.dark .rt-wiz-ov{--w-c:#171f27;--w-t:#eef3f7;--w-m:#9aa6b2;--w-l:rgba(255,255,255,.14);--w-bg:#0f151b}
+  @keyframes rtWizIn{from{opacity:0}to{opacity:1}}
+  body.rt-wiz-abierto{overflow:hidden}
+  .rt-wiz-ov *{box-sizing:border-box}
+  .rt-wiz-caja{position:relative;width:100%;max-width:660px;max-height:92vh;
+    background:var(--w-bg);color:var(--w-t);border-radius:20px;overflow:hidden;
+    display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.45);
+    animation:rtWizUp .28s cubic-bezier(.22,.61,.36,1)}
+  @keyframes rtWizUp{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+  @media(prefers-reduced-motion:reduce){
+    .rt-wiz-ov,.rt-wiz-caja{animation:none}
+  }
+  .rt-wiz-x{position:absolute;top:12px;right:12px;z-index:2;width:34px;height:34px;
+    border:0;border-radius:999px;background:rgba(128,128,128,.16);color:var(--w-t);
+    font-size:15px;cursor:pointer;line-height:1;transition:background .18s}
+  .rt-wiz-x:hover{background:rgba(128,128,128,.3)}
+  .rt-wiz-barra{height:3px;background:rgba(128,128,128,.2);flex:0 0 auto}
+  .rt-wiz-barra span{display:block;height:100%;width:20%;background:#FF8C03;
+    transition:width .3s cubic-bezier(.22,.61,.36,1)}
+  .rt-wiz-cuerpo{padding:30px 28px 8px;overflow-y:auto;flex:1 1 auto}
+  .rt-wiz-cuerpo h2{font-size:clamp(20px,3.2vw,27px);font-weight:900;line-height:1.15;
+    margin:0 0 8px;color:var(--w-t)}
+  .rt-wiz-sub{color:var(--w-m);font-size:14px;line-height:1.55;margin:0 0 20px}
+
+  .rt-wiz-tipos{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .rt-wiz-tipo{display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    text-align:left;padding:14px 15px;border-radius:14px;cursor:pointer;
+    background:var(--w-c);border:1.5px solid var(--w-l);color:var(--w-t);
+    font-family:inherit;transition:border-color .18s,transform .18s,box-shadow .18s}
+  .rt-wiz-tipo:hover{border-color:#FF8C03;transform:translateY(-2px)}
+  .rt-wiz-tipo.on{border-color:#C2410C;box-shadow:0 0 0 3px rgba(194,65,12,.15)}
+  html.dark .rt-wiz-tipo.on{border-color:#FF8C03;box-shadow:0 0 0 3px rgba(255,140,3,.2)}
+  .rt-wiz-ico{font-size:22px;line-height:1;margin-bottom:4px}
+  .rt-wiz-tipo b{font-size:14.5px;font-weight:800}
+  .rt-wiz-tipo small{font-size:12px;color:var(--w-m);line-height:1.35}
+
+  .rt-wiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .rt-wiz-f{display:flex;flex-direction:column;min-width:0}
+  .rt-wiz-f label{font-size:12.5px;font-weight:700;margin-bottom:6px;color:var(--w-t)}
+  .rt-wiz-ov input,.rt-wiz-ov select,.rt-wiz-ov textarea{width:100%;padding:12px 14px;
+    border-radius:11px;border:1px solid var(--w-l);background:var(--w-c);color:var(--w-t);
+    font-family:inherit;font-size:14.5px}
+  .rt-wiz-ov input:focus,.rt-wiz-ov select:focus,.rt-wiz-ov textarea:focus{
+    outline:none;border-color:#FF8C03;box-shadow:0 0 0 3px rgba(255,140,3,.16)}
+  .rt-wiz-ov select option{background:var(--w-c);color:var(--w-t)}
+  .rt-wiz-err{display:none;margin:14px 0 0;padding:11px 14px;border-radius:11px;
+    background:rgba(229,72,77,.12);border:1px solid rgba(229,72,77,.4);
+    font-size:13.5px;color:var(--w-t)}
+
+  .rt-wiz-cont{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:14px 16px;border-radius:14px;background:var(--w-c);border:1px solid var(--w-l);
+    margin-bottom:10px;font-weight:700;font-size:15px}
+  .rt-wiz-step{display:flex;align-items:center;gap:4px}
+  .rt-wiz-step button{width:36px;height:36px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--w-l);background:transparent;color:var(--w-t);
+    font-size:18px;font-family:inherit;line-height:1;transition:background .16s,border-color .16s}
+  .rt-wiz-step button:hover{border-color:#FF8C03;background:rgba(255,140,3,.12)}
+  .rt-wiz-step b{min-width:34px;text-align:center;font-size:16px}
+  .rt-wiz-edades{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;margin-top:6px}
+  .rt-wiz-edades label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;
+    font-weight:700;color:var(--w-t)}
+
+  .rt-wiz-extras{display:grid;gap:10px;margin-bottom:16px}
+  .rt-wiz-chk{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;
+    border-radius:14px;background:var(--w-c);border:1.5px solid var(--w-l);cursor:pointer;
+    transition:border-color .18s}
+  .rt-wiz-chk:hover{border-color:#FF8C03}
+  .rt-wiz-chk.on{border-color:#C2410C}
+  html.dark .rt-wiz-chk.on{border-color:#FF8C03}
+  .rt-wiz-chk input{width:18px;height:18px;flex:0 0 auto;margin-top:2px;accent-color:#C2410C}
+  html.dark .rt-wiz-chk input{accent-color:#FF8C03}
+  .rt-wiz-chk b{display:block;font-size:14.5px;font-weight:800}
+  .rt-wiz-chk small{display:block;font-size:12.5px;color:var(--w-m);line-height:1.4}
+
+  .rt-wiz-ticket{background:var(--w-c);border:1px solid var(--w-l);border-radius:16px;
+    padding:6px 18px;margin-bottom:16px}
+  .rt-wiz-tk{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:12px 0;border-bottom:1px dashed var(--w-l)}
+  .rt-wiz-tk:last-child{border-bottom:0}
+  .rt-wiz-tk span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--w-m);flex:0 0 auto}
+  .rt-wiz-tk b{font-size:14.5px;text-align:right;min-width:0;word-break:break-word}
+  .rt-wiz-precio{background:rgba(255,140,3,.10);border:1px solid rgba(255,140,3,.34);
+    border-radius:16px;padding:16px 18px;margin-bottom:14px}
+  .rt-wiz-pk{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;
+    color:#C2410C;margin-bottom:6px}
+  html.dark .rt-wiz-pk{color:#FF8C03}
+  .rt-wiz-pn{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .rt-wiz-pn b{font-size:28px;font-weight:900;line-height:1}
+  .rt-wiz-pn small{font-size:12.5px;color:var(--w-m)}
+  .rt-wiz-precio p{font-size:13px;color:var(--w-m);line-height:1.55;margin:8px 0 0}
+  .rt-wiz-precio a{color:#C2410C;font-weight:700}
+  html.dark .rt-wiz-precio a{color:#FF8C03}
+  .rt-wiz-nota{font-size:13px;color:var(--w-m);line-height:1.6;margin:0}
+  .rt-wiz-nota b{color:var(--w-t)}
+
+  .rt-wiz-pie{display:flex;gap:12px;padding:18px 28px 22px;flex:0 0 auto;
+    border-top:1px solid var(--w-l);background:var(--w-bg)}
+  .rt-wiz-atras{padding:13px 22px;border-radius:999px;cursor:pointer;font-family:inherit;
+    font-weight:700;font-size:14px;background:transparent;color:var(--w-m);
+    border:1px solid var(--w-l);transition:color .18s,border-color .18s}
+  .rt-wiz-atras:hover{color:var(--w-t);border-color:var(--w-t)}
+  .rt-wiz-sig{flex:1;padding:13px 22px;border:0;border-radius:999px;cursor:pointer;
+    font-family:inherit;font-weight:800;font-size:14.5px;background:#C2410C;color:#fff;
+    transition:filter .18s,transform .18s}
+  .rt-wiz-sig:hover{filter:brightness(1.09);transform:translateY(-1px)}
+
+  @media(max-width:600px){
+    .rt-wiz-ov{padding:0;align-items:stretch}
+    .rt-wiz-caja{max-width:none;max-height:none;height:100%;border-radius:0}
+    .rt-wiz-cuerpo{padding:26px 18px 8px}
+    .rt-wiz-grid{grid-template-columns:1fr}
+    .rt-wiz-pie{padding:16px 18px calc(16px + env(safe-area-inset-bottom))}
+    .rt-wiz-tipos{grid-template-columns:1fr}
+    .rt-wiz-tk{flex-direction:column;gap:2px}
+    .rt-wiz-tk b{text-align:left}
+  }
+
   /* ===== HOME: la pastilla de Holafly quedaba debajo de la tarjeta de cifras =====
      29-jul-2026. En la captura de Raul se leia "eSIM Holafly · 5% OFF con" y ahi se
      cortaba. No era recorte de texto: la tarjeta blanca de "8+ años / 1.000+ / 24/7"
@@ -1845,6 +1974,338 @@
       if(/^\s*(seguir comprando|continue shopping|seguir viendo)\s*$/i.test((b.textContent||''))) b.style.setProperty('display','none','important');
     });
   }
+
+  /* ================= ASISTENTE DE COTIZACION ====================================
+     29-jul-2026. Nace de un documento que le pasaron a Raul. La idea de fondo era
+     buena y el hueco es real: HOY todos los botones "Cotizar" del sitio llevan a
+     WhatsApp con el texto "Hola Reano! Quiero cotizar." — el asesor recibe un saludo
+     y tiene que averiguar a pulso destino, fechas y cuanta gente viaja. Cada
+     cotizacion empieza con cuatro preguntas que el visitante ya sabia responder.
+
+     Lo que este asistente NO hace, a proposito:
+     · NO inventa precios. El documento traia un "motor" con vuelos a 450 USD por
+       persona, hoteles a 70/130/250 y seguro a 6 USD/dia. Ninguno es de Reano —la
+       tarifa real de seguro va de 1,00 a 22,00 USD/dia segun plan y EDAD— y un
+       estimado inventado se paga cuando llega la cotizacion de verdad.
+     · Solo se muestra precio donde hay dato cierto: el SEGURO, calculado con la
+       misma tabla Simply que ya usa /seguros. Todo lo demas se recoge y se contesta.
+     · NO se guarda nada en el navegador del cliente. En julio hubo que retirar una
+       cola en localStorage que almacenaba documento, direccion y telefono y no la
+       leia nadie. El estado vive en memoria y muere al cerrar.
+
+     El envio es SIEMPRE del usuario: el mensaje se arma y se abre WhatsApp con el
+     boton. Si algun dia existe backend, window.RT_CRM_ENDPOINT recibe una copia. */
+  var WIZ_WA='584247309699';
+  var WIZ_TIPOS=[
+    {id:'vuelo',     i:'✈️', t:'Boletos aéreos',        d:'Nacional o internacional'},
+    {id:'nacional',  i:'🌴', t:'Paquete en Venezuela',  d:'Los Roques, Canaima, Margarita'},
+    {id:'intl',      i:'🌎', t:'Viaje internacional',   d:'Europa, Colombia, a tu medida'},
+    {id:'concierto', i:'🎫', t:'Concierto o evento',    d:'Entrada, vuelo y hotel'},
+    {id:'hotel',     i:'🏨', t:'Solo hospedaje',        d:'Hoteles y apartamentos'},
+    {id:'seguro',    i:'🩺', t:'Solo seguro de viaje',  d:'Precio exacto al instante'}
+  ];
+  var WIZ_ZONAS=[
+    {id:'nac', t:'Dentro de Venezuela'},
+    {id:'eu',  t:'Europa (espacio Schengen)'},
+    {id:'int', t:'Resto del mundo'}
+  ];
+  var WIZ_EXTRAS=[
+    {id:'seguro',    t:'Seguro de viaje',    d:'Asistencia médica desde US$ 1 por día'},
+    {id:'esim',      t:'eSIM Holafly',       d:'Internet al aterrizar, 5% con REANOTRAVELS'},
+    {id:'traslados', t:'Traslados',          d:'Aeropuerto y hotel'},
+    {id:'entradas',  t:'Entradas al evento', d:'Conciertos y espectáculos'}
+  ];
+
+  /* Plan de seguro MAS BARATO que cubre a todo el grupo en esa zona. Devuelve null
+     si no hay ninguno valido (p.ej. un viajero de 90 anos en un plan que no llega).
+     Misma tabla y misma aritmetica que /seguros: aqui no se crea una segunda verdad. */
+  function wizSeguro(zona, dias, edades){
+    if(!dias || !edades.length) return null;
+    var nivs=SEG_NIV.filter(function(n){
+      if(zona==='eu')  return n.eu;
+      if(zona==='nac') return !!n.nac || n.cob==='US$ 5.000';
+      return !n.nac;
+    });
+    var mejor=null;
+    nivs.forEach(function(n){
+      var total=0, ok=true;
+      edades.forEach(function(e){
+        var pl=n[segBanda(e)];
+        if(!pl){ ok=false; return; }
+        total+=pl.u*dias;
+      });
+      if(!ok) return;
+      if(!mejor || total<mejor.total) mejor={cob:n.cob, eu:!!n.eu, total:total};
+    });
+    return mejor;
+  }
+
+  function wizFecha(s){
+    if(!s) return '';
+    var p=s.split('-');
+    return p.length===3 ? (p[2]+'/'+p[1]+'/'+p[0]) : s;
+  }
+
+  function wizard(){
+    if(document.getElementById('rt-wiz')) return;
+
+    var D={tipo:'', zona:'int', origen:'', destino:'', salida:'', regreso:'',
+           adultos:2, ninos:[], extras:{}, notas:''};
+    var paso=0, PASOS=5;
+
+    var ov=document.createElement('div');
+    ov.id='rt-wiz'; ov.className='rt-wiz-ov'; ov.setAttribute('role','dialog');
+    ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label','Asistente de cotización');
+    ov.innerHTML='<div class="rt-wiz-caja">'
+      + '<button type="button" class="rt-wiz-x" aria-label="Cerrar">✕</button>'
+      + '<div class="rt-wiz-barra"><span id="rt-wiz-prog"></span></div>'
+      + '<div class="rt-wiz-cuerpo" id="rt-wiz-cuerpo"></div>'
+      + '<div class="rt-wiz-pie">'
+      +   '<button type="button" class="rt-wiz-atras" id="rt-wiz-atras">Atrás</button>'
+      +   '<button type="button" class="rt-wiz-sig" id="rt-wiz-sig">Continuar</button>'
+      + '</div></div>';
+    document.body.appendChild(ov);
+
+    var cuerpo=ov.querySelector('#rt-wiz-cuerpo');
+    var bSig=ov.querySelector('#rt-wiz-sig'), bAtras=ov.querySelector('#rt-wiz-atras');
+    var prog=ov.querySelector('#rt-wiz-prog');
+
+    function cerrar(){ ov.remove(); document.body.classList.remove('rt-wiz-abierto'); }
+    ov.querySelector('.rt-wiz-x').addEventListener('click', cerrar);
+    ov.addEventListener('click', function(e){ if(e.target===ov) cerrar(); });
+    document.addEventListener('keydown', function esc(e){
+      if(e.key==='Escape' && document.getElementById('rt-wiz')){ cerrar(); document.removeEventListener('keydown', esc); }
+    });
+    document.body.classList.add('rt-wiz-abierto');
+
+    var hoy=new Date().toISOString().slice(0,10);
+
+    function pinta(){
+      prog.style.width=Math.round(((paso+1)/PASOS)*100)+'%';
+      bAtras.style.visibility = paso===0 ? 'hidden' : 'visible';
+      bSig.textContent = paso===PASOS-1 ? 'Enviar a un asesor' : 'Continuar';
+      var h='';
+
+      if(paso===0){
+        h='<h2>¿Qué quieres resolver?</h2><p class="rt-wiz-sub">Elige una y te preguntamos solo lo necesario.</p>'
+         + '<div class="rt-wiz-tipos">'
+         + WIZ_TIPOS.map(function(t){
+             return '<button type="button" class="rt-wiz-tipo'+(D.tipo===t.id?' on':'')+'" data-t="'+t.id+'">'
+                  + '<span class="rt-wiz-ico">'+t.i+'</span><b>'+t.t+'</b><small>'+t.d+'</small></button>';
+           }).join('')
+         + '</div>';
+      }
+      else if(paso===1){
+        h='<h2>¿A dónde y cuándo?</h2><p class="rt-wiz-sub">Si aún no tienes las fechas cerradas, pon las que más se acerquen.</p>'
+         + '<div class="rt-wiz-grid">'
+         + '<div class="rt-wiz-f"><label for="rt-wiz-org">Sales desde</label>'
+         +   '<input id="rt-wiz-org" type="text" placeholder="Caracas, San Cristóbal…" value="'+D.origen+'"></div>'
+         + '<div class="rt-wiz-f"><label for="rt-wiz-des">Destino</label>'
+         +   '<input id="rt-wiz-des" type="text" placeholder="Madrid, Bogotá, Los Roques…" value="'+D.destino+'"></div>'
+         + '<div class="rt-wiz-f"><label for="rt-wiz-zona">Zona</label><select id="rt-wiz-zona">'
+         +   WIZ_ZONAS.map(function(z){ return '<option value="'+z.id+'"'+(D.zona===z.id?' selected':'')+'>'+z.t+'</option>'; }).join('')
+         +   '</select></div>'
+         + '<div class="rt-wiz-f"><label for="rt-wiz-sal">Salida</label>'
+         +   '<input id="rt-wiz-sal" type="date" min="'+hoy+'" value="'+D.salida+'"></div>'
+         + '<div class="rt-wiz-f"><label for="rt-wiz-reg">Regreso</label>'
+         +   '<input id="rt-wiz-reg" type="date" min="'+hoy+'" value="'+D.regreso+'"></div>'
+         + '</div><p class="rt-wiz-err" id="rt-wiz-err"></p>';
+      }
+      else if(paso===2){
+        h='<h2>¿Quiénes viajan?</h2><p class="rt-wiz-sub">La edad de los menores hace falta para el seguro y para las tarifas de niño.</p>'
+         + '<div class="rt-wiz-cont"><span>Adultos</span>'
+         +   '<div class="rt-wiz-step"><button type="button" data-a="-1" aria-label="Quitar adulto">−</button>'
+         +   '<b id="rt-wiz-ad">'+D.adultos+'</b>'
+         +   '<button type="button" data-a="1" aria-label="Añadir adulto">+</button></div></div>'
+         + '<div class="rt-wiz-cont"><span>Niños</span>'
+         +   '<div class="rt-wiz-step"><button type="button" data-n="-1" aria-label="Quitar niño">−</button>'
+         +   '<b id="rt-wiz-ni">'+D.ninos.length+'</b>'
+         +   '<button type="button" data-n="1" aria-label="Añadir niño">+</button></div></div>'
+         + '<div id="rt-wiz-edades" class="rt-wiz-edades">'
+         +   D.ninos.map(function(e,i){
+               return '<label>Edad del niño '+(i+1)+'<input type="number" min="0" max="17" value="'+(e===''?'':e)+'" data-i="'+i+'"></label>';
+             }).join('')
+         + '</div><p class="rt-wiz-err" id="rt-wiz-err"></p>';
+      }
+      else if(paso===3){
+        h='<h2>¿Le sumamos algo?</h2><p class="rt-wiz-sub">Marca lo que te interese. Nada de esto se cobra aquí.</p>'
+         + '<div class="rt-wiz-extras">'
+         + WIZ_EXTRAS.map(function(x){
+             return '<label class="rt-wiz-chk'+(D.extras[x.id]?' on':'')+'">'
+                  + '<input type="checkbox" value="'+x.id+'"'+(D.extras[x.id]?' checked':'')+'>'
+                  + '<span><b>'+x.t+'</b><small>'+x.d+'</small></span></label>';
+           }).join('')
+         + '</div>'
+         + '<div class="rt-wiz-f"><label for="rt-wiz-notas">¿Algo más que debamos saber?</label>'
+         + '<textarea id="rt-wiz-notas" rows="2" placeholder="Aniversario, movilidad reducida, presupuesto tope…">'+D.notas+'</textarea></div>';
+      }
+      else {
+        var dias=segDias(D.salida, D.regreso);
+        var noches=dias>0?dias-1:0;
+        var edades=D.ninos.filter(function(e){return e!=='';}).map(Number);
+        var todas=edades.slice();
+        for(var k=0;k<D.adultos;k++) todas.push(35);
+        var tipo=WIZ_TIPOS.filter(function(t){return t.id===D.tipo;})[0]||{t:'Consulta'};
+        var seg=(D.extras.seguro||D.tipo==='seguro') ? wizSeguro(D.zona, dias, todas) : null;
+        var ex=Object.keys(D.extras).filter(function(k2){return D.extras[k2];})
+                 .map(function(k2){ return (WIZ_EXTRAS.filter(function(x){return x.id===k2;})[0]||{}).t; });
+
+        h='<h2>Esto es lo que le llega a tu asesor</h2>'
+         + '<div class="rt-wiz-ticket">'
+         +   '<div class="rt-wiz-tk"><span>Servicio</span><b>'+tipo.t+'</b></div>'
+         +   '<div class="rt-wiz-tk"><span>Ruta</span><b>'+(D.origen||'—')+' → '+(D.destino||'—')+'</b></div>'
+         +   '<div class="rt-wiz-tk"><span>Fechas</span><b>'+wizFecha(D.salida)+' al '+wizFecha(D.regreso)
+         +     (noches>0?(' · '+noches+' noche'+(noches===1?'':'s')):'')+'</b></div>'
+         +   '<div class="rt-wiz-tk"><span>Viajeros</span><b>'+D.adultos+' adulto'+(D.adultos===1?'':'s')
+         +     (D.ninos.length?(' · '+D.ninos.length+' niño'+(D.ninos.length===1?'':'s')):'')+'</b></div>'
+         +   (ex.length?('<div class="rt-wiz-tk"><span>Extras</span><b>'+ex.join(' · ')+'</b></div>'):'')
+         + '</div>';
+
+        if(seg){
+          h+='<div class="rt-wiz-precio"><span class="rt-wiz-pk">PRECIO EXACTO · SEGURO</span>'
+           + '<div class="rt-wiz-pn"><b>'+segMoney(seg.total)+'</b><small>'+dias+' día'+(dias===1?'':'s')
+           + ' · '+todas.length+' viajero'+(todas.length===1?'':'s')+'</small></div>'
+           + '<p>Cobertura '+seg.cob+(seg.eu?' · válida para el visado Schengen':'')+'. '
+           + 'Es el plan más económico que cubre a todo tu grupo; hay coberturas mayores en '
+           + '<a href="/seguros">la calculadora</a>.</p></div>';
+        }
+        h+='<p class="rt-wiz-nota">El resto de tarifas te las confirma un asesor con disponibilidad real. '
+         + '<b>No te damos un estimado inventado</b>: preferimos decirte el precio de verdad.</p>';
+      }
+      cuerpo.innerHTML=h;
+      cuerpo.scrollTop=0;
+      engancha();
+    }
+
+    function engancha(){
+      cuerpo.querySelectorAll('.rt-wiz-tipo').forEach(function(b){
+        b.addEventListener('click', function(){
+          D.tipo=b.getAttribute('data-t');
+          if(D.tipo==='seguro') D.extras.seguro=true;
+          pinta();
+        });
+      });
+      var org=cuerpo.querySelector('#rt-wiz-org'); if(org) org.addEventListener('input',function(){D.origen=this.value;});
+      var des=cuerpo.querySelector('#rt-wiz-des'); if(des) des.addEventListener('input',function(){D.destino=this.value;});
+      var zon=cuerpo.querySelector('#rt-wiz-zona'); if(zon) zon.addEventListener('change',function(){D.zona=this.value;});
+      var sal=cuerpo.querySelector('#rt-wiz-sal'); if(sal) sal.addEventListener('change',function(){D.salida=this.value;});
+      var reg=cuerpo.querySelector('#rt-wiz-reg'); if(reg) reg.addEventListener('change',function(){D.regreso=this.value;});
+      cuerpo.querySelectorAll('[data-a]').forEach(function(b){
+        b.addEventListener('click', function(){
+          D.adultos=Math.max(1, Math.min(20, D.adultos+parseInt(b.getAttribute('data-a'),10)));
+          pinta();
+        });
+      });
+      cuerpo.querySelectorAll('[data-n]').forEach(function(b){
+        b.addEventListener('click', function(){
+          var d=parseInt(b.getAttribute('data-n'),10);
+          if(d>0 && D.ninos.length<10) D.ninos.push('');
+          if(d<0 && D.ninos.length>0) D.ninos.pop();
+          pinta();
+        });
+      });
+      cuerpo.querySelectorAll('#rt-wiz-edades input').forEach(function(i){
+        i.addEventListener('input', function(){ D.ninos[parseInt(i.getAttribute('data-i'),10)]=i.value; });
+      });
+      cuerpo.querySelectorAll('.rt-wiz-chk input').forEach(function(i){
+        i.addEventListener('change', function(){
+          D.extras[i.value]=i.checked;
+          i.closest('.rt-wiz-chk').classList.toggle('on', i.checked);
+        });
+      });
+      var nt=cuerpo.querySelector('#rt-wiz-notas'); if(nt) nt.addEventListener('input',function(){D.notas=this.value;});
+    }
+
+    function valida(){
+      var err=cuerpo.querySelector('#rt-wiz-err');
+      function fallo(m){ if(err){ err.textContent=m; err.style.display='block'; } return false; }
+      if(paso===0) return !!D.tipo;
+      if(paso===1){
+        if(!D.destino.trim()) return fallo('Dinos al menos el destino.');
+        if(!D.salida)  return fallo('Falta la fecha de salida.');
+        if(!D.regreso) return fallo('Falta la fecha de regreso.');
+        if(D.regreso < D.salida) return fallo('El regreso no puede ser antes de la salida.');
+        if(err) err.style.display='none';
+        return true;
+      }
+      if(paso===2){
+        var falta=D.ninos.some(function(e){ return e==='' || isNaN(parseInt(e,10)); });
+        if(falta) return fallo('Pon la edad de cada niño.');
+        if(err) err.style.display='none';
+        return true;
+      }
+      return true;
+    }
+
+    function mensaje(){
+      var dias=segDias(D.salida, D.regreso), noches=dias>0?dias-1:0;
+      var edades=D.ninos.filter(function(e){return e!=='';}).map(Number);
+      var todas=edades.slice(); for(var k=0;k<D.adultos;k++) todas.push(35);
+      var tipo=(WIZ_TIPOS.filter(function(t){return t.id===D.tipo;})[0]||{}).t||'Consulta';
+      var ex=Object.keys(D.extras).filter(function(k2){return D.extras[k2];})
+               .map(function(k2){ return (WIZ_EXTRAS.filter(function(x){return x.id===k2;})[0]||{}).t; });
+      var seg=(D.extras.seguro||D.tipo==='seguro') ? wizSeguro(D.zona, dias, todas) : null;
+      var L=[];
+      L.push('*NUEVA SOLICITUD DESDE LA WEB*');
+      L.push('--------------------');
+      L.push('Servicio: '+tipo);
+      L.push('Ruta: '+(D.origen||'-')+' -> '+(D.destino||'-'));
+      L.push('Fechas: '+wizFecha(D.salida)+' al '+wizFecha(D.regreso)+(noches?(' ('+noches+' noches)'):''));
+      L.push('Viajeros: '+D.adultos+' adultos'+(edades.length?(' | '+edades.length+' ninos (edades: '+edades.join(', ')+')'):''));
+      if(ex.length) L.push('Extras: '+ex.join(', '));
+      if(seg) L.push('Seguro: cobertura '+seg.cob+' - '+segMoney(seg.total)+' por los '+dias+' dias');
+      if(D.notas.trim()) L.push('Nota: '+D.notas.trim());
+      L.push('--------------------');
+      L.push('¡Hola! Armé esta solicitud en la web. ¿Me confirman tarifas y disponibilidad?');
+      return L.join('\n');
+    }
+
+    function enviar(){
+      /* copia al CRM si algun dia hay backend. Nunca bloquea al usuario ni guarda
+         nada en su navegador: si falla, el WhatsApp sale igual. */
+      try{
+        if(window.RT_CRM_ENDPOINT){
+          fetch(window.RT_CRM_ENDPOINT, {method:'POST', mode:'no-cors',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({origen:'web_asistente', ts:new Date().toISOString(), datos:D})
+          }).catch(function(){});
+        }
+      }catch(e){}
+      window.open('https://wa.me/'+WIZ_WA+'?text='+encodeURIComponent(mensaje()), '_blank', 'noopener');
+      cerrar();
+    }
+
+    bSig.addEventListener('click', function(){
+      if(!valida()) return;
+      if(paso===PASOS-1){ enviar(); return; }
+      paso++; pinta();
+    });
+    bAtras.addEventListener('click', function(){ if(paso>0){ paso--; pinta(); } });
+
+    pinta();
+  }
+
+  /* Engancha el asistente a los botones "Cotizar" que hoy abren un WhatsApp vacio.
+     Se deja fuera el de la promo RT10 (numero 584145323750): es otra campana y otro
+     numero. Tambien entra el CTA del header, que vive en shadow DOM. */
+  function wizardEnlaces(){
+    function cazar(a){
+      if(a.getAttribute('data-rtwiz')) return;
+      var h=a.getAttribute('href')||'';
+      if(!/wa\.me/.test(h)) return;
+      if(/584145323750/.test(h)) return;                 /* promo RT10, no tocar */
+      if(!/cotiz/i.test((a.textContent||'')+h)) return;
+      a.setAttribute('data-rtwiz','1');
+      a.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        wizard();
+      });
+    }
+    document.querySelectorAll('a[href*="wa.me"]').forEach(cazar);
+    var hd=document.getElementById('rt2-header');
+    if(hd && hd.shadowRoot) hd.shadowRoot.querySelectorAll('a[href*="wa.me"]').forEach(cazar);
+  }
+
   /* Encuadre de la miniatura del carrito — y por que va por JS y no por CSS.
      29-jul-2026. La miniatura recorta en vertical y estas fotos llevan mucho cielo
      arriba (margarita.jpg: el 60% superior). Centrada al 50% el cliente veia una nube
@@ -2614,7 +3075,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
