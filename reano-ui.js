@@ -596,6 +596,18 @@
     .cart-row{gap:12px !important;padding:14px !important}
     .cart-row-price{width:100% !important;margin:6px 0 0 !important}
   }
+
+  /* ===== HERO del inicio: laminas que se cruzan =====
+     Las capas nuevas van con la MISMA opacidad que la original (.6 en claro, .4 en
+     oscuro) para que el titular siga leyendose igual de bien sobre cualquier foto.
+     El velo (.hero-scrim) queda por encima porque se inserta despues en el DOM. */
+  .rt-hero-img{position:absolute;inset:0;background-size:cover;background-position:center;
+    opacity:0;transition:opacity .9s ease;pointer-events:none;z-index:0}
+  html:not(.dark) .rt-hero-img{filter:opacity(.6)}
+  html.dark .rt-hero-img{filter:opacity(.4)}
+  body.rt-home .bg-cover{transition:opacity .9s ease}
+  .rt-hero-fade{opacity:0;transition:opacity .35s ease}
+  body.rt-home .relative.z-10{transition:opacity .35s ease}
   `;
 
   function injectCSS(){
@@ -994,6 +1006,95 @@
       +   '<small>Te lleva a Holafly, aliado oficial de Reaño Travels.</small>'
       + '</div></div>';
     host.appendChild(s);
+  }
+
+  /* ================= HERO DEL INICIO: rotacion de mensaje e imagen ===============
+     27-jul-2026. Raul: "siento que es muy estatica, me gustaria que ese banner de
+     bienvenida vaya cambiando al igual que la imagen, algo mas dinamico".
+
+     Como esta montado el hero (medido en vivo): <section> con dos capas — una de fondo
+     (div .bg-cover con background-image + un velo .hero-scrim encima) y otra de
+     contenido con el logo, la pastilla, el h1, el parrafo y los botones.
+
+     Decisiones:
+     · La lamina 1 es la que YA existe: su texto se LEE del DOM en vez de reescribirlo,
+       asi que si Raul cambia el titular desde Squarespace, la rotacion lo respeta.
+     · Solo se rota pastilla, titular y parrafo. Los botones NO cambian: son genericos
+       ("Cotizar mi viaje" / "Ver servicios") y moverlos bajo el dedo del que va a
+       pulsar es una forma segura de perder un clic.
+     · Cero precios en las laminas. Un precio en el hero envejece sin que nadie lo mire
+       — es exactamente lo que acaba de pasar con la fecha de Maiquetia.
+     · Se respeta prefers-reduced-motion: si el sistema pide menos animacion, se queda
+       la lamina 1 fija.
+     · Se pausa con la pestana en segundo plano y al pasar el raton por encima (si
+       alguien esta leyendo, no se le cambia el texto debajo).
+     Imagenes: las del propio repo, ya usadas en otras partes del sitio. */
+  var HERO_CDN='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/';
+  var HERO_SLIDES=[
+    null,   /* marcador: la lamina que ya trae la pagina */
+    {k:'VIVE A TUS ARTISTAS EN VIVO', t:'Conciertos con todo resuelto',
+     p:'Vuelo, hotel, traslados y entrada. Karol G y BTS en Bogotá, con salidas desde Caracas y el Táchira.',
+     img:HERO_CDN+'intl-bogota.jpg'},
+    {k:'PAQUETES NACIONALES', t:'Descubre Venezuela',
+     p:'Los Roques, Canaima y la Isla de Margarita con vuelo, hospedaje y traslados incluidos.',
+     img:HERO_CDN+'losroques.jpg'},
+    {k:'EUROPA Y COLOMBIA', t:'Tu viaje internacional, a tu medida',
+     p:'Vuelos, hotel, traslados y actividades, armados contigo. Te lo cotizamos sin compromiso.',
+     img:HERO_CDN+'intl-colosseum.jpg'}
+  ];
+  function heroRotador(){
+    if(!document.body.classList.contains('rt-home')) return;
+    if(document.getElementById('rt-hero-rot')) return;
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var pill=null;
+    document.querySelectorAll('span').forEach(function(e){
+      if(!pill && !e.children.length && /descubre el mundo/i.test(e.textContent||'')) pill=e;
+    });
+    if(!pill) return;
+    var cont=pill.parentElement, sec=cont && cont.parentElement;
+    var h1=cont && cont.querySelector('h1'), p=cont && cont.querySelector('p');
+    if(!sec || !h1 || !p) return;
+    var capa=sec.children[0]; if(!capa) return;
+    var base=capa.querySelector('.bg-cover'); if(!base) return;
+
+    /* lamina 1 = lo que ya hay en la pagina */
+    HERO_SLIDES[0]={k:(pill.textContent||'').trim(), t:h1.innerHTML, p:p.innerHTML,
+                    img:null, base:true};
+
+    var marca=document.createElement('span');
+    marca.id='rt-hero-rot'; marca.style.display='none'; sec.appendChild(marca);
+
+    /* una capa por cada imagen nueva, encima de la original y bajo el velo */
+    var capas=[];
+    HERO_SLIDES.forEach(function(s,i){
+      if(!s || !s.img) { capas[i]=null; return; }
+      var d=document.createElement('div');
+      d.className='rt-hero-img';
+      d.style.backgroundImage='url("'+s.img+'")';
+      base.parentNode.insertBefore(d, base.nextSibling);
+      capas[i]=d;
+    });
+
+    var idx=0, pausa=false;
+    function pinta(n){
+      var s=HERO_SLIDES[n]; if(!s) return;
+      cont.classList.add('rt-hero-fade');
+      setTimeout(function(){
+        pill.textContent=s.k; h1.innerHTML=s.t; p.innerHTML=s.p;
+        cont.classList.remove('rt-hero-fade');
+      }, 380);
+      capas.forEach(function(c){ if(c) c.style.opacity='0'; });
+      if(capas[n]) capas[n].style.opacity='1';
+      base.style.opacity = s.base ? '' : '0';
+    }
+    function avanza(){
+      if(pausa || document.hidden) return;
+      idx=(idx+1)%HERO_SLIDES.length;
+      pinta(idx);
+    }
+    sec.addEventListener('mouseenter', function(){ pausa=true; });
+    sec.addEventListener('mouseleave', function(){ pausa=false; });
+    setInterval(avanza, 6500);
   }
 
   function markTienda(){
@@ -1748,7 +1849,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
