@@ -631,6 +631,44 @@
   html.dark .rt-tcat-a{color:#FF8C03}
   @media(max-width:520px){ #rt-tcat{padding:44px 16px 54px} }
 
+  /* ===== Bono de regalo ===== */
+  #rt-gift{--gf-c:#fff;--gf-t:#191512;--gf-m:#6b645c;--gf-l:rgba(0,0,0,.12);--gf-bg:#fff}
+  html.dark #rt-gift{--gf-c:#171f27;--gf-t:#eef3f7;--gf-m:#9aa6b2;
+    --gf-l:rgba(255,255,255,.14);--gf-bg:#0b1015}
+  #rt-gift{background:var(--gf-bg);color:var(--gf-t);padding:64px 20px 76px}
+  #rt-gift *{box-sizing:border-box}
+  .rt-gift-in{max-width:1000px;margin:0 auto;display:grid;gap:30px;
+    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));align-items:center}
+  .rt-gift-k{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.20em;
+    color:#C2410C;margin-bottom:10px}
+  html.dark .rt-gift-k{color:#FF8C03}
+  #rt-gift h2{font-size:clamp(25px,3.6vw,38px);line-height:1.1;font-weight:900;margin:0 0 12px}
+  .rt-gift-tx p{color:var(--gf-m);line-height:1.65;margin:0 0 14px}
+  .rt-gift-tx p b{color:var(--gf-t)}
+  .rt-gift-l{list-style:none;padding:0;margin:0;font-size:14.5px}
+  .rt-gift-l li{padding-left:24px;position:relative;margin-bottom:7px;color:var(--gf-t)}
+  .rt-gift-l li:before{content:"✓";position:absolute;left:0;color:#2fbf62;font-weight:900}
+  .rt-gift-card{background:var(--gf-c);border:1px solid var(--gf-l);border-radius:16px;padding:24px}
+  .rt-gift-lb{display:block;font-size:13px;font-weight:700;margin:14px 0 7px;color:var(--gf-t)}
+  .rt-gift-lb:first-child{margin-top:0}
+  .rt-gift-lb small{font-weight:500;color:var(--gf-m)}
+  .rt-gift-m{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:8px}
+  .rt-gift-b{background:none;border:1px solid var(--gf-l);border-radius:10px;padding:11px 8px;
+    font:inherit;font-weight:800;color:var(--gf-t);cursor:pointer;transition:all .15s}
+  .rt-gift-b:hover{border-color:#FF8C03}
+  .rt-gift-b.on{background:#C2410C;border-color:#C2410C;color:#fff}
+  #rt-gift input,#rt-gift textarea{width:100%;padding:11px 13px;border-radius:10px;
+    border:1px solid var(--gf-l);background:transparent;color:var(--gf-t);font:inherit}
+  #rt-gift input:focus,#rt-gift textarea:focus{border-color:#FF8C03;outline:none}
+  .rt-gift-av{display:none;margin:12px 0 0;background:rgba(229,72,77,.12);
+    border:1px solid rgba(229,72,77,.42);border-radius:10px;padding:10px 13px;font-size:13.5px}
+  .rt-gift-go{width:100%;margin-top:16px;background:#C2410C;color:#fff;border:none;
+    border-radius:10px;padding:14px;font:inherit;font-weight:800;cursor:pointer}
+  .rt-gift-go:hover{filter:brightness(1.08)}
+  .rt-gift-card > small{display:block;margin-top:10px;color:var(--gf-m);font-size:12.5px;
+    text-align:center}
+  @media(max-width:520px){ #rt-gift{padding:44px 16px 54px} }
+
   .rt-hero-fade{opacity:0 !important}
   body.rt-home h1,body.rt-home .glass-orange,
   body.rt-home .relative.z-10 > p{transition:opacity .35s ease}
@@ -1181,6 +1219,87 @@
         }).join('')
       + '</div></div>';
     host.appendChild(s);
+  }
+
+  /* ================= BONO DE REGALO (gift card) =================================
+     27-jul-2026. Raul: "la gift card me gusta", de 50 a 1.000 dolares.
+
+     Por que cierra por WhatsApp y no por el carrito: un bono necesita un PRODUCTO en
+     Squarespace (o las tarjetas de regalo nativas), y crear productos es panel de
+     admin, que sigue bloqueado para ORION. Esto entrega hoy la parte que si se puede:
+     que el cliente elija monto, escriba la dedicatoria y le llegue a Raul el pedido
+     completo. El dia que exista el producto, este mismo formulario alimenta el carrito.
+
+     El monto libre se acota entre 50 y 1.000 -el rango que fijo Raul- y se valida:
+     un bono de 5 dolares o de 5.000 son dos problemas distintos y ninguno es una venta. */
+  var GIFT_MONTOS=[50,100,250,500,1000];
+  function giftCard(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda') return;
+    if(document.getElementById('rt-gift')) return;
+    var host=document.querySelector('#sections')||document.getElementById('page')||document.querySelector('main');
+    if(!host) return;
+    var s=document.createElement('section');
+    s.id='rt-gift';
+    s.innerHTML='<div class="rt-gift-in">'
+      + '<div class="rt-gift-tx">'
+      +   '<span class="rt-gift-k">BONO DE REGALO</span>'
+      +   '<h2>Regala un viaje, no otra cosa</h2>'
+      +   '<p>Elige el monto y nosotros preparamos el bono con la dedicatoria que quieras. '
+      +   'Se puede usar en cualquier cosa que vendamos: vuelos, hoteles, paquetes, '
+      +   'conciertos o seguros. <b>Sin fecha de caducidad y sin comisiones.</b></p>'
+      +   '<ul class="rt-gift-l"><li>Lo recibes por correo o por WhatsApp, listo para enviar</li>'
+      +   '<li>Si el viaje cuesta más, se paga la diferencia y ya</li>'
+      +   '<li>Lo puede usar otra persona: el bono va a nombre de quien tú digas</li></ul>'
+      + '</div>'
+      + '<div class="rt-gift-card">'
+      +   '<label class="rt-gift-lb">¿De cuánto?</label>'
+      +   '<div class="rt-gift-m">'
+      +     GIFT_MONTOS.map(function(m,i){ return '<button type="button" class="rt-gift-b'
+      +       +(i===1?' on':'')+'" data-m="'+m+'">US$ '+m+'</button>'; }).join('')
+      +   '</div>'
+      +   '<label class="rt-gift-lb" for="rt-gift-otro">U otro monto (US$ 50 a 1.000)</label>'
+      +   '<input type="number" id="rt-gift-otro" min="50" max="1000" step="10" placeholder="Ej. 300">'
+      +   '<label class="rt-gift-lb" for="rt-gift-para">¿Para quién es?</label>'
+      +   '<input type="text" id="rt-gift-para" placeholder="Nombre de quien lo recibe">'
+      +   '<label class="rt-gift-lb" for="rt-gift-msg">Dedicatoria <small>(opcional)</small></label>'
+      +   '<textarea id="rt-gift-msg" rows="2" placeholder="Feliz cumpleaños, ¡nos vemos en la playa!"></textarea>'
+      +   '<p class="rt-gift-av" id="rt-gift-av"></p>'
+      +   '<button type="button" class="rt-gift-go" id="rt-gift-go">Pedir mi bono</button>'
+      +   '<small>Te lo confirmamos por WhatsApp y coordinamos el pago.</small>'
+      + '</div></div>';
+    host.appendChild(s);
+
+    var sel=100;
+    s.querySelectorAll('.rt-gift-b').forEach(function(b){
+      b.addEventListener('click', function(){
+        s.querySelectorAll('.rt-gift-b').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        sel=parseInt(b.getAttribute('data-m'),10);
+        s.querySelector('#rt-gift-otro').value='';
+      });
+    });
+    s.querySelector('#rt-gift-otro').addEventListener('input', function(){
+      if(this.value) s.querySelectorAll('.rt-gift-b').forEach(function(x){ x.classList.remove('on'); });
+    });
+    s.querySelector('#rt-gift-go').addEventListener('click', function(){
+      var av=s.querySelector('#rt-gift-av');
+      var otro=parseInt(s.querySelector('#rt-gift-otro').value,10);
+      var monto=isNaN(otro)?sel:otro;
+      if(isNaN(monto) || monto<50 || monto>1000){
+        av.textContent='El bono va de US$ 50 a US$ 1.000. Revisa el monto.';
+        av.style.display='block'; return;
+      }
+      var para=(s.querySelector('#rt-gift-para').value||'').trim();
+      if(!para){ av.textContent='Dinos para quién es, para ponerle el nombre al bono.';
+                 av.style.display='block'; s.querySelector('#rt-gift-para').focus(); return; }
+      av.style.display='none';
+      var msg=(s.querySelector('#rt-gift-msg').value||'').trim();
+      window.open('https://wa.me/584247309699?text='
+        + '🎁 *Bono de regalo — Reaño Travels*%0A'
+        + 'Monto: US$ '+monto+'%0A'
+        + 'Para: '+encodeURIComponent(para)+'%0A'
+        + (msg?('Dedicatoria: '+encodeURIComponent(msg)):''), '_blank');
+    });
   }
 
   function markTienda(){
@@ -1935,7 +2054,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); tiendaCatalogo(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
