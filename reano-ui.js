@@ -1254,8 +1254,14 @@
       + '<div class="rt-gift-card">'
       +   '<label class="rt-gift-lb">¿De cuánto?</label>'
       +   '<div class="rt-gift-m">'
-      +     GIFT_MONTOS.map(function(m,i){ return '<button type="button" class="rt-gift-b'
-      +       +(i===1?' on':'')+'" data-m="'+m+'">US$ '+m+'</button>'; }).join('')
+      /* OJO: aqui habia un '+' de mas al partir la linea. Quedaba
+         'rt-gift-b' + +(i===1?' on':'') y ese segundo '+' es un MAS UNARIO: convierte
+         el texto en numero, asi que la clase salia "rt-gift-b0" y "rt-gift-bNaN".
+         Los botones existian y se veian, pero sin clase: ni estilo ni manejador de
+         clic. Se veia bien en la captura y estaba roto por dentro. */
+      +     GIFT_MONTOS.map(function(m,i){
+              return '<button type="button" class="rt-gift-b'+(i===1?' on':'')
+                   + '" data-m="'+m+'">US$ '+m+'</button>'; }).join('')
       +   '</div>'
       +   '<label class="rt-gift-lb" for="rt-gift-otro">U otro monto (US$ 50 a 1.000)</label>'
       +   '<input type="number" id="rt-gift-otro" min="50" max="1000" step="10" placeholder="Ej. 300">'
