@@ -571,8 +571,12 @@
   .cart-row{--ct-l:rgba(0,0,0,.12);--ct-m:#6b645c;
     gap:16px !important;padding:16px !important;align-items:center !important}
   html.dark .cart-row{--ct-l:rgba(255,255,255,.16);--ct-m:#9aa6b2}
+  /* la columna del texto se quedaba en 176 px y el titulo se cortaba igual, ahora a
+     dos lineas en vez de con puntos suspensivos. Se le da sitio de verdad: min-width:0
+     es imprescindible para que un hijo flex PUEDA encogerse y repartir bien. */
+  .cart-row-desc{min-width:0 !important;flex:1 1 46% !important}
   .cart-row-title{white-space:normal !important;text-overflow:clip !important;
-    overflow:visible !important;display:-webkit-box !important;-webkit-line-clamp:2;
+    overflow:visible !important;display:-webkit-box !important;-webkit-line-clamp:3;
     -webkit-box-orient:vertical;line-height:1.35 !important}
   .cart-row-no-img{background:linear-gradient(135deg,#FF8C03,#C2410C) !important;
     border-radius:10px !important}
@@ -582,7 +586,9 @@
     padding:2px !important;display:inline-flex !important;align-items:center !important}
   .cart-row-qty-dec,.cart-row-qty-inc{border-radius:999px !important}
   .cart-row-qty-dec:hover,.cart-row-qty-inc:hover{background:rgba(255,140,3,.16) !important}
-  .cart-row-price{margin:0 6px 0 10px !important;font-weight:700 !important}
+  /* el margen izquierdo lo pisaba una regla de Squarespace mas especifica: el precio
+     quedaba pegado al boton "+" y se leia "+US$ 1.250,00". Se sube la especificidad. */
+  .cart-row .cart-row-price{margin:0 6px 0 18px !important;font-weight:700 !important}
   .cart-row-remove{border-radius:10px !important;opacity:.55;transition:opacity .15s,background .15s}
   .cart-row-remove:hover{opacity:1;background:rgba(229,72,77,.14) !important}
   .cart-row-remove:hover svg{color:#e5484d !important;fill:#e5484d !important}
