@@ -926,16 +926,27 @@
      media la pantalla— con OCHO elementos apilados (logo, pastilla, titular, parrafo,
      dos botones, aviso de aerolineas, puntos y esta pastilla).
 
-     Se retira esta, que es la que menos aporta ahi y la que sobra de verdad: el 28-jul
-     le puse al inicio una tarjeta de eSIM Holafly CON FOTO en "Servicios Destacados",
-     unos pixeles mas abajo. Eran dos anuncios del mismo 5% en la misma pagina.
-     No se pierde la comision: el enlace de afiliado sigue en la tarjeta del inicio, en
-     la ficha de /tienda y en la banda de /seguros.
-
-     Ademas esto RESUELVE de raiz el solape de 36 px que arreglamos ayer con un
-     margin-bottom de 58 px: sin pastilla no hay nada que chocar con la tarjeta de
-     cifras, asi que aquel parche se retira con ella. */
+     Se retira esta, que es la que sobraba de verdad: el 28-jul le puse al inicio una
+     tarjeta de eSIM Holafly CON FOTO en "Servicios Destacados", unos pixeles mas
+     abajo. Eran dos anuncios del mismo 5% en la misma pagina. La comision no se
+     pierde: el enlace de afiliado sigue en la tarjeta del inicio, en la ficha de
+     /tienda y en la banda de /seguros. Resultado medido: 1.139 -> 880 px. */
   .rt-holafly{display:none !important}
+
+  /* ===== Y LA RAIZ DEL CHOQUE, que ya iba por su tercera victima =====
+     La tarjeta de cifras ("8+ / 1.000+ / 24/7") sube 64 px sobre el hero por diseno
+     (-mt-16) y va con z-index 20. El hero solo deja 28 px de relleno abajo, asi que
+     SIEMPRE se come lo ultimo que haya dentro del bloque de texto.
+     Ya paso con la pastilla de Holafly (36 px, arreglado ayer con un margen) y, al
+     quitarla, paso EXACTAMENTE IGUAL con los puntos del carrusel: otros 36 px, y los
+     puntos desaparecian enteros.
+
+     Parchear el elemento de turno es perseguir el sintoma: manana entra otro y vuelve.
+     Se arregla donde toca —el relleno inferior del hero— y asi cabe lo que sea que
+     quede ultimo. Medido: con 64 px extra quedan 28 px de holgura.
+     El :has() acota al hero de verdad (es donde vive el marcador del rotador) sin
+     depender de las clases de Tailwind con corchetes, que son fragiles de escribir. */
+  body.rt-home section:has(#rt-hero-rot){padding-bottom:92px !important}
 
   /* ===== /estado-aerolineas: DOS botones flotantes de WhatsApp =====
      29-jul. Esa pagina trae su propio .rt-fab naranja ("Cotiza por WhatsApp",
