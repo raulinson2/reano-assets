@@ -708,7 +708,7 @@
      porque esa hoja se inserta DESPUES; dentro de rt-ui-css3, que va temprano, vuelve a
      perder. Con los div explicitos sube a (0,2,4) y ahi si manda. Leccion: probar la
      regla en el MISMO sitio de la hoja donde va a vivir, no en un <style> al final. */
-  html body div.cart-row div.cart-row-img{background-position:50% 68% !important}
+  /* (el encuadre real lo pone encuadreMiniaturas() en linea: por CSS no gana) */
   .cart-row-no-img{background:linear-gradient(135deg,#FF8C03,#C2410C) !important;
     border-radius:10px !important}
   .cart-row-no-img svg{opacity:.55 !important}
@@ -1845,6 +1845,24 @@
       if(/^\s*(seguir comprando|continue shopping|seguir viendo)\s*$/i.test((b.textContent||''))) b.style.setProperty('display','none','important');
     });
   }
+  /* Encuadre de la miniatura del carrito — y por que va por JS y no por CSS.
+     29-jul-2026. La miniatura recorta en vertical y estas fotos llevan mucho cielo
+     arriba (margarita.jpg: el 60% superior). Centrada al 50% el cliente veia una nube
+     y ninguna playa — Raul lo mando en una captura y parecia el producto equivocado.
+
+     Se intento por CSS TRES veces (.cart-row-img, luego (0,2,2), luego (0,2,4)) y
+     ninguna gano: Squarespace pinta esa miniatura con algo que manda mas. Mis dos
+     primeras "pruebas OK" fueron un error MIO de medicion — habia dejado un <style>
+     de prueba en la pagina que era el que ganaba de verdad.
+     El estilo en linea con prioridad important si gana siempre, y como markCart()
+     vuelve a pasar en cada vuelta de run(), se reafirma si Squarespace repinta la fila. */
+  function encuadreMiniaturas(){
+    document.querySelectorAll('.cart-row .cart-row-img').forEach(function(d){
+      if(d.style.getPropertyPriority('background-position')==='important') return;
+      d.style.setProperty('background-position','50% 68%','important');
+    });
+  }
+
   function markCart(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/cart')return;
     var rows=document.querySelectorAll('.cart-row, .cart-item, [data-cart-row]');
@@ -1852,6 +1870,7 @@
     else {
       document.body.classList.remove('rt-cart-empty');
       var b=document.getElementById('rt-cart-empty-box'); if(b) b.remove();
+      encuadreMiniaturas();
       cartFilas(); guardados();
     }
   }
