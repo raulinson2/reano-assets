@@ -398,6 +398,11 @@
      que el titular se lea igual en claro y en oscuro (medido: el texto es blanco en
      los dos temas, asi que el velo NO cambia con el tema — cambiarlo era lo que
      dejaba titulares grises sobre foto clara en otras secciones). */
+  /* box-sizing PRIMERO. Sin esta linea (medido en movil de 375 px) el boton se iba
+     40 px fuera de la pantalla —width:100% + 28 px de padding a cada lado— y las tres
+     metricas caian una por fila en vez de dos. Todas las demas secciones propias ya lo
+     traen; esta portada nacio sin el. */
+  #rt-seg-port,#rt-seg-port *{box-sizing:border-box}
   #rt-seg-port{position:relative;overflow:hidden;min-height:clamp(420px,58vh,560px);
     display:flex;align-items:center;justify-content:center;text-align:center;
     padding:88px 20px 72px;color:#fff}
@@ -673,7 +678,7 @@
   /* Puntos del hero. Van dentro del bloque de texto (no sobre la foto) para que se
      vean igual en claro y en oscuro y no tapen nada en movil. */
   .rt-hero-dots{display:flex;gap:9px;justify-content:center;margin:26px 0 0;padding:0}
-  .rt-hero-dot{width:9px;height:9px;padding:0;border-radius:999px;cursor:pointer;
+  .rt-hero-dot{box-sizing:border-box;width:9px;height:9px;padding:0;border-radius:999px;cursor:pointer;
     border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);
     transition:background .25s ease,width .25s ease,border-color .25s ease}
   .rt-hero-dot:hover{background:rgba(255,255,255,.55)}
