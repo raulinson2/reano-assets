@@ -30,6 +30,14 @@
     ['Conciertos', '/conciertos'],
     ['Tienda', '/tienda'],
     ['Hoteles', '/hoteles'],
+    /* 28-jul-2026. Raul: "donde esta la pestana de servicios en el header? no la veo
+       por ningun lado? Donde cotizo el seguro? No lo veo".
+       Tenia razon en las dos: /servicios NUNCA estuvo en este menu, y la calculadora
+       de seguros vivia colgada al FINAL de esa pagina, a 3.607 px de scroll. Es decir:
+       el producto existia y no habia forma humana de llegar a el.
+       Ahora el seguro tiene pagina propia (/seguros, creada en Squarespace el 28-jul)
+       y entra al menu con nombre propio, que es lo que Raul pidio. */
+    ['Seguros', '/seguros'],
     ['Nosotros', '/nosotros'],
     ['Contacto', '/contacto']
   ];

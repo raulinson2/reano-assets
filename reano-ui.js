@@ -393,7 +393,44 @@
   html.dark body.rt-pp select.variant-select.show-placeholder{color:#aab4bf}
   body.rt-pp select.variant-select:focus{border-color:#FF8C03;outline:none}
 
-  /* ===== CALCULADORA DE SEGURO (/servicios) — clara, oscura y movil =====
+  /* ===== /seguros: PORTADA con imagen =====
+     La pagina de Squarespace nace vacia; esta es su cabecera. Foto + velo doble para
+     que el titular se lea igual en claro y en oscuro (medido: el texto es blanco en
+     los dos temas, asi que el velo NO cambia con el tema — cambiarlo era lo que
+     dejaba titulares grises sobre foto clara en otras secciones). */
+  #rt-seg-port{position:relative;overflow:hidden;min-height:clamp(420px,58vh,560px);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:88px 20px 72px;color:#fff}
+  .rt-seg-portimg{position:absolute;inset:0;background-size:cover;background-position:center;
+    transform:scale(1.04);animation:rtSegZoom 18s ease-out forwards}
+  @keyframes rtSegZoom{from{transform:scale(1.12)}to{transform:scale(1.0)}}
+  @media(prefers-reduced-motion:reduce){ .rt-seg-portimg{animation:none;transform:none} }
+  .rt-seg-portvelo{position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(8,10,14,.72) 0%,rgba(8,10,14,.60) 45%,rgba(8,10,14,.88) 100%)}
+  .rt-seg-portin{position:relative;z-index:1;max-width:760px}
+  .rt-seg-portk{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.20em;
+    color:#FF8C03;border:1px solid rgba(255,140,3,.5);border-radius:999px;padding:6px 14px;
+    margin-bottom:18px}
+  #rt-seg-port h1{font-size:clamp(30px,5.2vw,52px);line-height:1.06;font-weight:900;
+    margin:0 0 14px;color:#fff}
+  #rt-seg-port p{color:rgba(255,255,255,.82);line-height:1.65;margin:0 auto 26px;max-width:56ch}
+  .rt-seg-portm{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+  .rt-seg-portm span{display:flex;flex-direction:column;gap:2px;min-width:118px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    border-radius:12px;padding:12px 16px;font-size:12.5px;color:rgba(255,255,255,.75)}
+  .rt-seg-portm b{font-size:21px;font-weight:900;color:#fff;line-height:1.1}
+  .rt-seg-portb{display:inline-block;background:#C2410C;color:#fff;text-decoration:none;
+    font-weight:800;font-size:14px;letter-spacing:.02em;padding:14px 28px;border-radius:12px;
+    transition:transform .2s ease,filter .2s ease}
+  .rt-seg-portb:hover{transform:translateY(-2px);filter:brightness(1.1)}
+  @media(max-width:520px){
+    #rt-seg-port{min-height:0;padding:72px 16px 56px}
+    .rt-seg-portm{gap:10px}
+    .rt-seg-portm span{min-width:0;flex:1 1 44%;padding:10px 12px}
+    .rt-seg-portb{width:100%}
+  }
+
+  /* ===== CALCULADORA DE SEGURO (/seguros) — clara, oscura y movil =====
      Sin anchos fijos: una sola columna en telefono y tres en escritorio via
      auto-fit, para que no haya que mantener dos maquetas. */
   #rt-seg{--sg-card:#fff;--sg-tx:#191512;--sg-mu:#6b645c;--sg-ln:rgba(0,0,0,.10);
@@ -630,10 +667,20 @@
      oscuro) para que el titular siga leyendose igual de bien sobre cualquier foto.
      El velo (.hero-scrim) queda por encima porque se inserta despues en el DOM. */
   .rt-hero-img{position:absolute;inset:0;background-size:cover;background-position:center;
-    opacity:0;transition:opacity .9s ease;pointer-events:none;z-index:0}
+    opacity:0;transition:opacity .85s ease;pointer-events:none;z-index:0}
   html:not(.dark) .rt-hero-img{filter:opacity(.6)}
   html.dark .rt-hero-img{filter:opacity(.4)}
-  body.rt-home .bg-cover{transition:opacity .9s ease}
+  /* Puntos del hero. Van dentro del bloque de texto (no sobre la foto) para que se
+     vean igual en claro y en oscuro y no tapen nada en movil. */
+  .rt-hero-dots{display:flex;gap:9px;justify-content:center;margin:26px 0 0;padding:0}
+  .rt-hero-dot{width:9px;height:9px;padding:0;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);
+    transition:background .25s ease,width .25s ease,border-color .25s ease}
+  .rt-hero-dot:hover{background:rgba(255,255,255,.55)}
+  .rt-hero-dot.on{width:26px;background:#FF8C03;border-color:#FF8C03}
+  html:not(.dark) .rt-hero-dot{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.28)}
+  .rt-hero-dot:focus-visible{outline:2px solid #FF8C03;outline-offset:3px}
+  @media(max-width:600px){ .rt-hero-dots{margin-top:20px} }
   /* ===== /tienda: catalogo completo ===== */
   #rt-tcat{--tc-c:#fff;--tc-t:#191512;--tc-m:#6b645c;--tc-l:rgba(0,0,0,.10);--tc-bg:#faf7f4;
     background:var(--tc-bg);color:var(--tc-t);padding:64px 20px 76px}
@@ -679,20 +726,20 @@
   .rt-gift-card{background:var(--gf-c);border:1px solid var(--gf-l);border-radius:16px;padding:24px}
   .rt-gift-lb{display:block;font-size:13px;font-weight:700;margin:14px 0 7px;color:var(--gf-t)}
   .rt-gift-lb:first-child{margin-top:0}
-  .rt-gift-lb small{font-weight:500;color:var(--gf-m)}
   .rt-gift-m{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:8px}
-  .rt-gift-b{background:none;border:1px solid var(--gf-l);border-radius:10px;padding:11px 8px;
-    font:inherit;font-weight:800;color:var(--gf-t);cursor:pointer;transition:all .15s}
-  .rt-gift-b:hover{border-color:#FF8C03}
-  .rt-gift-b.on{background:#C2410C;border-color:#C2410C;color:#fff}
-  #rt-gift input,#rt-gift textarea{width:100%;padding:11px 13px;border-radius:10px;
-    border:1px solid var(--gf-l);background:transparent;color:var(--gf-t);font:inherit}
-  #rt-gift input:focus,#rt-gift textarea:focus{border-color:#FF8C03;outline:none}
-  .rt-gift-av{display:none;margin:12px 0 0;background:rgba(229,72,77,.12);
-    border:1px solid rgba(229,72,77,.42);border-radius:10px;padding:10px 13px;font-size:13.5px}
-  .rt-gift-go{width:100%;margin-top:16px;background:#C2410C;color:#fff;border:none;
-    border-radius:10px;padding:14px;font:inherit;font-weight:800;cursor:pointer}
-  .rt-gift-go:hover{filter:brightness(1.08)}
+  /* 28-jul: los montos y el boton pasaron de <button> a <a> (llevan al producto real
+     de Squarespace). Necesitan display e interlineado propios: un <a> no hereda ni el
+     centrado ni el font del <button>, y sin esto quedaban textos pegados a la izquierda
+     con subrayado. */
+  .rt-gift-b{display:flex;align-items:center;justify-content:center;text-align:center;
+    text-decoration:none;background:none;border:1px solid var(--gf-l);border-radius:10px;
+    padding:11px 8px;font:inherit;font-weight:800;color:var(--gf-t);cursor:pointer;
+    transition:border-color .15s,background .15s,color .15s,transform .15s}
+  .rt-gift-b:hover{border-color:#FF8C03;background:rgba(255,140,3,.10);transform:translateY(-2px)}
+  .rt-gift-go{display:block;width:100%;margin-top:16px;background:#C2410C;color:#fff;border:none;
+    border-radius:10px;padding:14px;font:inherit;font-weight:800;cursor:pointer;
+    text-align:center;text-decoration:none;transition:filter .18s,transform .18s}
+  .rt-gift-go:hover{filter:brightness(1.08);transform:translateY(-2px)}
   .rt-gift-card > small{display:block;margin-top:10px;color:var(--gf-m);font-size:12.5px;
     text-align:center}
   @media(max-width:520px){ #rt-gift{padding:44px 16px 54px} }
@@ -822,20 +869,47 @@
   }
   function segMoney(n){ return 'US$ ' + n.toFixed(2).replace('.',','); }
 
+  /* 28-jul-2026. Antes esto se colgaba al final de /servicios, a 3.607 px de scroll y
+     sin ningun enlace que llevara alli: Raul pregunto "donde cotizo el seguro? no lo
+     veo" y tenia toda la razon. Ahora vive en su propia pagina, /seguros, creada en
+     Squarespace, enlazada desde el menu, desde el home y desde la tienda. */
   function seguroCalc(){
-    if((location.pathname.replace(/\/+$/,'')||'/')!=='/servicios') return;
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/seguros') return;
     if(document.getElementById('rt-seg')) return;
     var host=document.querySelector('#sections')||document.getElementById('page')||document.querySelector('main');
     if(!host) return;
+
+    /* Portada con imagen: la pagina de Squarespace nace vacia y sin esto el visitante
+       aterriza en un formulario a secas. La regla de marca es portada SIEMPRE con
+       imagen. El Coliseo es deliberado: Schengen exige seguro, y ese es el motivo por
+       el que la mitad de la gente llega a esta pagina. */
+    var port=document.createElement('section');
+    port.id='rt-seg-port';
+    port.innerHTML='<div class="rt-seg-portimg"></div><div class="rt-seg-portvelo"></div>'
+      + '<div class="rt-seg-portin">'
+      +   '<span class="rt-seg-portk">ASISTENCIA MÉDICA EN VIAJE</span>'
+      +   '<h1>Viaja cubierto, no confiado</h1>'
+      +   '<p>Un dolor de muelas en Madrid o una torcedura en Bogotá se pagan en euros '
+      +   'o en dólares. Aquí calculas tu cobertura con tus fechas y las edades reales '
+      +   'de tu grupo, y ves el precio al instante — sin esperar que nadie te responda.</p>'
+      +   '<div class="rt-seg-portm">'
+      +     '<span><b>US$ 1</b>por día, desde</span>'
+      +     '<span><b>0 a 99</b>años de edad</span>'
+      +     '<span><b>23</b>planes disponibles</span>'
+      +   '</div>'
+      +   '<a class="rt-seg-portb" href="#rt-seg">Calcular mi seguro ↓</a>'
+      + '</div>';
+    port.querySelector('.rt-seg-portimg').style.backgroundImage='url("'+HERO_CDN+'intl-colosseum.jpg")';
+    host.appendChild(port);
 
     var wrap=document.createElement('section');
     wrap.id='rt-seg';
     wrap.innerHTML=
       '<div class="rt-seg-in">'
-      + '<span class="rt-seg-k">ASISTENCIA MÉDICA EN VIAJE</span>'
-      + '<h2>Calcula tu seguro en 30 segundos</h2>'
-      + '<p class="rt-seg-sub">Precio exacto, sin esperar respuesta. Cobertura real desde el día '
-      + 'que sales hasta el que regresas.</p>'
+      + '<span class="rt-seg-k">CALCULADORA</span>'
+      + '<h2>Tu precio exacto en 30 segundos</h2>'
+      + '<p class="rt-seg-sub">La edad de cada viajero decide su plan, y el precio se '
+      + 'cuenta por día. Cobertura real desde el día que sales hasta el que regresas.</p>'
       + '<div class="rt-seg-grid">'
       +   '<div class="rt-seg-f"><label for="rt-seg-d">Destino</label>'
       +     '<select id="rt-seg-d"><option value="int">Internacional</option>'
@@ -1102,11 +1176,23 @@
      vendiera dentro de la tienda, se perderia la comision — que es todo el negocio.
      Sin logotipo de Holafly: no tenemos el archivo oficial y la regla de marca es
      usar SIEMPRE isotipos oficiales. Se resuelve con tipografia y color propios.
-     El 5% es el mismo que ya anuncia la pastilla del home: no se inventa otro numero. */
+     El 5% es el mismo que ya anuncia la pastilla del home: no se inventa otro numero.
+
+     28-jul-2026 — REPARTO. Raul: "no me gusta como distribuiste lo del seguro y lo de
+     Hola Fly". El problema no era la banda, era donde caia: colgada al final de
+     /servicios y de /vuelos, dos paginas donde nadie la buscaba, y sola, sin nada
+     alrededor con lo que conversara. Ahora Holafly aparece donde tiene sentido
+     comercial y en el formato que le toca a cada sitio:
+       · /seguros  -> como companera al terminar de cotizar (ya resolviste la salud,
+                      te falta la conexion). Es esta banda.
+       · home      -> tarjeta con foto en "Servicios Destacados", junto al seguro.
+       · /tienda   -> ficha del catalogo.
+       · hero      -> la pastilla del 5%, que ya existia.
+     Fuera de /servicios y de /vuelos. */
   var HOLAFLY_URL='https://holafly.sjv.io/qWzvnj';
   function holaflyBanda(){
     var p=(location.pathname.replace(/\/+$/,'')||'/');
-    if(p!=='/servicios' && p!=='/vuelos') return;
+    if(p!=='/seguros') return;
     if(document.getElementById('rt-hfly')) return;
     var host=document.querySelector('#sections')||document.getElementById('page')||document.querySelector('main');
     if(!host) return;
@@ -1154,7 +1240,40 @@
        la lamina 1 fija.
      · Se pausa con la pestana en segundo plano y al pasar el raton por encima (si
        alguien esta leyendo, no se le cambia el texto debajo).
-     Imagenes: las del propio repo, ya usadas en otras partes del sitio. */
+     Imagenes: las del propio repo, ya usadas en otras partes del sitio.
+
+     ---------------------------------------------------------------------------
+     28-jul-2026 — POR QUE LA IMAGEN NUNCA CAMBIO (Raul: "la imagen no cambia, se
+     queda pegada"). Tenia razon y el diagnostico no era el obvio.
+
+     Lo MEDIDO en Chrome real, no deducido:
+       capa.style.opacity = "1"   ->   getComputedStyle(capa).opacity = "0"
+       base.style.opacity = "0"   ->   getComputedStyle(base).opacity = "0.6"
+     Es decir: el texto rotaba (eso es JS puro y se veia), pero las dos ordenes de
+     opacidad se descartaban. Ni siquiera con !important en linea: probado, sigue en 0.
+
+     La causa: el sistema de animaciones global de Squarespace (el sitio corre con
+     tweak-global-animations-*) se apropia de los nodos que aparecen mientras el
+     arranca. Prueba directa: los divs de las capas tenian escrito en su atributo
+     style un "animation: ... !important" que ESTE codigo nunca puso, y getAnimations()
+     devolvia una CSSTransition de opacidad en estado "running" congelada en
+     currentTime = 0. Una transicion en curso gana en la cascada por encima de
+     cualquier declaracion, incluida !important -> la opacidad queda clavada en su
+     valor inicial para siempre. Un div identico creado DESPUES, en el mismo padre,
+     si respeta la opacidad: no es CSS del sitio, es cuando nace el elemento.
+
+     Como se arregla, en dos capas:
+       1) La verdad vive en el background-image del .bg-cover que ya trae la pagina.
+          Cambiarlo SI funciona (medido). Eso garantiza que la imagen cambie siempre,
+          aunque el fundido falle.
+       2) El fundido es un extra: una sola capa creada TARDE (cuando Squarespace ya
+          termino) y sometida a un examen — se le sube la opacidad y se comprueba que
+          el navegador la respeta. Si no la respeta, se descarta la capa y se pasa a
+          cambio directo. Nunca volvemos a un hero que se "queda pegado".
+
+     Ademas se anaden PUNTOS de navegacion: sin ellos nadie sabe que el hero rota, y
+     quien quiera volver a una lamina no puede. Tambien es la senal visible de que
+     esto funciona. */
   var HERO_CDN='https://cdn.jsdelivr.net/gh/raulinson2/reano-assets@main/';
   var HERO_SLIDES=[
     null,   /* marcador: la lamina que ya trae la pagina */
@@ -1183,25 +1302,40 @@
     var capa=sec.children[0]; if(!capa) return;
     var base=capa.querySelector('.bg-cover'); if(!base) return;
 
-    /* lamina 1 = lo que ya hay en la pagina */
+    /* lamina 1 = lo que ya hay en la pagina, IMAGEN INCLUIDA. Antes se guardaba
+       img:null y se marcaba base:true, lo que obligaba a jugar con la opacidad del
+       .bg-cover para volver a ella — justo la orden que el navegador descarta.
+       Leyendola aqui, la lamina 1 es una mas y todas se pintan igual. */
+    var imgBase=(getComputedStyle(base).backgroundImage||'').replace(/^url\(["']?/,'').replace(/["']?\)$/,'');
     HERO_SLIDES[0]={k:(pill.textContent||'').trim(), t:h1.innerHTML, p:p.innerHTML,
-                    img:null, base:true};
+                    img:(imgBase && imgBase!=='none') ? imgBase : null};
 
     var marca=document.createElement('span');
     marca.id='rt-hero-rot'; marca.style.display='none'; sec.appendChild(marca);
 
-    /* una capa por cada imagen nueva, encima de la original y bajo el velo */
-    var capas=[];
-    HERO_SLIDES.forEach(function(s,i){
-      if(!s || !s.img) { capas[i]=null; return; }
+    /* Precarga: sin esto la primera vuelta de cada foto entra en blanco sobre un
+       hero oscuro y parece un fallo. Pesan poco y son del propio CDN. */
+    HERO_SLIDES.forEach(function(s){ if(s && s.img){ var im=new Image(); im.src=s.img; } });
+
+    /* ---- la capa del fundido, creada TARDE y sometida a examen ---- */
+    var velo=null;
+    function montaVelo(){
       var d=document.createElement('div');
       d.className='rt-hero-img';
-      d.style.backgroundImage='url("'+s.img+'")';
       base.parentNode.insertBefore(d, base.nextSibling);
-      capas[i]=d;
-    });
+      /* EXAMEN: le pedimos opacidad 1 SIN transicion y comprobamos que el navegador
+         nos hace caso. Si Squarespace se apropio del nodo, aqui saldra "0" y nos
+         ahorramos un fundido fantasma que dejaria la foto congelada. */
+      d.style.transition='none';
+      d.style.opacity='1';
+      var obedece=(getComputedStyle(d).opacity==='1');
+      d.style.opacity='0';
+      if(!obedece){ d.remove(); return null; }
+      requestAnimationFrame(function(){ d.style.transition='opacity .85s ease'; });
+      return d;
+    }
 
-    var idx=0, pausa=false;
+    var idx=0, pausa=false, dots=[];
     /* Solo se desvanecen los TRES elementos que cambian. Antes se desvanecia el
        contenedor entero y con el se iban el logo y los botones: el hero parpadeaba
        completo en cada vuelta y, pillado a media transicion, parecia roto. Ademas
@@ -1210,14 +1344,29 @@
     var cambian=[pill,h1,p];
     function pinta(n){
       var s=HERO_SLIDES[n]; if(!s) return;
+      idx=n;
       cambian.forEach(function(e){ e.classList.add('rt-hero-fade'); });
       setTimeout(function(){
         pill.textContent=s.k; h1.innerHTML=s.t; p.innerHTML=s.p;
         cambian.forEach(function(e){ e.classList.remove('rt-hero-fade'); });
       }, 380);
-      capas.forEach(function(c){ if(c) c.style.opacity='0'; });
-      if(capas[n]) capas[n].style.opacity='1';
-      base.style.opacity = s.base ? '' : '0';
+      dots.forEach(function(b,i){ b.classList.toggle('on', i===n); b.setAttribute('aria-current', i===n?'true':'false'); });
+
+      if(!s.img) return;
+      if(velo){
+        /* fundido: la foto nueva entra por encima; cuando termina se asienta en el
+           .bg-cover y el velo se retira de golpe (sin transicion) para la siguiente. */
+        velo.style.backgroundImage='url("'+s.img+'")';
+        velo.style.opacity='1';
+        setTimeout(function(){
+          base.style.backgroundImage='url("'+s.img+'")';
+          velo.style.transition='none';
+          velo.style.opacity='0';
+          requestAnimationFrame(function(){ if(velo) velo.style.transition='opacity .85s ease'; });
+        }, 880);
+      } else {
+        base.style.backgroundImage='url("'+s.img+'")';   /* camino garantizado */
+      }
     }
     /* Dos correcciones tras probarlo en vivo (no rotaba nunca):
        1) Se comprobaba document.hidden y se SALTABA el turno. Basta con que el
@@ -1229,14 +1378,104 @@
           hero se quedaba congelado en la primera lamina. Ahora la pausa es solo sobre
           el bloque de texto: si estas leyendo, no se te cambia debajo; si el raton
           esta de paso por la foto, sigue rotando. */
+    var reloj=null;
+    function arranca(){ clearInterval(reloj); reloj=setInterval(avanza, 6500); }
     function avanza(){
       if(pausa) return;
-      idx=(idx+1)%HERO_SLIDES.length;
-      pinta(idx);
+      pinta((idx+1)%HERO_SLIDES.length);
     }
     cont.addEventListener('mouseenter', function(){ pausa=true; });
     cont.addEventListener('mouseleave', function(){ pausa=false; });
-    setInterval(avanza, 6500);
+
+    /* ---- puntos: hacen visible que el hero rota y devuelven el control ---- */
+    var nav=document.createElement('div');
+    nav.className='rt-hero-dots';
+    nav.setAttribute('role','tablist');
+    nav.setAttribute('aria-label','Laminas del banner');
+    HERO_SLIDES.forEach(function(s,i){
+      var b=document.createElement('button');
+      b.type='button'; b.className='rt-hero-dot'+(i===0?' on':'');
+      b.setAttribute('aria-label','Ver: '+(s.t||('lamina '+(i+1))).replace(/<[^>]*>/g,''));
+      b.addEventListener('click', function(){ pinta(i); arranca(); });
+      nav.appendChild(b); dots.push(b);
+    });
+    cont.appendChild(nav);
+
+    /* El velo se monta a los 3 s: para entonces Squarespace ya dejo de reclamar
+       nodos. La rotacion arranca justo despues, asi que la primera transicion que
+       ve el visitante ya es la buena. */
+    setTimeout(function(){ velo=montaVelo(); arranca(); }, 3000);
+  }
+
+  /* ============ HOME: seguro y eSIM dentro de "Servicios Destacados" ============
+     28-jul-2026. Raul: "los seguros deberian ir tambien en el home screen" y "no me
+     gusta como distribuiste lo del seguro y lo de Hola Fly".
+
+     Lo importante de esta funcion es lo que NO hace: no inventa maqueta. CLONA una
+     tarjeta que ya existe en esa rejilla y le cambia foto, icono, textos y enlace.
+     Motivo tecnico, no estetico: el sitio corre con Tailwind por CDN, asi que una
+     clase que no este ya en la pagina puede no llegar a compilarse nunca y la tarjeta
+     saldria sin estilo. Clonando, heredamos exactamente el mismo aspecto, el mismo
+     hover (la foto hace zoom con group-hover:scale-105) y el mismo comportamiento
+     responsive que las otras cuatro, gratis y sin poder desincronizarse.
+
+     Se insertan tras la primera fila (8+4) para formar otra fila 8+4 completa. */
+  var HOME_CARDS=[
+    {modelo:0, img:'intl-colosseum.jpg', icono:'health_and_safety',
+     t:'Seguro de viaje',
+     d:'Asistencia médica desde US$ 1 por día y por persona, de 0 a 99 años. Calcula el precio exacto con tus fechas y las edades de tu grupo, y llévate el plan que exige el visado Schengen.',
+     a:'CALCULAR MI SEGURO', h:'/seguros'},
+    {modelo:1, img:'intl-bogota.jpg', icono:'sim_card',
+     t:'eSIM Holafly',
+     d:'Aterriza con internet, sin roaming y sin cambiar tu chip. 5% de descuento con el código REANOTRAVELS.',
+     a:'VER PLANES', h:null, fuera:true}
+  ];
+  function homeServicios(){
+    if(!document.body.classList.contains('rt-home')) return;
+    if(document.getElementById('rt-home-serv')) return;
+    var h=null;
+    document.querySelectorAll('h1,h2,h3').forEach(function(x){
+      if(!h && /servicios\s+destacados/i.test(x.textContent||'')) h=x;
+    });
+    if(!h) return;
+    var sec=h.closest('section')||h.parentElement;
+    var grid=null;
+    sec.querySelectorAll('div').forEach(function(d){
+      if(!grid && /\bgrid\b/.test(String(d.className)) && d.children.length>=2) grid=d;
+    });
+    if(!grid || grid.children.length<2) return;
+
+    var marca=document.createElement('span');
+    marca.id='rt-home-serv'; marca.style.display='none'; grid.appendChild(marca);
+
+    var ancla=grid.children[2]||null;   /* delante de la primera tarjeta ancha */
+    HOME_CARDS.forEach(function(c){
+      var modelo=grid.children[c.modelo];
+      if(!modelo) return;
+      var n=modelo.cloneNode(true);
+
+      var foto=n.querySelector('.bg-cover');
+      if(foto) foto.style.backgroundImage='url("'+HERO_CDN+c.img+'")';
+
+      var cuerpo=n.children[2]; if(!cuerpo) return;
+      var ico=cuerpo.children[0];
+      if(ico && ico.children.length) ico.children[0].textContent=c.icono;
+      var tit=cuerpo.querySelector('h2,h3,h4'); if(tit) tit.textContent=c.t;
+      var des=cuerpo.querySelector('p');        if(des) des.textContent=c.d;
+      var enl=cuerpo.querySelector('a');
+      if(enl){
+        enl.setAttribute('href', c.fuera ? HOLAFLY_URL : c.h);
+        if(c.fuera){ enl.setAttribute('target','_blank'); enl.setAttribute('rel','noopener'); }
+        else { enl.removeAttribute('target'); enl.removeAttribute('rel'); }
+        /* solo el nodo de texto: la flecha (arrow_forward) es un hijo aparte y se queda */
+        var puesto=false;
+        [].forEach.call(enl.childNodes, function(t){
+          if(!puesto && t.nodeType===3 && (t.nodeValue||'').trim()){ t.nodeValue=c.a+' '; puesto=true; }
+        });
+        if(!puesto) enl.insertBefore(document.createTextNode(c.a+' '), enl.firstChild);
+      }
+      grid.insertBefore(n, ancla);
+    });
   }
 
   /* ================= /tienda: catalogo completo de servicios ====================
@@ -1251,8 +1490,13 @@
      destinos existen y estan probados.
 
      El eSIM sale del sitio a proposito (enlace de afiliado, ver holaflyBanda). */
+  /* URL del producto real de tarjeta de regalo (Squarespace nativo, creado 28-jul).
+     Vive aqui y no en el bloque del bono porque el catalogo de abajo se evalua antes:
+     si se declarara mas abajo, esta ficha saldria con href "undefined". */
+  var GIFT_URL='/tienda/p/bono-de-regalo-reao-travels';
   var TIENDA_CAT=[
-    {i:'🩺', t:'Seguro de viaje', d:'23 planes desde US$ 1 por día. Calcula el tuyo con las fechas y las edades reales de tu grupo.', a:'Calcular mi seguro', h:'/servicios'},
+    {i:'🩺', t:'Seguro de viaje', d:'23 planes desde US$ 1 por día. Calcula el tuyo con las fechas y las edades reales de tu grupo.', a:'Calcular mi seguro', h:'/seguros'},
+    {i:'🎁', t:'Bono de regalo', d:'De US$ 50 a US$ 1.000. Se paga en línea, llega un código por correo y conserva el saldo entre compras.', a:'Regalar un viaje', h:GIFT_URL},
     {i:'🏨', t:'Hoteles', d:'Busca y compara alojamiento en todo el mundo con tus fechas, habitaciones y las edades de los niños.', a:'Buscar hoteles', h:'/hoteles'},
     {i:'🌎', t:'Paquetes de viaje', d:'Los Roques, Canaima y Margarita con vuelo y hospedaje · Europa y Colombia a tu medida.', a:'Ver paquetes', h:'/paquetes'},
     {i:'🎫', t:'Conciertos', d:'Entrada, vuelo, hotel y traslados coordinados por nosotros. Salidas desde Caracas y el Táchira.', a:'Ver conciertos', h:'/conciertos'},
@@ -1285,15 +1529,28 @@
 
   /* ================= BONO DE REGALO (gift card) =================================
      27-jul-2026. Raul: "la gift card me gusta", de 50 a 1.000 dolares.
+     28-jul-2026. Raul: "coordina lo de las gift cards de la mejor manera".
 
-     Por que cierra por WhatsApp y no por el carrito: un bono necesita un PRODUCTO en
-     Squarespace (o las tarjetas de regalo nativas), y crear productos es panel de
-     admin, que sigue bloqueado para ORION. Esto entrega hoy la parte que si se puede:
-     que el cliente elija monto, escriba la dedicatoria y le llegue a Raul el pedido
-     completo. El dia que exista el producto, este mismo formulario alimenta el carrito.
+     Y la mejor manera resulto ser tirar lo que habia hecho el dia anterior. Aquel
+     formulario recogia monto, destinatario y dedicatoria y los mandaba por WhatsApp,
+     con esta excusa escrita a mano: "crear productos es panel de admin, que sigue
+     bloqueado para ORION". Ya no lo esta: Squarespace trae TARJETAS DE REGALO
+     NATIVAS y estaban ahi, apagadas, en Productos > Gift Cards. El 28-jul se creo el
+     producto real (US$ 50 / 100 / 250 / 500 / 1.000, publicado y con foto).
 
-     El monto libre se acota entre 50 y 1.000 -el rango que fijo Raul- y se valida:
-     un bono de 5 dolares o de 5.000 son dos problemas distintos y ninguno es una venta. */
+     Diferencia para el negocio: se cobra en linea, el codigo se genera y se envia
+     solo, y Squarespace le lleva el saldo cuando se canjea en varias compras. Con el
+     formulario, cada bono era trabajo manual de Raul.
+
+     Mantener las dos vias habria sido justo la duplicidad que hay que evitar: dos
+     botones para lo mismo, uno automatico y otro a mano, y el cliente eligiendo el
+     malo la mitad de las veces. Asi que esta seccion ya no pide datos: presenta el
+     bono y lleva al producto.
+
+     Nota honesta sobre lo que se pierde: la dedicatoria. El bono nativo no la
+     recoge. A cambio se paga solo, que era el cuello de botella real.
+     (GIFT_URL se declara mas arriba, junto al catalogo de la tienda, porque el
+     catalogo tambien lo enlaza y se evalua antes que este bloque.) */
   var GIFT_MONTOS=[50,100,250,500,1000];
   function giftCard(){
     if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda') return;
@@ -1306,68 +1563,23 @@
       + '<div class="rt-gift-tx">'
       +   '<span class="rt-gift-k">BONO DE REGALO</span>'
       +   '<h2>Regala un viaje, no otra cosa</h2>'
-      +   '<p>Elige el monto y nosotros preparamos el bono con la dedicatoria que quieras. '
-      +   'Se puede usar en cualquier cosa que vendamos: vuelos, hoteles, paquetes, '
-      +   'conciertos o seguros. <b>Sin fecha de caducidad y sin comisiones.</b></p>'
-      +   '<ul class="rt-gift-l"><li>Lo recibes por correo o por WhatsApp, listo para enviar</li>'
-      +   '<li>Si el viaje cuesta más, se paga la diferencia y ya</li>'
-      +   '<li>Lo puede usar otra persona: el bono va a nombre de quien tú digas</li></ul>'
+      +   '<p>Elige el monto y listo. Quien lo recibe decide en qué usarlo: un paquete, '
+      +   'un viaje de concierto, un boleto o su seguro de viaje. '
+      +   '<b>Sin fecha de caducidad y sin comisiones.</b></p>'
+      +   '<ul class="rt-gift-l"><li>Se paga en línea y el código llega por correo</li>'
+      +   '<li>Conserva el saldo: se puede usar en más de una compra</li>'
+      +   '<li>Si el viaje cuesta más, se paga la diferencia y ya</li></ul>'
       + '</div>'
       + '<div class="rt-gift-card">'
       +   '<label class="rt-gift-lb">¿De cuánto?</label>'
       +   '<div class="rt-gift-m">'
-      /* OJO: aqui habia un '+' de mas al partir la linea. Quedaba
-         'rt-gift-b' + +(i===1?' on':'') y ese segundo '+' es un MAS UNARIO: convierte
-         el texto en numero, asi que la clase salia "rt-gift-b0" y "rt-gift-bNaN".
-         Los botones existian y se veian, pero sin clase: ni estilo ni manejador de
-         clic. Se veia bien en la captura y estaba roto por dentro. */
-      +     GIFT_MONTOS.map(function(m,i){
-              return '<button type="button" class="rt-gift-b'+(i===1?' on':'')
-                   + '" data-m="'+m+'">US$ '+m+'</button>'; }).join('')
+      +     GIFT_MONTOS.map(function(m){
+              return '<a class="rt-gift-b" href="'+GIFT_URL+'">US$ '+m+'</a>'; }).join('')
       +   '</div>'
-      +   '<label class="rt-gift-lb" for="rt-gift-otro">U otro monto (US$ 50 a 1.000)</label>'
-      +   '<input type="number" id="rt-gift-otro" min="50" max="1000" step="10" placeholder="Ej. 300">'
-      +   '<label class="rt-gift-lb" for="rt-gift-para">¿Para quién es?</label>'
-      +   '<input type="text" id="rt-gift-para" placeholder="Nombre de quien lo recibe">'
-      +   '<label class="rt-gift-lb" for="rt-gift-msg">Dedicatoria <small>(opcional)</small></label>'
-      +   '<textarea id="rt-gift-msg" rows="2" placeholder="Feliz cumpleaños, ¡nos vemos en la playa!"></textarea>'
-      +   '<p class="rt-gift-av" id="rt-gift-av"></p>'
-      +   '<button type="button" class="rt-gift-go" id="rt-gift-go">Pedir mi bono</button>'
-      +   '<small>Te lo confirmamos por WhatsApp y coordinamos el pago.</small>'
+      +   '<a class="rt-gift-go" href="'+GIFT_URL+'">Comprar el bono</a>'
+      +   '<small>Pago seguro en la tienda. El código se genera al confirmar la compra.</small>'
       + '</div></div>';
     host.appendChild(s);
-
-    var sel=100;
-    s.querySelectorAll('.rt-gift-b').forEach(function(b){
-      b.addEventListener('click', function(){
-        s.querySelectorAll('.rt-gift-b').forEach(function(x){ x.classList.remove('on'); });
-        b.classList.add('on');
-        sel=parseInt(b.getAttribute('data-m'),10);
-        s.querySelector('#rt-gift-otro').value='';
-      });
-    });
-    s.querySelector('#rt-gift-otro').addEventListener('input', function(){
-      if(this.value) s.querySelectorAll('.rt-gift-b').forEach(function(x){ x.classList.remove('on'); });
-    });
-    s.querySelector('#rt-gift-go').addEventListener('click', function(){
-      var av=s.querySelector('#rt-gift-av');
-      var otro=parseInt(s.querySelector('#rt-gift-otro').value,10);
-      var monto=isNaN(otro)?sel:otro;
-      if(isNaN(monto) || monto<50 || monto>1000){
-        av.textContent='El bono va de US$ 50 a US$ 1.000. Revisa el monto.';
-        av.style.display='block'; return;
-      }
-      var para=(s.querySelector('#rt-gift-para').value||'').trim();
-      if(!para){ av.textContent='Dinos para quién es, para ponerle el nombre al bono.';
-                 av.style.display='block'; s.querySelector('#rt-gift-para').focus(); return; }
-      av.style.display='none';
-      var msg=(s.querySelector('#rt-gift-msg').value||'').trim();
-      window.open('https://wa.me/584247309699?text='
-        + '🎁 *Bono de regalo — Reaño Travels*%0A'
-        + 'Monto: US$ '+monto+'%0A'
-        + 'Para: '+encodeURIComponent(para)+'%0A'
-        + (msg?('Dedicatoria: '+encodeURIComponent(msg)):''), '_blank');
-    });
   }
 
   /* Oscurece el TEXTO de lo que ya esta pintado del verde vivo de WhatsApp.
@@ -2220,7 +2432,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
