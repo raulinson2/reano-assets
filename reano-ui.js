@@ -514,6 +514,42 @@
     border-radius:10px;padding:14px 20px;font-weight:800;margin-bottom:10px}
   .rt-hfly-b:hover{filter:brightness(1.08)}
   .rt-hfly-cta small{color:var(--hf-m);font-size:12.5px;line-height:1.5;display:block}
+
+  /* ===== MINI-CARRITO ("se agregó al carrito") =====
+     27-jul-2026. Raul: "no se ve la imagen, no respeta claro ni oscuro y se ve cortada".
+     Es el mini-carrito NATIVO de Squarespace (.commerce-mini-cart-*), no codigo nuestro.
+     Medido en vivo, con el sitio en tema OSCURO, eran tres fallos distintos:
+       1) SE CORTA: el dialogo nace en y=33 y la cabecera fija mide 80 px, asi que su
+          primera linea queda debajo de la cabecera. Se baja para que la libre.
+       2) NO RESPETA EL TEMA: fondo rgb(218,217,217) con texto negro, fijo, en ambos
+          temas. En oscuro es un recuadro gris claro sobre negro. Y el icono de cerrar
+          se pinta con background NEGRO -> invisible sobre fondo oscuro.
+       3) IMAGEN: los productos sin foto propia (los paquetes nacionales) dejaban un
+          hueco vacio que parece imagen rota. Se le pone al contenedor un fondo de
+          marca, asi que sin foto se ve un mosaico naranja intencional, no un error. */
+  .commerce-mini-cart-positioner--top-right .commerce-mini-cart-dialog{margin-top:58px !important}
+  @media(max-width:640px){
+    .commerce-mini-cart-positioner--top-right .commerce-mini-cart-dialog{margin-top:16px !important}
+  }
+  .commerce-mini-cart-dialog{background:#fff !important;color:#191512 !important;
+    border:1px solid rgba(0,0,0,.10) !important;border-radius:14px !important;
+    box-shadow:0 18px 50px rgba(20,15,10,.22) !important}
+  .commerce-mini-cart-header-title,.commerce-mini-cart-item-details,
+  .commerce-mini-cart-item-details *{color:#191512 !important}
+  html.dark .commerce-mini-cart-dialog{background:#171f27 !important;color:#eef3f7 !important;
+    border-color:rgba(255,255,255,.14) !important;
+    box-shadow:0 20px 60px rgba(0,0,0,.62) !important}
+  html.dark .commerce-mini-cart-header-title,
+  html.dark .commerce-mini-cart-item-details,
+  html.dark .commerce-mini-cart-item-details *{color:#eef3f7 !important}
+  /* el aspa se dibuja con background-color: en oscuro iba negra sobre negro */
+  html.dark .commerce-mini-cart-close-icon{background:#eef3f7 !important}
+  /* producto sin foto: mosaico de marca en vez de hueco */
+  .commerce-mini-cart-item-image-container{border-radius:8px !important;overflow:hidden !important;
+    background:linear-gradient(135deg,#FF8C03,#C2410C) !important}
+  .commerce-mini-cart-item-image-container img{border-radius:8px !important}
+  .commerce-mini-cart-footer{border-top:1px solid rgba(0,0,0,.10) !important;padding-top:12px !important}
+  html.dark .commerce-mini-cart-footer{border-top-color:rgba(255,255,255,.14) !important}
   `;
 
   function injectCSS(){
