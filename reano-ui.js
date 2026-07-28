@@ -3139,9 +3139,100 @@
     });
   }
 
+  /* ===== /conciertos: las tres campañas nuevas (29-jul-2026) =====
+     TINI (18-sep), EDC Colombia (10+11-oct) y Aitana (16-oct). Se inyectan desde
+     aqui y no desde el bloque de codigo de la pagina por dos razones: el editor
+     de paginas de Squarespace no abre en automatizacion, y asi los precios
+     quedan versionados junto al resto del sitio.
+
+     Van AL PRINCIPIO de la rejilla porque sus fechas son las mas proximas: la
+     cartelera queda en orden cronologico (sep, oct, oct, dic...).
+
+     OJO — DIFERENCIA DELIBERADA CON LAS TRES TARJETAS VIEJAS: estas NO llevan
+     boton de PayPal ni "Comprar en la Tienda". Solo cotizacion por WhatsApp.
+     Motivo: al 29-jul no esta confirmado cuantas entradas aparta el proveedor
+     de cada evento. Publicar un boton de pago sobre inventario sin confirmar
+     permitiria cobrarle a un cliente un cupo que quiza no exista, y la tarifa
+     aerea es NO REEMBOLSABLE. Cuando Raul confirme el inventario se les agrega
+     el producto y el boton de compra. */
+  var RT_NUEVOS = [
+    {id:'tini', t:'TINI · FUTTTURA',
+     img:'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=70',
+     f:'18 de septiembre', d:'Movistar Arena, Bogotá. Localidad Platea, en la pista.',
+     x:'Traslados · seguro · eSIM',
+     ops:[{k:'San Cristóbal',v:'$599'},{k:'Caracas',v:'$799'}],
+     wa:'Me interesa el paquete de TINI en Bogotá.'},
+    {id:'edc', t:'EDC Colombia',
+     img:'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=70',
+     f:'10 y 11 de octubre', d:'Atanasio Girardot, Medellín. Abono de dos días. Solo +18.',
+     x:'Tour a Guatapé · seguro · eSIM',
+     ops:[{k:'San Cristóbal',v:'$1,199'},{k:'Caracas',v:'$1,449'}],
+     wa:'Me interesa el paquete de EDC Colombia en Medellín.'},
+    {id:'aitana', t:'Aitana · Cuarto Azul',
+     img:'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=900&q=70',
+     f:'16 de octubre', d:'Movistar Arena, Bogotá. Asiento numerado en Piso 2.',
+     x:'Traslados · seguro · eSIM',
+     ops:[{k:'San Cristóbal',v:'$629'},{k:'Caracas',v:'$799'}],
+     wa:'Me interesa el paquete de Aitana en Bogotá.'}
+  ];
+
+  function conciertosNuevos(){
+    if(location.pathname.indexOf('/conciertos')!==0) return;
+    var vieja=document.querySelector('.cx-card');
+    if(!vieja) return;                      /* la cartelera aun no se pinta */
+    var grid=vieja.parentElement;
+    if(!grid || grid.querySelector('[data-rt-nuevo]')) return;   /* ya estan */
+
+    RT_NUEVOS.slice().reverse().forEach(function(c){
+      var el=document.createElement('div');
+      el.className='cx-card rt-rv rt-in';
+      el.setAttribute('data-rt-nuevo', c.id);
+      var paneles='', tabs='';
+      c.ops.forEach(function(o,i){
+        tabs+='<button class="otab'+(i?'':' active')+'" data-rtp="'+c.id+'-'+i+'">'+o.k+'</button>';
+        paneles+='<div class="opanel'+(i?'':' active')+'" id="'+c.id+'-'+i+'">'+
+                 '<div class="price-row"><span class="font-label-caps text-label-caps">Desde '+o.k+'</span>'+
+                 '<span class="text-price-display text-primary font-black" style="font-family:Montserrat">'+
+                 o.v+'</span></div></div>';
+      });
+      el.innerHTML=
+        '<div class="rt-cardimg" style="background-image:url(\''+c.img+'\')"></div>'+
+        '<div class="p-7 pt-3 flex flex-col flex-grow">'+
+          '<h2 class="text-card-title font-bold" style="font-family:Montserrat">'+c.t+'</h2>'+
+          '<p class="font-body-md text-body-md text-on-surface-variant mt-1 mb-4">'+
+            '<b>'+c.f+'</b> · '+c.d+'</p>'+
+          '<ul class="space-y-2 mb-2 font-body-md text-body-md text-on-surface-variant">'+
+            '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm">flight</span> Vuelo ida y vuelta</li>'+
+            '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm">hotel</span> Hotel incluido</li>'+
+            '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm">local_activity</span> '+c.x+'</li>'+
+          '</ul>'+
+          '<div class="otabs">'+tabs+'</div>'+paneles+
+          '<a href="https://wa.me/584247309699?text='+encodeURIComponent('¡Hola Reaño! '+c.wa)+'" '+
+            'target="_blank" rel="noopener" class="w-full py-3 mt-4 rounded-full border border-primary '+
+            'text-primary font-label-caps text-label-caps flex items-center justify-center gap-2 '+
+            'hover:bg-glass-orange transition-colors">'+
+            '<span class="material-symbols-outlined">chat</span> Cotizar por WhatsApp</a>'+
+        '</div>';
+      grid.insertBefore(el, grid.firstElementChild);
+    });
+
+    /* El conmutador de origen de la pagina ya esta enlazado a SUS tarjetas, no
+       a las nuestras: les ponemos el nuestro, acotado a las tarjetas nuevas. */
+    grid.querySelectorAll('[data-rt-nuevo] .otab').forEach(function(b){
+      b.addEventListener('click', function(){
+        var card=b.closest('[data-rt-nuevo]');
+        card.querySelectorAll('.otab').forEach(function(o){ o.classList.remove('active'); });
+        card.querySelectorAll('.opanel').forEach(function(p){ p.classList.remove('active'); });
+        b.classList.add('active');
+        var p=card.querySelector('#'+b.getAttribute('data-rtp'));
+        if(p) p.classList.add('active');
+      });
+    });
+  }
+
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); conciertosNuevos(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
