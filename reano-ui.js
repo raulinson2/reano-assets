@@ -542,6 +542,9 @@
   .rt-hfly-k{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.20em;
     color:#C2410C;margin-bottom:10px}
   html.dark .rt-hfly-k{color:#FF8C03}
+  /* El logotipo oficial es rojo sobre transparente: se lee en claro y en oscuro sin
+     tocarlo. No se recolorea nunca — es marca ajena. */
+  .rt-hfly-logo{display:block;height:34px;width:auto;margin:14px 0 12px}
   #rt-hfly h2{font-size:clamp(24px,3.4vw,36px);line-height:1.1;font-weight:900;margin:0 0 12px}
   .rt-hfly-tx p{color:var(--hf-m);line-height:1.65;margin:0 0 14px;max-width:52ch}
   .rt-hfly-l{list-style:none;padding:0;margin:0;color:var(--hf-t);font-size:14.5px}
@@ -1182,8 +1185,11 @@
      27-jul-2026. Va como ENLACE DE AFILIADO, nunca como articulo del carrito: Raul
      cobra comision por su enlace (holafly.sjv.io) mas el codigo REANOTRAVELS. Si se
      vendiera dentro de la tienda, se perderia la comision — que es todo el negocio.
-     Sin logotipo de Holafly: no tenemos el archivo oficial y la regla de marca es
-     usar SIEMPRE isotipos oficiales. Se resuelve con tipografia y color propios.
+     CORREGIDO 28-jul en la auditoria: aqui decia "no tenemos el archivo oficial" de
+     Holafly y era falso. El logotipo oficial ya estaba alojado y en uso desde antes,
+     en la pastilla del hero del inicio (i.ibb.co/d4B9QQRr). La regla de marca es usar
+     SIEMPRE el isotipo oficial, asi que se usa ese mismo — el que ya carga la pagina,
+     sin anadir una peticion nueva.
      El 5% es el mismo que ya anuncia la pastilla del home: no se inventa otro numero.
 
      28-jul-2026 — REPARTO. Raul: "no me gusta como distribuiste lo del seguro y lo de
@@ -1198,6 +1204,9 @@
        · hero      -> la pastilla del 5%, que ya existia.
      Fuera de /servicios y de /vuelos. */
   var HOLAFLY_URL='https://holafly.sjv.io/qWzvnj';
+  /* El mismo archivo que ya usa la pastilla del hero: logotipo oficial, cero peticiones
+     nuevas y una sola fuente si algun dia cambia. */
+  var HOLAFLY_LOGO='https://i.ibb.co/d4B9QQRr/Holafly-logo-svg.png';
   function holaflyBanda(){
     var p=(location.pathname.replace(/\/+$/,'')||'/');
     if(p!=='/seguros') return;
@@ -1210,6 +1219,8 @@
       '<div class="rt-hfly-in">'
       + '<div class="rt-hfly-tx">'
       +   '<span class="rt-hfly-k">INTERNET EN EL EXTRANJERO</span>'
+      +   '<img class="rt-hfly-logo" src="'+HOLAFLY_LOGO+'" alt="Holafly" '
+      +     'width="114" height="40" loading="lazy">'
       +   '<h2>Llega conectado, sin pagar roaming</h2>'
       +   '<p>eSIM de <b>Holafly</b> con datos ilimitados en más de 200 destinos. '
       +   'Se activa antes de salir de casa: escaneas un código y aterrizas con internet, '
