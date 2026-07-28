@@ -393,6 +393,26 @@
   html.dark body.rt-pp select.variant-select.show-placeholder{color:#aab4bf}
   body.rt-pp select.variant-select:focus{border-color:#FF8C03;outline:none}
 
+  /* ===== /servicios: LOGO DUPLICADO en la portada (28-jul) =====
+     Visto al meter "Servicios" en el menu: la portada mostraba el logo DOS veces, uno
+     debajo del otro. No era un bloque repetido — la pagina trae el par de siempre
+     ("block dark:hidden" para el original + "hidden dark:block" para el blanco) y en
+     claro se veian LOS DOS.
+     (OJO: nada de acentos graves en estos comentarios — el bloque de CSS vive dentro
+     de una plantilla de JS y un acento grave la cierra a media frase.)
+
+     El culpable, localizado leyendo las hojas: rt-mega-css trae
+        html:not(.dark) img.h-14[src*="BLANCAS"]{display:block!important}
+     Esa excepcion se escribio para el hero de /hoteles (logo blanco sobre banner
+     oscuro, donde SI hace falta en claro), pero quedo suelta y alcanza a CUALQUIER
+     img.h-14 blanca del sitio. La portada de /servicios es crema: ahi el logo blanco
+     no se lee y ademas duplica al correcto.
+
+     Se acota en vez de tocar la inyeccion: (0,3,2) le gana a (0,2,2) aun con
+     !important, y /hoteles conserva su excepcion intacta. En oscuro no se toca nada
+     (medido: alli ya salia bien). */
+  html:not(.dark) section.rt-svc-mine img.h-14[src*="BLANCAS"]{display:none!important}
+
   /* ===== /servicios: segundo enlace "esto ya se resuelve solo" =====
      Deliberadamente SECUNDARIO: sin fondo, mas pequeno y bajo el boton de WhatsApp, para
      que se lea como atajo y no compita con el CTA que Raul ya tenia puesto. */
