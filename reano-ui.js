@@ -2026,7 +2026,7 @@
       if(zona==='nac') return !!n.nac || n.cob==='US$ 5.000';
       return !n.nac;
     });
-    var mejor=null;
+    var mejor=null, valor=null;
     nivs.forEach(function(n){
       var total=0, ok=true;
       edades.forEach(function(e){
@@ -2035,8 +2035,16 @@
         total+=pl.u*dias;
       });
       if(!ok) return;
-      if(!mejor || total<mejor.total) mejor={cob:n.cob, eu:!!n.eu, total:total};
+      if(!mejor || total<mejor.total) mejor={cob:n.cob, eu:!!n.eu, total:total, motivo:'economico'};
+      /* SIMPLY 43 cuesta lo mismo que el de 10.000 y cubre 43.000: es la mejor
+         relacion del catalogo y asi esta anotado en el tarifario. Solo existe para
+         0-75, por eso puede no salir valido y entonces manda el mas barato. */
+      if((n.j||{}).n==='SIMPLY 43') valor={cob:n.cob, eu:!!n.eu, total:total, motivo:'valor'};
     });
+    /* En Schengen no se elige: manda el minimo que acepta el consulado. Fuera de
+       Schengen se recomienda la mejor relacion, no el plan mas barato — liderar con
+       una cobertura de 5.000 en un viaje internacional es flojo para el cliente. */
+    if(zona!=='eu' && valor) return valor;
     return mejor;
   }
 
@@ -2166,7 +2174,9 @@
            + '<div class="rt-wiz-pn"><b>'+segMoney(seg.total)+'</b><small>'+dias+' día'+(dias===1?'':'s')
            + ' · '+todas.length+' viajero'+(todas.length===1?'':'s')+'</small></div>'
            + '<p>Cobertura '+seg.cob+(seg.eu?' · válida para el visado Schengen':'')+'. '
-           + 'Es el plan más económico que cubre a todo tu grupo; hay coberturas mayores en '
+           + (seg.motivo==='valor'
+               ? 'Es la mejor relación cobertura/precio del catálogo. Hay planes más económicos y coberturas mayores en '
+               : 'Es el plan más económico que cubre a todo tu grupo; hay coberturas mayores en ')
            + '<a href="/seguros">la calculadora</a>.</p></div>';
         }
         h+='<p class="rt-wiz-nota">El resto de tarifas te las confirma un asesor con disponibilidad real. '
