@@ -1087,13 +1087,23 @@
       if(capas[n]) capas[n].style.opacity='1';
       base.style.opacity = s.base ? '' : '0';
     }
+    /* Dos correcciones tras probarlo en vivo (no rotaba nunca):
+       1) Se comprobaba document.hidden y se SALTABA el turno. Basta con que el
+          navegador crea que la pestana no esta al frente para que no avance jamas.
+          Los navegadores ya ralentizan solos los temporizadores en segundo plano;
+          esa comprobacion sobraba y solo rompia.
+       2) La pausa al pasar el raton estaba en la SECCION entera, que ocupa el 80% de
+          la pantalla. En un escritorio el puntero cae ahi casi siempre, asi que el
+          hero se quedaba congelado en la primera lamina. Ahora la pausa es solo sobre
+          el bloque de texto: si estas leyendo, no se te cambia debajo; si el raton
+          esta de paso por la foto, sigue rotando. */
     function avanza(){
-      if(pausa || document.hidden) return;
+      if(pausa) return;
       idx=(idx+1)%HERO_SLIDES.length;
       pinta(idx);
     }
-    sec.addEventListener('mouseenter', function(){ pausa=true; });
-    sec.addEventListener('mouseleave', function(){ pausa=false; });
+    cont.addEventListener('mouseenter', function(){ pausa=true; });
+    cont.addEventListener('mouseleave', function(){ pausa=false; });
     setInterval(avanza, 6500);
   }
 
