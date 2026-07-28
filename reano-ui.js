@@ -550,6 +550,46 @@
   .commerce-mini-cart-item-image-container img{border-radius:8px !important}
   .commerce-mini-cart-footer{border-top:1px solid rgba(0,0,0,.10) !important;padding-top:12px !important}
   html.dark .commerce-mini-cart-footer{border-top-color:rgba(255,255,255,.14) !important}
+
+  /* ===== CARRITO: las filas =====
+     27-jul-2026. Raul: "se ve desorganizado, no respeta margenes, no tiene imagenes y
+     no se distingue si es agregar una persona o eliminar el ITEM".
+     Las clases con hash (KGHc6QM2...) las regenera Squarespace en cada despliegue;
+     aqui SOLO se usan las semanticas (.cart-row-*), que si son estables.
+
+     1) TITULO CORTADO. Venia con white-space:nowrap + ellipsis, asi que "Canaima y el
+        Salto Angel - desde Caracas" se leia "Canaima y el Salto ...". En un carrito,
+        no poder leer QUE estas comprando es grave. Se deja en dos lineas.
+     2) SIN IMAGEN. Los paquetes nacionales no tienen foto de producto y dejaban un
+        recuadro gris vacio (.cart-row-no-img) con pinta de error. Mosaico de marca,
+        igual que en el mini-carrito.
+     3) CANTIDAD vs ELIMINAR. Los tres controles (menos, cantidad, mas) y el aspa de
+        borrar tenian el mismo peso visual y estaban pegados, con el precio metido en
+        medio. Ahora la cantidad es UNA pastilla con borde -se lee como un control- y
+        el aspa se separa y se pone roja al pasar por encima: destructivo se ve
+        destructivo. El texto del boton lo pone markCart(). */
+  .cart-row{--ct-l:rgba(0,0,0,.12);--ct-m:#6b645c;
+    gap:16px !important;padding:16px !important;align-items:center !important}
+  html.dark .cart-row{--ct-l:rgba(255,255,255,.16);--ct-m:#9aa6b2}
+  .cart-row-title{white-space:normal !important;text-overflow:clip !important;
+    overflow:visible !important;display:-webkit-box !important;-webkit-line-clamp:2;
+    -webkit-box-orient:vertical;line-height:1.35 !important}
+  .cart-row-no-img{background:linear-gradient(135deg,#FF8C03,#C2410C) !important;
+    border-radius:10px !important}
+  .cart-row-no-img svg{opacity:.55 !important}
+  .cart-row-img-wrapper{border-radius:10px !important;overflow:hidden !important;flex:0 0 auto}
+  .cart-row-qty > div > div{border:1px solid var(--ct-l) !important;border-radius:999px !important;
+    padding:2px !important;display:inline-flex !important;align-items:center !important}
+  .cart-row-qty-dec,.cart-row-qty-inc{border-radius:999px !important}
+  .cart-row-qty-dec:hover,.cart-row-qty-inc:hover{background:rgba(255,140,3,.16) !important}
+  .cart-row-price{margin:0 6px 0 10px !important;font-weight:700 !important}
+  .cart-row-remove{border-radius:10px !important;opacity:.55;transition:opacity .15s,background .15s}
+  .cart-row-remove:hover{opacity:1;background:rgba(229,72,77,.14) !important}
+  .cart-row-remove:hover svg{color:#e5484d !important;fill:#e5484d !important}
+  @media(max-width:600px){
+    .cart-row{gap:12px !important;padding:14px !important}
+    .cart-row-price{width:100% !important;margin:6px 0 0 !important}
+  }
   `;
 
   function injectCSS(){
@@ -1035,7 +1075,45 @@
     else {
       document.body.classList.remove('rt-cart-empty');
       var b=document.getElementById('rt-cart-empty-box'); if(b) b.remove();
+      cartFilas();
     }
+  }
+
+  /* Dos arreglos del carrito que el CSS no puede hacer solo (27-jul-2026):
+     1) Los botones no tienen texto: son un menos, un mas y un aspa, iguales de peso.
+        Raul: "no se distingue si es agregar una persona o eliminar el ITEM". Se les
+        pone title y aria-label, asi que al pasar el raton se lee que hace cada uno
+        (y un lector de pantalla tambien).
+     2) Los paquetes nacionales no tienen foto de producto y el carrito dejaba un
+        recuadro gris. Pero SI tenemos la foto del destino: PIMG ya la usa la ficha de
+        producto. Se reutiliza aqui, asi que el cliente ve Canaima en vez de un hueco.
+        Si el producto no esta en PIMG queda el mosaico naranja del CSS, que al menos
+        parece intencional. */
+  function cartFilas(){
+    document.querySelectorAll('.cart-row').forEach(function(row){
+      if(row.getAttribute('data-rt-cart')) return;
+      row.setAttribute('data-rt-cart','1');
+      var poner=function(sel,txt){
+        var el=row.querySelector(sel); if(!el) return;
+        el.setAttribute('title',txt); el.setAttribute('aria-label',txt);
+      };
+      poner('.cart-row-remove','Eliminar este paquete del carrito');
+      poner('.cart-row-qty-dec','Quitar una persona');
+      poner('.cart-row-qty-inc','Añadir una persona');
+      var hueco=row.querySelector('.cart-row-no-img');
+      if(hueco && !hueco.querySelector('img')){
+        var a=row.querySelector('.cart-row-title');
+        var href=(a && a.getAttribute('href')) || '';
+        for(var k in PIMG){
+          if(href.indexOf(k)===-1) continue;
+          var im=document.createElement('img');
+          im.src=PIMG[k]; im.alt=''; im.loading='lazy';
+          im.style.cssText='width:100%;height:100%;object-fit:cover;display:block';
+          hueco.innerHTML=''; hueco.appendChild(im);
+          break;
+        }
+      }
+    });
   }
 
   // ===== PRODUCTO: fondo blur del propio articulo + galeria fallback + bloques muertos =====
