@@ -606,8 +606,9 @@
   html:not(.dark) .rt-hero-img{filter:opacity(.6)}
   html.dark .rt-hero-img{filter:opacity(.4)}
   body.rt-home .bg-cover{transition:opacity .9s ease}
-  .rt-hero-fade{opacity:0;transition:opacity .35s ease}
-  body.rt-home .relative.z-10{transition:opacity .35s ease}
+  .rt-hero-fade{opacity:0 !important}
+  body.rt-home h1,body.rt-home .glass-orange,
+  body.rt-home .relative.z-10 > p{transition:opacity .35s ease}
   `;
 
   function injectCSS(){
@@ -1076,12 +1077,18 @@
     });
 
     var idx=0, pausa=false;
+    /* Solo se desvanecen los TRES elementos que cambian. Antes se desvanecia el
+       contenedor entero y con el se iban el logo y los botones: el hero parpadeaba
+       completo en cada vuelta y, pillado a media transicion, parecia roto. Ademas
+       hacer desaparecer un boton 380 ms mientras alguien va a pulsarlo es la forma
+       mas tonta de perder una venta. */
+    var cambian=[pill,h1,p];
     function pinta(n){
       var s=HERO_SLIDES[n]; if(!s) return;
-      cont.classList.add('rt-hero-fade');
+      cambian.forEach(function(e){ e.classList.add('rt-hero-fade'); });
       setTimeout(function(){
         pill.textContent=s.k; h1.innerHTML=s.t; p.innerHTML=s.p;
-        cont.classList.remove('rt-hero-fade');
+        cambian.forEach(function(e){ e.classList.remove('rt-hero-fade'); });
       }, 380);
       capas.forEach(function(c){ if(c) c.style.opacity='0'; });
       if(capas[n]) capas[n].style.opacity='1';
