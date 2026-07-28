@@ -1521,7 +1521,9 @@
         sv.type='button'; sv.className='rt-save'; sv.textContent='Guardar para después';
         sv.addEventListener('click', function(){
           var a=row.querySelector('.cart-row-title');
-          var im=row.querySelector('.cart-row-img-wrapper img');
+          /* cualquier <img> de la fila, no solo la del envoltorio: probando en vivo
+             la foto no se capturaba y el guardado salia sin imagen */
+          var im=row.querySelector('img');
           var it={t:(a&&a.textContent||'').trim(),
                   h:(a&&a.getAttribute('href'))||'',
                   p:(row.querySelector('.cart-row-price')||{}).textContent||'',
