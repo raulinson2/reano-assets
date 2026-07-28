@@ -3216,6 +3216,20 @@
       grid.insertBefore(el, grid.firstElementChild);
     });
 
+    /* La inyeccion de Squarespace trae una regla global
+         .rt-cardimg, .rt-herowrap, .rt-asesores-sec, .rt-svc-hero, .rt-svcbg
+         { display:none !important }
+       que deja SIN FOTO a las seis tarjetas de la cartelera — tambien a las tres
+       viejas. La regla no esta en este repo, asi que no se puede quitar desde
+       aqui; y levantarla globalmente apagaria heros y secciones de otras paginas
+       que nadie pidio tocar.
+       Se levanta SOLO dentro de la cartelera de /conciertos, por estilo en linea
+       (unica forma de ganarle a un !important sin tocar la regla global). */
+    grid.querySelectorAll('.cx-card .rt-cardimg').forEach(function(d){
+      d.style.setProperty('display','block','important');
+      if(!d.style.height) d.style.height='170px';
+    });
+
     /* El conmutador de origen de la pagina ya esta enlazado a SUS tarjetas, no
        a las nuestras: les ponemos el nuestro, acotado a las tarjetas nuevas. */
     grid.querySelectorAll('[data-rt-nuevo] .otab').forEach(function(b){
