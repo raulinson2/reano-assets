@@ -703,7 +703,10 @@
      (margarita.jpg: el 60% superior es cielo). Centrado al 50% el cliente veia una
      nube y ninguna playa. Bajando el foco al 68% entra la arena y el agua, y en la
      de Canaima (vertical) sigue cayendo sobre el salto. */
-  .cart-row-img{background-position:50% 68% !important}
+     Con .cart-row-img a secas NO basta: Squarespace pinta esa miniatura con una clase
+     propia de igual peso y gana por orden, incluso frente a !important. Medido en vivo:
+     hace falta html body .cart-row .cart-row-img. */
+  html body .cart-row .cart-row-img{background-position:50% 68% !important}
   .cart-row-no-img{background:linear-gradient(135deg,#FF8C03,#C2410C) !important;
     border-radius:10px !important}
   .cart-row-no-img svg{opacity:.55 !important}
