@@ -945,8 +945,13 @@
      Se arregla donde toca —el relleno inferior del hero— y asi cabe lo que sea que
      quede ultimo. Medido: con 64 px extra quedan 28 px de holgura.
      El :has() acota al hero de verdad (es donde vive el marcador del rotador) sin
-     depender de las clases de Tailwind con corchetes, que son fragiles de escribir. */
-  body.rt-home section:has(#rt-hero-rot){padding-bottom:92px !important}
+     depender de las clases de Tailwind con corchetes, que son fragiles de escribir.
+
+     OJO: el selector lleva '>' a proposito. Sin el, :has() alcanza TAMBIEN a las
+     secciones que envuelven al hero (page-section y region, que lo contienen), y les
+     mete 92 px de relleno a las tres: 184 px de hueco muerto. Medido al meter la
+     pata. El marcador del rotador es hijo DIRECTO del hero, asi que '>' lo acota. */
+  body.rt-home section:has(> #rt-hero-rot){padding-bottom:92px !important}
 
   /* ===== /estado-aerolineas: DOS botones flotantes de WhatsApp =====
      29-jul. Esa pagina trae su propio .rt-fab naranja ("Cotiza por WhatsApp",
