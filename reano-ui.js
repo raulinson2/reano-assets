@@ -907,14 +907,10 @@
     .rt-wiz-tk b{text-align:left}
   }
 
-  /* ===== Contraste de la pastilla de Holafly (29-jul) =====
-     El texto iba en el rosa de Holafly (#FF3B6B) sobre blanco a 12 px en negrita:
-     medido, 3,45:1 — por debajo del 4,5:1 que pide AA para ese tamano. Y era igual
-     en claro y en oscuro, porque la pastilla es blanca siempre.
-     Se oscurece SOLO el texto, que es copy de Reano, a #D11B4F (5,28:1). El isotipo
-     de Holafly NO se toca: es marca ajena y va como viene.
-     El icono del 5% se deja fuera por si algun dia lleva fondo propio. */
-  .rt-holafly span,.rt-holafly b,.rt-holafly small{color:#D11B4F !important}
+  /* (Aqui vivia una correccion de contraste de la pastilla de Holafly: su texto rosa
+     sobre blanco daba 3,45:1, por debajo de AA. Se retira junto con la pastilla, que
+     ya no se pinta —ver mas abajo—. Se anota para que no se vuelva a anadir a ciegas:
+     si algun dia la pastilla vuelve, el texto necesita #D11B4F, no #FF3B6B.) */
 
   /* ===== Banner de cookies de Squarespace: se salia 14 px en movil =====
      No es nuestro, pero lo ve todo el mundo que entra desde el telefono: el grupo de
@@ -925,17 +921,21 @@
     .sqs-cookie-banner-v2 .button-group > *{max-width:100% !important}
   }
 
-  /* ===== HOME: la pastilla de Holafly quedaba debajo de la tarjeta de cifras =====
-     29-jul-2026. En la captura de Raul se leia "eSIM Holafly · 5% OFF con" y ahi se
-     cortaba. No era recorte de texto: la tarjeta blanca de "8+ años / 1.000+ / 24/7"
-     sube 64 px sobre el hero a proposito (-mt-16, es el diseno del sitio) y va con
-     z-index 20, asi que se comia los ultimos 36 px de la pastilla.
-     Medido: pastilla 896..952, tarjeta desde 916 → 36 px de solape.
-     Y NO era solo de movil: exactamente los mismos 36 px en escritorio a 1905 px.
-     La tarjeta se coloca respecto al final del hero, asi que dandole aire por debajo
-     a la pastilla baja la tarjeta lo mismo y el solape se convierte en hueco.
-     Medido despues: -22 px (o sea, 22 px de hueco) en los dos anchos. */
-  .rt-holafly{margin-bottom:58px}
+  /* ===== HOME: la pastilla de Holafly SALE del banner (29-jul) =====
+     Raul: "el banner esta sobrecargado". Medido en movil: 1.139 px de alto —vez y
+     media la pantalla— con OCHO elementos apilados (logo, pastilla, titular, parrafo,
+     dos botones, aviso de aerolineas, puntos y esta pastilla).
+
+     Se retira esta, que es la que menos aporta ahi y la que sobra de verdad: el 28-jul
+     le puse al inicio una tarjeta de eSIM Holafly CON FOTO en "Servicios Destacados",
+     unos pixeles mas abajo. Eran dos anuncios del mismo 5% en la misma pagina.
+     No se pierde la comision: el enlace de afiliado sigue en la tarjeta del inicio, en
+     la ficha de /tienda y en la banda de /seguros.
+
+     Ademas esto RESUELVE de raiz el solape de 36 px que arreglamos ayer con un
+     margin-bottom de 58 px: sin pastilla no hay nada que chocar con la tarjeta de
+     cifras, asi que aquel parche se retira con ella. */
+  .rt-holafly{display:none !important}
 
   /* ===== /estado-aerolineas: DOS botones flotantes de WhatsApp =====
      29-jul. Esa pagina trae su propio .rt-fab naranja ("Cotiza por WhatsApp",

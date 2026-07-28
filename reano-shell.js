@@ -30,20 +30,18 @@
     ['Conciertos', '/conciertos'],
     ['Tienda', '/tienda'],
     ['Hoteles', '/hoteles'],
-    /* 28-jul-2026. Raul: "donde esta la pestana de servicios en el header? no la veo
-       por ningun lado? Donde cotizo el seguro? No lo veo".
-       Tenia razon en las dos: /servicios NUNCA estuvo en este menu, y la calculadora
-       de seguros vivia colgada al FINAL de esa pagina, a 3.607 px de scroll. Es decir:
-       el producto existia y no habia forma humana de llegar a el.
-       Ahora el seguro tiene pagina propia (/seguros, creada en Squarespace el 28-jul)
-       y entra al menu con nombre propio, que es lo que Raul pidio. */
-    ['Seguros', '/seguros'],
-    /* 28-jul, 2a ola. Raul, mirando el menu ya con Seguros: "donde esta servicios?".
-       Y tenia razon otra vez: /servicios NUNCA estuvo aqui. Yo habia resuelto la mitad
-       de su queja original (darle pestana propia al seguro) y me deje la otra mitad.
-       La pagina se gana el sitio: es la UNICA donde viven Cruceros, Eventos Deportivos,
-       Visa y Documentacion, Asesoria Legal, Tours Exclusivos y Viajes a Medida —
-       seis servicios que hoy no aparecen en ningun otro lado del sitio. */
+    /* 28-jul: se creo /seguros (pagina propia) y entro al menu con nombre propio.
+       29-jul: Raul lo retira — "siento que no es necesario lo de seguros, sino
+       simplemente que diga servicios arriba". El menu habia llegado a NUEVE entradas
+       y se veia recargado; tiene razon.
+       /seguros NO desaparece: sigue viva y enlazada desde tres sitios con mas fuerza
+       de venta que una entrada de menu — la tarjeta con foto de "Servicios Destacados"
+       en el inicio, la ficha del catalogo de /tienda, y el atajo "Calcular el precio
+       ahora" dentro de la tarjeta de Seguro de Viaje en /servicios. Ademas el
+       asistente de cotizacion calcula el seguro sin salir de donde estes.
+       La pagina /servicios es el paraguas: es la UNICA donde viven Cruceros, Eventos
+       Deportivos, Visa y Documentacion, Asesoria Legal, Tours Exclusivos y Viajes a
+       Medida. Por eso se queda ella y no la de seguros. */
     ['Servicios', '/servicios'],
     ['Nosotros', '/nosotros'],
     ['Contacto', '/contacto']
