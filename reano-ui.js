@@ -431,7 +431,10 @@
   @media(max-width:520px){
     #rt-seg-port{min-height:0;padding:72px 16px 56px}
     .rt-seg-portm{gap:10px}
-    .rt-seg-portm span{min-width:0;flex:1 1 44%;padding:10px 12px}
+    /* flex-grow 0 a proposito: con grow 1 la tercera metrica se quedaba sola en su
+       fila y se estiraba a lo ancho de la pantalla, con la cifra perdida en el medio.
+       Asi las tres miden lo mismo y la tercera queda centrada bajo las otras dos. */
+    .rt-seg-portm span{min-width:0;flex:0 1 calc(50% - 5px);padding:10px 12px}
     .rt-seg-portb{width:100%}
   }
 
