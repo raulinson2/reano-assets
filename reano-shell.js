@@ -38,6 +38,13 @@
        Ahora el seguro tiene pagina propia (/seguros, creada en Squarespace el 28-jul)
        y entra al menu con nombre propio, que es lo que Raul pidio. */
     ['Seguros', '/seguros'],
+    /* 28-jul, 2a ola. Raul, mirando el menu ya con Seguros: "donde esta servicios?".
+       Y tenia razon otra vez: /servicios NUNCA estuvo aqui. Yo habia resuelto la mitad
+       de su queja original (darle pestana propia al seguro) y me deje la otra mitad.
+       La pagina se gana el sitio: es la UNICA donde viven Cruceros, Eventos Deportivos,
+       Visa y Documentacion, Asesoria Legal, Tours Exclusivos y Viajes a Medida —
+       seis servicios que hoy no aparecen en ningun otro lado del sitio. */
+    ['Servicios', '/servicios'],
     ['Nosotros', '/nosotros'],
     ['Contacto', '/contacto']
   ];

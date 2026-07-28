@@ -393,6 +393,16 @@
   html.dark body.rt-pp select.variant-select.show-placeholder{color:#aab4bf}
   body.rt-pp select.variant-select:focus{border-color:#FF8C03;outline:none}
 
+  /* ===== /servicios: segundo enlace "esto ya se resuelve solo" =====
+     Deliberadamente SECUNDARIO: sin fondo, mas pequeno y bajo el boton de WhatsApp, para
+     que se lea como atajo y no compita con el CTA que Raul ya tenia puesto. */
+  .rt-svc-ya{display:inline-block;margin-top:10px;font-size:13px;font-weight:700;
+    color:#C2410C;text-decoration:none;border-bottom:1px solid rgba(194,65,12,.35);
+    padding-bottom:1px;transition:color .18s,border-color .18s}
+  .rt-svc-ya:hover{border-bottom-color:#C2410C}
+  html.dark .rt-svc-ya{color:#FF8C03;border-bottom-color:rgba(255,140,3,.38)}
+  html.dark .rt-svc-ya:hover{border-bottom-color:#FF8C03}
+
   /* ===== /seguros: PORTADA con imagen =====
      La pagina de Squarespace nace vacia; esta es su cabecera. Foto + velo doble para
      que el titular se lea igual en claro y en oscuro (medido: el texto es blanco en
@@ -1432,6 +1442,43 @@
     setTimeout(function(){ velo=montaVelo(); arranca(); }, 3000);
   }
 
+  /* ================= /servicios: atajo a lo que ya se resuelve solo ==============
+     28-jul-2026. Al meter "Servicios" en el menu revise la pagina: sus 13 tarjetas SI
+     funcionan (me equivoque al medirlo la primera vez — el selector agarraba el propio
+     titulo y por eso parecian muertas). Todas llevan a WhatsApp.
+
+     Lo que si sobra: hay cinco servicios que el sitio YA resuelve solo —el seguro da
+     precio exacto en 30 segundos, /hoteles busca en Booking, /vuelos trae el buscador y
+     el tablero, y conciertos y paquetes tienen productos a la venta—. Mandar esos cinco
+     a "escribeme por WhatsApp" es cobrarle al cliente un paso que no hace falta y a Raul
+     una conversacion que no necesitaba tener.
+
+     DECISION deliberada: NO se toca el boton de WhatsApp. Cambiarlo seria moverle el
+     embudo de ventas a Raul, y eso es decision suya, no mia. Se ANADE un segundo enlace
+     debajo. Asi no se pierde nada y se gana el atajo. */
+  var SERV_ATAJOS=[
+    {re:/seguro/i,               h:'/seguros',    txt:'Calcular el precio ahora'},
+    {re:/hoteles/i,              h:'/hoteles',    txt:'Buscar hoteles ahora'},
+    {re:/^vuelos$/i,             h:'/vuelos',     txt:'Ver buscador y estado de aerolíneas'},
+    {re:/conciertos/i,           h:'/conciertos', txt:'Ver los conciertos a la venta'},
+    {re:/paquetes vacacionales/i,h:'/paquetes',   txt:'Ver los paquetes armados'}
+  ];
+  function serviciosAtajos(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/servicios') return;
+    document.querySelectorAll('article.svc-card').forEach(function(c){
+      if(c.querySelector('.rt-svc-ya')) return;                 /* idempotente */
+      var h=c.querySelector('h3'); if(!h) return;
+      var t=(h.textContent||'').trim();
+      var m=null;
+      SERV_ATAJOS.forEach(function(s){ if(!m && s.re.test(t)) m=s; });
+      if(!m) return;
+      var cta=c.querySelector('a.svc-cta'); if(!cta) return;
+      var a=document.createElement('a');
+      a.className='rt-svc-ya'; a.href=m.h; a.textContent=m.txt+' →';
+      cta.parentNode.insertBefore(a, cta.nextSibling);
+    });
+  }
+
   /* ============ HOME: seguro y eSIM dentro de "Servicios Destacados" ============
      28-jul-2026. Raul: "los seguros deberian ir tambien en el home screen" y "no me
      gusta como distribuiste lo del seguro y lo de Hola Fly".
@@ -2457,7 +2504,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
