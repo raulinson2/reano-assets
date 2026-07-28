@@ -268,9 +268,16 @@
       '      <a class="pill line" href="tel:+584247309699">☎ Llamar</a>' +
       '    </div>' +
       '  </div>' +
+      /* 29-jul: "Seguros" salio de la cabecera (Raul: se veia recargada, y tenia
+         razon con nueve entradas). Pero al salir de ahi le quedaba UN solo enlace
+         visible en todo el inicio, y es una pagina con producto vendible detras.
+         El pie es el sitio para eso: es una lista larga, no compite por espacio y
+         nadie lo percibe como recargado. La cabecera se queda limpia y la pagina
+         deja de estar a un clic de nada. */
       '  <div class="col"><div class="h">Explorar</div>' +
       '    <a href="/">Inicio</a><a href="/estado-aerolineas">Vuelos</a><a href="/paquetes">Paquetes</a>' +
       '    <a href="/conciertos">Conciertos</a><a href="/tienda">Tienda</a><a href="/hoteles">Hoteles</a>' +
+      '    <a href="/seguros">Seguros</a>' +
       '  </div>' +
       '  <div class="col"><div class="h">Empresa</div>' +
       '    <a href="/servicios">Servicios</a><a href="/nosotros">Nosotros</a><a href="/contacto">Contacto</a>' +
