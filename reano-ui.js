@@ -3225,11 +3225,6 @@
        que nadie pidio tocar.
        Se levanta SOLO dentro de la cartelera de /conciertos, por estilo en linea
        (unica forma de ganarle a un !important sin tocar la regla global). */
-    grid.querySelectorAll('.cx-card .rt-cardimg').forEach(function(d){
-      d.style.setProperty('display','block','important');
-      if(!d.style.height) d.style.height='170px';
-    });
-
     /* El conmutador de origen de la pagina ya esta enlazado a SUS tarjetas, no
        a las nuestras: les ponemos el nuestro, acotado a las tarjetas nuevas. */
     grid.querySelectorAll('[data-rt-nuevo] .otab').forEach(function(b){
@@ -3244,9 +3239,22 @@
     });
   }
 
+  /* La foto de las tarjetas va APARTE de conciertosNuevos(): esa funcion se
+     autolimita para no duplicar tarjetas, pero la pagina repinta las SUYAS
+     despues y se lleva por delante el estilo en linea. Esta corre en cada
+     pasada de run(), que es barata y idempotente. */
+  function conciertosFotos(){
+    if(location.pathname.indexOf('/conciertos')!==0) return;
+    document.querySelectorAll('.cx-card .rt-cardimg').forEach(function(d){
+      if(getComputedStyle(d).display!=='none') return;      /* ya visible */
+      d.style.setProperty('display','block','important');
+      if(!d.style.height) d.style.height='170px';
+    });
+  }
+
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); conciertosNuevos(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); conciertosNuevos(); conciertosFotos(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
