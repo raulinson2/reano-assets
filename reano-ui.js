@@ -403,6 +403,12 @@
      metricas caian una por fila en vez de dos. Todas las demas secciones propias ya lo
      traen; esta portada nacio sin el. */
   #rt-seg-port,#rt-seg-port *{box-sizing:border-box}
+  /* La inyeccion FOOTER busca "el primer contenedor con pinta de hero" y le mete
+     dentro un .rt-herowrap con el logo. Encontro esta portada nueva y le clavo el
+     logo arriba del todo, medio comido por el header fijo (visto en vivo). Se oculta
+     solo aqui dentro, igual que ya se hizo en #rt-paq-portada: el logo ya esta en el
+     header, dos a la vez no aportan nada y este ademas sale recortado. */
+  #rt-seg-port .rt-herowrap{display:none!important}
   #rt-seg-port{position:relative;overflow:hidden;min-height:clamp(420px,58vh,560px);
     display:flex;align-items:center;justify-content:center;text-align:center;
     padding:88px 20px 72px;color:#fff}
