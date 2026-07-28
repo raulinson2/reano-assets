@@ -596,6 +596,34 @@
     .cart-row{gap:12px !important;padding:14px !important}
     .cart-row-price{width:100% !important;margin:6px 0 0 !important}
   }
+  /* ===== Guardar para después ===== */
+  .rt-save{display:inline-block;margin-top:6px;background:none;border:none;padding:0;
+    font:inherit;font-size:12.5px;font-weight:700;color:var(--ct-m);cursor:pointer;
+    text-decoration:underline;text-underline-offset:3px}
+  .rt-save:hover{color:#C2410C}
+  html.dark .rt-save:hover{color:#FF8C03}
+  #rt-guardados{--gd-c:#fff;--gd-t:#191512;--gd-m:#6b645c;--gd-l:rgba(0,0,0,.12);
+    margin-top:26px;color:var(--gd-t)}
+  html.dark #rt-guardados{--gd-c:#171f27;--gd-t:#eef3f7;--gd-m:#9aa6b2;--gd-l:rgba(255,255,255,.14)}
+  #rt-guardados h3{font-size:17px;font-weight:800;margin:0 0 4px}
+  #rt-guardados h3 small{font-weight:700;color:var(--gd-m);font-size:13px}
+  .rt-gd-sub{color:var(--gd-m);font-size:13px;margin:0 0 12px;line-height:1.5}
+  .rt-gd-row{display:flex;align-items:center;gap:14px;background:var(--gd-c);
+    border:1px solid var(--gd-l);border-radius:12px;padding:12px;margin-bottom:9px}
+  .rt-gd-row img,.rt-gd-ph{width:56px;height:56px;border-radius:9px;object-fit:cover;
+    flex:0 0 auto;background:linear-gradient(135deg,#FF8C03,#C2410C)}
+  .rt-gd-tx{flex:1;min-width:0}
+  .rt-gd-tx b{display:block;font-size:14px;line-height:1.35}
+  .rt-gd-tx span{font-size:13px;color:var(--gd-m)}
+  .rt-gd-add{color:#C2410C;font-weight:800;font-size:13px;text-decoration:none;white-space:nowrap}
+  html.dark .rt-gd-add{color:#FF8C03}
+  .rt-gd-del{background:none;border:none;color:var(--gd-m);cursor:pointer;font-size:15px;
+    padding:6px 8px;border-radius:8px;line-height:1}
+  .rt-gd-del:hover{color:#e5484d;background:rgba(229,72,77,.12)}
+  @media(max-width:520px){
+    .rt-gd-row{flex-wrap:wrap}
+    .rt-gd-add{width:100%;margin-top:4px}
+  }
 
   /* ===== HERO del inicio: laminas que se cruzan =====
      Las capas nuevas van con la MISMA opacidad que la original (.6 en claro, .4 en
@@ -668,6 +696,29 @@
   .rt-gift-card > small{display:block;margin-top:10px;color:var(--gf-m);font-size:12.5px;
     text-align:center}
   @media(max-width:520px){ #rt-gift{padding:44px 16px 54px} }
+
+  /* ===== BOTONES DE WHATSAPP: contraste =====
+     27-jul-2026, autorizado por Raul ("si tienes que mejorarlo, hazlo").
+     Los botones de texto iban en BLANCO sobre el verde vivo #25D366: contraste
+     1,98:1 cuando el minimo legible es 4,5:1. A pleno sol, en un telefono, ese
+     boton -que es el que mas vende- practicamente no se lee.
+     Se pasa al verde OSCURO de WhatsApp #075E54, que es un color oficial suyo (el
+     de su cabecera), no un invento: sigue leyendose como WhatsApp y con blanco da
+     7,7:1. Se conserva el verde vivo SOLO en el boton flotante, que es un icono
+     -no texto- y ahi el brillo ayuda a encontrarlo; a ese se le pone el icono en
+     BLANCO, porque venia en negro sobre verde y casi no se distinguia. */
+  a[href*="wa.me"]:not(.rt-wa-float-btn):not(.rt-fab),
+  a[href*="whatsapp.com"]:not(.rt-wa-float-btn):not(.rt-fab),
+  .rt-wabtn,.rtp-cta{background-color:#075E54 !important;color:#fff !important}
+  a[href*="wa.me"]:not(.rt-wa-float-btn):not(.rt-fab):hover,
+  .rt-wabtn:hover,.rtp-cta:hover{background-color:#0A7A6C !important}
+  .rt-wa-float-btn{color:#fff !important}
+  .rt-wa-float-btn svg,.rt-wa-float-btn i{color:#fff !important;fill:#fff !important}
+  /* en movil el flotante tapaba la pastilla de "Estado de las aerolineas" del
+     inicio: se sube lo justo para dejarla ver, sin perder el pulgar */
+  @media(max-width:640px){
+    .rt-wa-float-btn,.rt-wa-float{bottom:86px !important}
+  }
 
   .rt-hero-fade{opacity:0 !important}
   body.rt-home h1,body.rt-home .glass-orange,
@@ -1393,7 +1444,7 @@
     else {
       document.body.classList.remove('rt-cart-empty');
       var b=document.getElementById('rt-cart-empty-box'); if(b) b.remove();
-      cartFilas();
+      cartFilas(); guardados();
     }
   }
 
@@ -1407,6 +1458,47 @@
         producto. Se reutiliza aqui, asi que el cliente ve Canaima en vez de un hueco.
         Si el producto no esta en PIMG queda el mosaico naranja del CSS, que al menos
         parece intencional. */
+  /* Lista de "guardados para despues". Vive en /cart, debajo del carrito.
+     "Volver a añadir" lleva a la ficha del producto en vez de meterlo al carrito
+     por codigo: el carrito de Squarespace exige elegir la variante (la ciudad de
+     salida, la seccion) y meterlo a ciegas podria añadir la que no era. Es un clic
+     mas, pero nunca compra lo que no pediste. */
+  function guardados(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/cart') return;
+    var L=[];
+    try{ L=JSON.parse(localStorage.getItem('rt-guardados')||'[]'); }catch(e){ L=[]; }
+    var box=document.getElementById('rt-guardados');
+    if(!L.length){ if(box) box.remove(); return; }
+    if(!box){
+      box=document.createElement('section'); box.id='rt-guardados';
+      var host=document.querySelector('.cart-container')||document.querySelector('main');
+      if(!host) return;
+      host.appendChild(box);
+    }
+    box.innerHTML='<h3>Guardados para después <small>'+L.length+'</small></h3>'
+      + '<p class="rt-gd-sub">No se pierden aunque cierres la página. Cuando quieras, '
+      + 'los vuelves a añadir.</p>'
+      + L.map(function(it,i){
+          return '<div class="rt-gd-row">'
+            + (it.i?'<img src="'+it.i+'" alt="" loading="lazy">':'<span class="rt-gd-ph"></span>')
+            + '<div class="rt-gd-tx"><b>'+it.t.replace(/</g,'&lt;')+'</b>'
+            + (it.p?('<span>'+it.p.replace(/</g,'&lt;')+'</span>'):'')+'</div>'
+            + (it.h?('<a class="rt-gd-add" href="'+it.h+'">Volver a añadir</a>'):'')
+            + '<button type="button" class="rt-gd-del" data-i="'+i+'" '
+            + 'title="Quitar de guardados">✕</button></div>';
+        }).join('');
+    box.querySelectorAll('.rt-gd-del').forEach(function(b){
+      b.addEventListener('click', function(){
+        try{
+          var A=JSON.parse(localStorage.getItem('rt-guardados')||'[]');
+          A.splice(parseInt(b.getAttribute('data-i'),10),1);
+          localStorage.setItem('rt-guardados', JSON.stringify(A));
+        }catch(e){}
+        guardados();
+      });
+    });
+  }
+
   function cartFilas(){
     document.querySelectorAll('.cart-row').forEach(function(row){
       if(row.getAttribute('data-rt-cart')) return;
@@ -1418,6 +1510,39 @@
       poner('.cart-row-remove','Eliminar este paquete del carrito');
       poner('.cart-row-qty-dec','Quitar una persona');
       poner('.cart-row-qty-inc','Añadir una persona');
+      /* GUARDAR PARA DESPUES. El orden importa y no es negociable: primero se
+         escribe en la lista y se COMPRUEBA que quedo escrito; solo entonces se
+         pulsa el boton de quitar del carrito. Al reves, si el guardado falla el
+         cliente pierde lo que tenia. Es la unica funcion de todo el encargo que
+         puede QUITARLE algo a alguien, y por eso se hizo la ultima.
+         Solo se guarda titulo, precio, enlace e imagen: nada personal. */
+      if(!row.querySelector('.rt-save')){
+        var sv=document.createElement('button');
+        sv.type='button'; sv.className='rt-save'; sv.textContent='Guardar para después';
+        sv.addEventListener('click', function(){
+          var a=row.querySelector('.cart-row-title');
+          var im=row.querySelector('.cart-row-img-wrapper img');
+          var it={t:(a&&a.textContent||'').trim(),
+                  h:(a&&a.getAttribute('href'))||'',
+                  p:(row.querySelector('.cart-row-price')||{}).textContent||'',
+                  i:(im&&im.src)||''};
+          if(!it.t){ return; }
+          var ok=false;
+          try{
+            var L=JSON.parse(localStorage.getItem('rt-guardados')||'[]');
+            if(!L.some(function(x){ return x.t===it.t; })) L.push(it);
+            localStorage.setItem('rt-guardados', JSON.stringify(L));
+            /* comprobacion real: releer y confirmar que esta */
+            ok=(JSON.parse(localStorage.getItem('rt-guardados')||'[]')||[])
+                 .some(function(x){ return x.t===it.t; });
+          }catch(e){ ok=false; }
+          if(!ok){ sv.textContent='No se pudo guardar — no se quitó nada'; return; }
+          var rm=row.querySelector('.cart-row-remove');
+          if(rm) rm.click(); else sv.textContent='Guardado (quítalo tú del carrito)';
+          setTimeout(guardados, 600);
+        });
+        (row.querySelector('.cart-row-desc')||row).appendChild(sv);
+      }
       var hueco=row.querySelector('.cart-row-no-img');
       if(hueco && !hueco.querySelector('img')){
         var a=row.querySelector('.cart-row-title');

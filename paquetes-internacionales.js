@@ -53,6 +53,9 @@
     { id:'bogota', tag:'PAQUETE 03', name:'Bogotá Shopping & Magia', sub:'Compras, sabor y aventura',
       nights:'4 noches', img:CDN+'intl-bogota.jpg', desde:'640',
       ruta:'Compras · Zipaquirá · Monserrate · Salitre Mágico · Usaquén',
+      /* 27-jul: confirmado por Raul. Antes se dejo en blanco a proposito porque no
+         estaba verificado; no se inventa un dato de fronteras. */
+      visa:'No necesitas visa. Colombia no la exige al pasaporte venezolano.',
       hl:['🛍️ Día de compras + guía Reaño','⛪ Catedral de Sal de Zipaquirá','🎢 Monserrate y Salitre Mágico'],
       cities:[
         ['Día 1','Llegada','Traslado y primer shopping en Andino / Zona T.'],
