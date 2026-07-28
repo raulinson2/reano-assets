@@ -907,6 +907,24 @@
     .rt-wiz-tk b{text-align:left}
   }
 
+  /* ===== Contraste de la pastilla de Holafly (29-jul) =====
+     El texto iba en el rosa de Holafly (#FF3B6B) sobre blanco a 12 px en negrita:
+     medido, 3,45:1 — por debajo del 4,5:1 que pide AA para ese tamano. Y era igual
+     en claro y en oscuro, porque la pastilla es blanca siempre.
+     Se oscurece SOLO el texto, que es copy de Reano, a #D11B4F (5,28:1). El isotipo
+     de Holafly NO se toca: es marca ajena y va como viene.
+     El icono del 5% se deja fuera por si algun dia lleva fondo propio. */
+  .rt-holafly span,.rt-holafly b,.rt-holafly small{color:#D11B4F !important}
+
+  /* ===== Banner de cookies de Squarespace: se salia 14 px en movil =====
+     No es nuestro, pero lo ve todo el mundo que entra desde el telefono: el grupo de
+     botones no cabia y "Manage cookies" quedaba medio fuera de la pantalla. Se deja
+     que envuelva en vez de forzar una sola fila. */
+  @media(max-width:600px){
+    .sqs-cookie-banner-v2 .button-group{flex-wrap:wrap !important;max-width:100% !important}
+    .sqs-cookie-banner-v2 .button-group > *{max-width:100% !important}
+  }
+
   /* ===== HOME: la pastilla de Holafly quedaba debajo de la tarjeta de cifras =====
      29-jul-2026. En la captura de Raul se leia "eSIM Holafly · 5% OFF con" y ahi se
      cortaba. No era recorte de texto: la tarjeta blanca de "8+ años / 1.000+ / 24/7"
