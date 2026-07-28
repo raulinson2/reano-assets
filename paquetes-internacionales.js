@@ -16,6 +16,11 @@
     { id:'euro-maxima', tag:'PAQUETE 01', name:'Euro Máxima', sub:'España · Grecia · Turquía',
       nights:'10 noches', img:CDN+'intl-acropolis.jpg', desde:'2.610',
       ruta:'Barcelona 2n · Atenas 3n · Estambul 3n · Madrid 2n',
+      /* 27-jul-2026: el dato que MAS pesa para un pasaporte venezolano y que no
+         estaba en ninguna parte de la web. Verificado en fuentes oficiales en el
+         itinerario que Raul preparo para su propia familia (RUTA A). */
+      visa:'No necesitas visa. Los tres países son libres de visado para el pasaporte venezolano.',
+      vuelos:'Vuelos entre ciudades: 3h05 a Atenas · 1h20 a Estambul · 4h05 a Madrid.',
       /* Los dos tours de Europa abrian con la MISMA linea (los estadios), que
          es justo lo que tienen en comun: puestas una al lado de la otra las
          tarjetas parecian el mismo paquete. Ahora cada una arranca por lo que
@@ -27,11 +32,15 @@
         ['Estambul','3 noches','Santa Sofía, el Gran Bazar y dos continentes en uno.'],
         ['Madrid','2 noches','El Santiago Bernabéu y el corazón español.']
       ],
-      inc:['Vuelo internacional ida y vuelta','Hospedaje 10 noches en base doble','Vuelos y tren internos','Traslado en Venezuela (Yummy Rides)','TODAS las actividades: ambos estadios + Acrópolis + Santa Sofía + Gaudí','Seguro internacional + eSIM Holafly','Guía de viaje Reaño + asistencia'] },
+      inc:['Vuelo internacional ida y vuelta','Apartamento entero y privado 10 noches, con cocina — nunca compartido','Vuelos y tren internos','Traslado en Venezuela (Yummy Rides)','TODAS las actividades: ambos estadios + Acrópolis + Santa Sofía + Gaudí','Seguro internacional + eSIM Holafly','Guía de viaje Reaño + asistencia'] },
 
     { id:'euro-clasica', tag:'PAQUETE 02', name:'Euro Clásica', sub:'España · Francia · Italia',
       nights:'10 noches', img:CDN+'intl-colosseum.jpg', desde:'2.690',
       ruta:'Barcelona 2n · París 3n · Roma 3n · Madrid 2n',
+      /* Esta ruta es TODA Schengen: un unico control migratorio en los 10 dias.
+         Verificado en el itinerario RUTA B que Raul preparo para su familia. */
+      visa:'No necesitas visa. Al ser los tres países Schengen, pasas un solo control migratorio en todo el viaje.',
+      vuelos:'Vuelos entre ciudades: 1h50 a París · 2h05 a Roma · 2h35 a Madrid.',
       hl:['🗼 Torre Eiffel y el Louvre','🏛️ El Coliseo y el Vaticano','⚽ Camp Nou y Santiago Bernabéu'],
       cities:[
         ['Barcelona','2 noches','El Camp Nou y la magia modernista de Gaudí.'],
@@ -39,7 +48,7 @@
         ['Roma','3 noches','El Coliseo, el Vaticano y la Fontana di Trevi.'],
         ['Madrid','2 noches','El Santiago Bernabéu y las mejores tapas.']
       ],
-      inc:['Vuelo internacional ida y vuelta','Hospedaje 10 noches en base doble','Vuelos y tren internos','Traslado en Venezuela (Yummy Rides)','TODAS las actividades: ambos estadios + Louvre + Torre Eiffel + Coliseo + Vaticano','Seguro internacional + eSIM Holafly','Guía de viaje Reaño + asistencia'] },
+      inc:['Vuelo internacional ida y vuelta','Apartamento entero y privado 10 noches, con cocina — nunca compartido','Vuelos y tren internos','Traslado en Venezuela (Yummy Rides)','TODAS las actividades: ambos estadios + Louvre + Torre Eiffel + Coliseo + Vaticano','Seguro internacional + eSIM Holafly','Guía de viaje Reaño + asistencia'] },
 
     { id:'bogota', tag:'PAQUETE 03', name:'Bogotá Shopping & Magia', sub:'Compras, sabor y aventura',
       nights:'4 noches', img:CDN+'intl-bogota.jpg', desde:'640',
@@ -116,6 +125,14 @@
     +'#rt-intl-modal .x{position:absolute;right:12px;top:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);border:none;font-size:20px;cursor:pointer;color:#333;line-height:1;}'
     +'#rt-intl-modal .mb{padding:18px 22px 22px;}'
     +'#rt-intl-modal .mb .rt{font-size:12.5px;font-weight:800;color:var(--r2);text-align:center;background:rgba(176,78,18,.08);border-radius:22px;padding:8px;margin-bottom:16px;}'
+    /* aviso de visado: verde de "todo en orden", no naranja de marca, para que se
+       lea como un permiso concedido y no como una promocion mas */
+    +'#rt-intl-modal .visa{display:flex;gap:10px;align-items:flex-start;background:rgba(47,191,98,.10);'
+    +'border:1px solid rgba(47,191,98,.34);border-radius:12px;padding:11px 14px;margin-bottom:12px;}'
+    +'#rt-intl-modal .visa b{color:#2fbf62;font-size:13px;white-space:nowrap;}'
+    +'#rt-intl-modal .visa span{font-size:12.5px;line-height:1.5;opacity:.9;}'
+    +'#rt-intl-modal .vuelos{font-size:12.5px;line-height:1.5;opacity:.75;margin:0 0 4px;}'
+    +'@media(max-width:420px){#rt-intl-modal .visa{flex-direction:column;gap:4px;}}'
     +'#rt-intl-modal h4{font-size:14px;font-weight:800;color:var(--o2);margin:16px 0 8px;}'
     +'#rt-intl-modal .city{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line,#eee);}'
     +'html.dark #rt-intl-modal .city{border-color:#33313a;}'
@@ -165,6 +182,12 @@
       +'<div class="tt"><div class="n">'+esc(p.name)+'</div><div class="s">'+esc(p.sub)+' · '+p.nights+'</div></div>'
       +'<div class="bg"><em>DESDE</em><b>$'+p.desde+'</b><i>por persona</i></div></div><div class="mb">'
       +'<div class="rt">'+esc(p.ruta)+'</div>'
+      /* El aviso de visado va ARRIBA del todo, antes del recorrido: es la primera
+         duda de cualquiera con pasaporte venezolano y responderla de entrada quita
+         la objecion antes de que aparezca. Solo se pinta si el paquete lo tiene
+         verificado; no se inventa para los que no. */
+      +(p.visa?('<div class="visa"><b>✔ Sin visado</b><span>'+esc(p.visa)+'</span></div>'):'')
+      +(p.vuelos?('<p class="vuelos">'+esc(p.vuelos)+'</p>'):'')
       +'<h4>'+(isBog?'Itinerario día a día':'Tu recorrido')+'</h4>';
     p.cities.forEach(function(c){ h+='<div class="city"><div class="cn">'+esc(c[0])+'<small>'+esc(c[1])+'</small></div><div class="cd">'+esc(c[2])+'</div></div>'; });
     h+='<h4>Qué incluye</h4><ul class="inc">'; p.inc.forEach(function(x){ h+='<li>'+esc(x)+'</li>'; });
