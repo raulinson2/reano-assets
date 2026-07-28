@@ -606,6 +606,31 @@
   html:not(.dark) .rt-hero-img{filter:opacity(.6)}
   html.dark .rt-hero-img{filter:opacity(.4)}
   body.rt-home .bg-cover{transition:opacity .9s ease}
+  /* ===== /tienda: catalogo completo ===== */
+  #rt-tcat{--tc-c:#fff;--tc-t:#191512;--tc-m:#6b645c;--tc-l:rgba(0,0,0,.10);--tc-bg:#faf7f4;
+    background:var(--tc-bg);color:var(--tc-t);padding:64px 20px 76px}
+  html.dark #rt-tcat{--tc-c:#171f27;--tc-t:#eef3f7;--tc-m:#9aa6b2;
+    --tc-l:rgba(255,255,255,.12);--tc-bg:#0f151b}
+  #rt-tcat *{box-sizing:border-box}
+  .rt-tcat-in{max-width:1100px;margin:0 auto}
+  .rt-tcat-k{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.20em;
+    color:#C2410C;margin-bottom:10px}
+  html.dark .rt-tcat-k{color:#FF8C03}
+  #rt-tcat h2{font-size:clamp(25px,3.6vw,38px);line-height:1.1;font-weight:900;margin:0 0 12px}
+  .rt-tcat-sub{color:var(--tc-m);margin:0 0 30px;max-width:58ch;line-height:1.6}
+  .rt-tcat-g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .rt-tcat-c{display:flex;flex-direction:column;background:var(--tc-c);
+    border:1px solid var(--tc-l);border-radius:16px;padding:22px;text-decoration:none;
+    color:inherit;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .rt-tcat-c:hover{transform:translateY(-3px);border-color:#FF8C03;
+    box-shadow:0 16px 40px -18px rgba(20,15,10,.45)}
+  .rt-tcat-i{font-size:30px;line-height:1;margin-bottom:12px}
+  .rt-tcat-c b{font-size:18px;font-weight:800;margin-bottom:7px}
+  .rt-tcat-c p{color:var(--tc-m);font-size:14px;line-height:1.55;margin:0 0 16px;flex:1}
+  .rt-tcat-a{color:#C2410C;font-weight:800;font-size:14px}
+  html.dark .rt-tcat-a{color:#FF8C03}
+  @media(max-width:520px){ #rt-tcat{padding:44px 16px 54px} }
+
   .rt-hero-fade{opacity:0 !important}
   body.rt-home h1,body.rt-home .glass-orange,
   body.rt-home .relative.z-10 > p{transition:opacity .35s ease}
@@ -1112,6 +1137,50 @@
     cont.addEventListener('mouseenter', function(){ pausa=true; });
     cont.addEventListener('mouseleave', function(){ pausa=false; });
     setInterval(avanza, 6500);
+  }
+
+  /* ================= /tienda: catalogo completo de servicios ====================
+     27-jul-2026. Raul: "la tienda la veo demasiado vacia, solo es como un apartado mas
+     de conciertos, no le estamos sacando provecho".
+     Tiene razon: la vitrina solo pinta los 3 paquetes de concierto, cuando Reano vende
+     seguros, eSIM, hoteles, paquetes nacionales e internacionales y traslados.
+
+     No se crean productos nuevos (eso es panel de Squarespace y no se puede desde aqui).
+     Lo que se hace es convertir /tienda en el INDICE de todo lo que se puede contratar,
+     y que cada tarjeta lleve a donde ya funciona. Nada de esto es invento: los seis
+     destinos existen y estan probados.
+
+     El eSIM sale del sitio a proposito (enlace de afiliado, ver holaflyBanda). */
+  var TIENDA_CAT=[
+    {i:'🩺', t:'Seguro de viaje', d:'23 planes desde US$ 1 por día. Calcula el tuyo con las fechas y las edades reales de tu grupo.', a:'Calcular mi seguro', h:'/servicios'},
+    {i:'🏨', t:'Hoteles', d:'Busca y compara alojamiento en todo el mundo con tus fechas, habitaciones y las edades de los niños.', a:'Buscar hoteles', h:'/hoteles'},
+    {i:'🌎', t:'Paquetes de viaje', d:'Los Roques, Canaima y Margarita con vuelo y hospedaje · Europa y Colombia a tu medida.', a:'Ver paquetes', h:'/paquetes'},
+    {i:'🎫', t:'Conciertos', d:'Entrada, vuelo, hotel y traslados coordinados por nosotros. Salidas desde Caracas y el Táchira.', a:'Ver conciertos', h:'/conciertos'},
+    {i:'📶', t:'eSIM Holafly', d:'Datos en más de 200 destinos, activada antes de salir de casa. 5% con el código REANOTRAVELS.', a:'Ver planes', h:HOLAFLY_URL, fuera:true},
+    {i:'✈️', t:'Boletos aéreos', d:'Nacionales e internacionales, con el estado real de cada aerolínea y acompañamiento antes y después.', a:'Cotizar mi vuelo', h:'/vuelos'}
+  ];
+  function tiendaCatalogo(){
+    if((location.pathname.replace(/\/+$/,'')||'/')!=='/tienda') return;
+    if(document.getElementById('rt-tcat')) return;
+    var host=document.querySelector('#sections')||document.getElementById('page')||document.querySelector('main');
+    if(!host) return;
+    var s=document.createElement('section');
+    s.id='rt-tcat';
+    s.innerHTML='<div class="rt-tcat-in">'
+      + '<span class="rt-tcat-k">CATÁLOGO COMPLETO</span>'
+      + '<h2>Todo lo que puedes contratar con nosotros</h2>'
+      + '<p class="rt-tcat-sub">Además de los paquetes de concierto de arriba, esto es lo '
+      + 'que resolvemos — cada uno con su propio buscador o cotizador.</p>'
+      + '<div class="rt-tcat-g">'
+      + TIENDA_CAT.map(function(c){
+          return '<a class="rt-tcat-c" href="'+c.h+'"'
+            + (c.fuera?' target="_blank" rel="noopener"':'')+'>'
+            + '<span class="rt-tcat-i">'+c.i+'</span>'
+            + '<b>'+c.t+'</b><p>'+c.d+'</p>'
+            + '<span class="rt-tcat-a">'+c.a+' →</span></a>';
+        }).join('')
+      + '</div></div>';
+    host.appendChild(s);
   }
 
   function markTienda(){
@@ -1866,7 +1935,7 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); contrastFix(); deepenButtons(); revealOnScroll(); }
+  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); tiendaCatalogo(); contrastFix(); deepenButtons(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
