@@ -263,8 +263,36 @@
     grid.insertBefore(c, grid.firstChild);
   }
 
+  /* ===== AVISO DE MAIQUETIA — comite IAIM del 21-jul-2026 =====
+     27-jul. El aviso grande del tablero seguia diciendo "Maiquetia sigue restringido
+     hasta el 9/07 (NOTAM)": DIECIOCHO dias vencido, y es el texto mas visible de la
+     pagina. Se sustituye por lo que dijo el comite de seguridad del aeropuerto.
+     Fuente completa: Documentos\IA\ORION\aerolineas\MAIQUETIA-comite-21jul-2026.md
+
+     El 24-ago se anuncia como PREVISION, nunca como fecha confirmada: el propio comite
+     prohibio a las aerolineas vender por Maiquetia hasta que llegue la confirmacion
+     oficial. Prometer esa fecha en la web seria vender algo que aun no existe.
+     Se incluyen los tres datos que de verdad le cambian el viaje a un cliente: no se
+     permiten acompanantes, web check-in obligatorio, y exigen boleto de retorno y
+     reserva de hotel confirmada (o carta de invitacion) o queda inadmitido. */
+  function avisoMaiquetia(){
+    var d=document.querySelector('.rt-disclaimer'); if(!d) return;
+    if(d.getAttribute('data-rtfx-mq')) return;   /* idempotente: apply() corre cada 1,5 s */
+    d.setAttribute('data-rtfx-mq','1');
+    d.innerHTML='⚠️ <b>Maiquetía (CCS) sigue cerrado al tráfico comercial</b> y Valencia '
+      + 'concentra los vuelos. El comité del aeropuerto <b>prevé una reapertura parcial el '
+      + '24 de agosto</b>, al 35–40% de su capacidad — es una meta, no una fecha confirmada: '
+      + 'las aerolíneas todavía no tienen permitido vender por Maiquetía. '
+      + '<b>Cuando reabra:</b> solo entra quien tenga boleto (no se permiten acompañantes), '
+      + 'el check-in por internet será obligatorio, y te exigirán <b>boleto de retorno y '
+      + 'reserva de hotel confirmada</b> o carta de invitación. '
+      + 'Los plazos y cupos cambian a diario — antes de decidir nada con tu boleto, '
+      + 'confírmalo con nosotros.';
+  }
+
   function apply(){
     if(!onBoard()) return;
+    avisoMaiquetia();
     moveCard('Aerocaribe','contingencia');
     moveCard('Estelar (nac.)','contingencia');
     moveCard('Avior (nac.)','contingencia');
