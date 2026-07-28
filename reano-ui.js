@@ -231,6 +231,25 @@
      Se corrige nada mas en esta pagina; el inicio no se toca. */
   html.rt-nos .rt-herowrap{text-align:center!important}
 
+  /* ===== INICIO: el logo del hero, que estaba OCULTO =====
+     27-jul-2026. Raul: "en el home falta el logo mio, arriba de Descubre el mundo".
+     Diagnostico: el elemento .rt-herowrap SI existe en el inicio, dentro del hero y
+     justo antes de la pastilla, y sus dos imagenes (clara y oscura) CARGAN bien
+     —naturalWidth 1763 y 640—. Lo que pasa es que llega con display:none. No hay
+     regla en ninguna hoja accesible ni estilo en linea que lo explique, asi que se
+     fuerza aqui en vez de perseguir su origen.
+     Ademas se centra: la inyeccion trae .rt-herowrap{text-align:left!important} y en
+     el inicio TODO el hero va centrado (pastilla, titular, parrafo y botones), asi
+     que alineado a la izquierda quedaba descuadrado contra ellos. Mismo arreglo que
+     ya se hizo para /nosotros ahi arriba. */
+  body.rt-home .rt-herowrap{display:block!important;text-align:center!important;
+    margin:0 auto 16px!important}
+  body.rt-home .rt-herologo{height:64px!important;width:auto!important;
+    max-width:230px!important;object-fit:contain!important;margin:0 auto!important}
+  @media(max-width:640px){
+    body.rt-home .rt-herologo{height:48px!important;max-width:180px!important}
+  }
+
   /* ===== /contacto: tarjeta blanca sobre hero oscuro =====
      El hero de contacto es una foto con un velo oscuro encima, asi que la
      inyeccion pinta de blanco TODO su texto (h1,h2,p,li,a) y de melocoton
