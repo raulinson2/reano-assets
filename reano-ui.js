@@ -2251,7 +2251,9 @@
       L.push('Servicio: '+tipo);
       L.push('Ruta: '+(D.origen||'-')+' -> '+(D.destino||'-'));
       L.push('Fechas: '+wizFecha(D.salida)+' al '+wizFecha(D.regreso)+(noches?(' ('+noches+' noches)'):''));
-      L.push('Viajeros: '+D.adultos+' adultos'+(edades.length?(' | '+edades.length+' ninos (edades: '+edades.join(', ')+')'):''));
+      L.push('Viajeros: '+D.adultos+' adulto'+(D.adultos===1?'':'s')
+             +(edades.length?(' | '+edades.length+' niño'+(edades.length===1?'':'s')
+             +' (edades: '+edades.join(', ')+')'):''));
       if(ex.length) L.push('Extras: '+ex.join(', '));
       if(seg) L.push('Seguro: cobertura '+seg.cob+' - '+segMoney(seg.total)+' por los '+dias+' dias');
       if(D.notas.trim()) L.push('Nota: '+D.notas.trim());
