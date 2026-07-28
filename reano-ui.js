@@ -861,6 +861,8 @@
   .rt-wiz-chk b{display:block;font-size:14.5px;font-weight:800}
   .rt-wiz-chk small{display:block;font-size:12.5px;color:var(--w-m);line-height:1.4}
 
+  .rt-wiz-may{margin-top:14px}
+  .rt-wiz-precio:has(.rt-wiz-pk) p:only-of-type{margin-top:0}
   .rt-wiz-ticket{background:var(--w-c);border:1px solid var(--w-l);border-radius:16px;
     padding:6px 18px;margin-bottom:16px}
   .rt-wiz-tk{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
@@ -2058,7 +2060,7 @@
     if(document.getElementById('rt-wiz')) return;
 
     var D={tipo:'', zona:'int', origen:'', destino:'', salida:'', regreso:'',
-           adultos:2, ninos:[], extras:{}, notas:''};
+           adultos:2, ninos:[], mayores:false, extras:{}, notas:''};
     var paso=0, PASOS=5;
 
     var ov=document.createElement('div');
@@ -2133,7 +2135,12 @@
          +   D.ninos.map(function(e,i){
                return '<label>Edad del niño '+(i+1)+'<input type="number" min="0" max="17" value="'+(e===''?'':e)+'" data-i="'+i+'"></label>';
              }).join('')
-         + '</div><p class="rt-wiz-err" id="rt-wiz-err"></p>';
+         + '</div>'
+         + '<label class="rt-wiz-chk rt-wiz-may'+(D.mayores?' on':'')+'">'
+         +   '<input type="checkbox" id="rt-wiz-may"'+(D.mayores?' checked':'')+'>'
+         +   '<span><b>Alguien tiene 76 años o más</b>'
+         +   '<small>La tarifa del seguro cambia por edad; con esto no te damos un precio corto.</small></span></label>'
+         + '<p class="rt-wiz-err" id="rt-wiz-err"></p>';
       }
       else if(paso===3){
         h='<h2>¿Le sumamos algo?</h2><p class="rt-wiz-sub">Marca lo que te interese. Nada de esto se cobra aquí.</p>'
@@ -2154,7 +2161,8 @@
         var todas=edades.slice();
         for(var k=0;k<D.adultos;k++) todas.push(35);
         var tipo=WIZ_TIPOS.filter(function(t){return t.id===D.tipo;})[0]||{t:'Consulta'};
-        var seg=(D.extras.seguro||D.tipo==='seguro') ? wizSeguro(D.zona, dias, todas) : null;
+        var quiereSeg=(D.extras.seguro||D.tipo==='seguro');
+        var seg=(quiereSeg && !D.mayores) ? wizSeguro(D.zona, dias, todas) : null;
         var ex=Object.keys(D.extras).filter(function(k2){return D.extras[k2];})
                  .map(function(k2){ return (WIZ_EXTRAS.filter(function(x){return x.id===k2;})[0]||{}).t; });
 
@@ -2178,6 +2186,13 @@
                ? 'Es la mejor relación cobertura/precio del catálogo. Hay planes más económicos y coberturas mayores en '
                : 'Es el plan más económico que cubre a todo tu grupo; hay coberturas mayores en ')
            + '<a href="/seguros">la calculadora</a>.</p></div>';
+        }
+        if(quiereSeg && D.mayores){
+          h+='<div class="rt-wiz-precio"><span class="rt-wiz-pk">SEGURO · HACE FALTA LA EDAD EXACTA</span>'
+           + '<p>A partir de los 76 años el seguro cambia de plan y de tarifa, y no queremos '
+           + 'darte un precio que luego suba. Puedes sacarlo exacto tú mismo en '
+           + '<a href="/seguros">la calculadora</a>, poniendo la edad de cada viajero, '
+           + 'o dejar que tu asesor lo haga contigo.</p></div>';
         }
         h+='<p class="rt-wiz-nota">El resto de tarifas te las confirma un asesor con disponibilidad real. '
          + '<b>No te damos un estimado inventado</b>: preferimos decirte el precio de verdad.</p>';
@@ -2223,6 +2238,10 @@
           i.closest('.rt-wiz-chk').classList.toggle('on', i.checked);
         });
       });
+      var may=cuerpo.querySelector('#rt-wiz-may');
+      if(may) may.addEventListener('change', function(){
+        D.mayores=may.checked; may.closest('.rt-wiz-chk').classList.toggle('on', may.checked);
+      });
       var nt=cuerpo.querySelector('#rt-wiz-notas'); if(nt) nt.addEventListener('input',function(){D.notas=this.value;});
     }
 
@@ -2254,7 +2273,7 @@
       var tipo=(WIZ_TIPOS.filter(function(t){return t.id===D.tipo;})[0]||{}).t||'Consulta';
       var ex=Object.keys(D.extras).filter(function(k2){return D.extras[k2];})
                .map(function(k2){ return (WIZ_EXTRAS.filter(function(x){return x.id===k2;})[0]||{}).t; });
-      var seg=(D.extras.seguro||D.tipo==='seguro') ? wizSeguro(D.zona, dias, todas) : null;
+      var seg=((D.extras.seguro||D.tipo==='seguro') && !D.mayores) ? wizSeguro(D.zona, dias, todas) : null;
       var L=[];
       L.push('*NUEVA SOLICITUD DESDE LA WEB*');
       L.push('--------------------');
@@ -2266,6 +2285,7 @@
              +' (edades: '+edades.join(', ')+')'):''));
       if(ex.length) L.push('Extras: '+ex.join(', '));
       if(seg) L.push('Seguro: cobertura '+seg.cob+' - '+segMoney(seg.total)+' por los '+dias+' dias');
+      else if(D.extras.seguro||D.tipo==='seguro') L.push('Seguro: SI, y hay viajeros de 76+ (cotizar con la edad exacta)');
       if(D.notas.trim()) L.push('Nota: '+D.notas.trim());
       L.push('--------------------');
       L.push('¡Hola! Armé esta solicitud en la web. ¿Me confirman tarifas y disponibilidad?');
