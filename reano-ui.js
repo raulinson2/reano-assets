@@ -115,8 +115,32 @@
   .cart-container::before{content:"Tu carrito";display:block;font-family:'Montserrat',system-ui,sans-serif;
     font-size:26px;font-weight:800;letter-spacing:-.01em;margin:0 0 18px;color:#1a1610}
   html.dark .cart-container::before{color:#eef3f7}
-  @media(max-width:900px){div:has(> .cart-container){display:block !important}
-    .cart-container::before{font-size:22px}}
+  /* ===== CARRITO EN MOVIL — 29-jul-2026, y el fallo era MIO =====
+     Raul mando una captura del carrito en el telefono: el bloque oscuro del resumen
+     empezaba pegado al borde izquierdo y se cortaba antes de llegar al derecho, con
+     los botones de PayPal apretados dentro. Medido a 390 px: el resumen ocupaba
+     248 px de 390, y el .cart-container se salia 13 px por la derecha.
+
+     La causa es la linea de arriba: para la rejilla de dos columnas le puse
+     width:100% al envoltorio del resumen. Al bajar a movil yo desactivaba la REJILLA
+     (display:block) pero NO ese ancho, asi que el envoltorio se quedaba clavado en el
+     ancho de la columna vieja mientras Squarespace le aplicaba sus margenes negativos
+     de -35,6 px. Resultado: una caja estrecha y descolocada.
+
+     Aqui se deshacen las tres cosas a la vez: ancho, margenes negativos y relleno.
+     Hace falta 'html body' porque la hoja de Squarespace pisa a igual especificidad.
+     Medido despues: resumen y contenedor alineados en 36..354, sin desbordes. */
+  @media(max-width:900px){
+    div:has(> .cart-container){display:block !important}
+    .cart-container::before{font-size:22px}
+    html body div:has(> .cart-summary){width:auto !important;grid-column:auto !important;
+      margin-left:0 !important;margin-right:0 !important;
+      padding-left:0 !important;padding-right:0 !important}
+    html body.rt-cartpg .cart-container{box-sizing:border-box !important;
+      margin-right:0 !important;padding-left:6px !important;padding-right:6px !important}
+    /* sitio para que el boton flotante de WhatsApp no tape la ultima fila */
+    body.rt-cartpg .cart-summary{margin-bottom:96px}
+  }
 
   /* ===== CARRITO: estado vacio premium ===== */
   body.rt-cart-empty .rt-cart-hero, body.rt-cart-empty .rt-cart-extra, body.rt-cart-empty .rt-cart-card{display:none !important}
@@ -191,6 +215,13 @@
   .rt-pax.open .rt-pax-body{display:block}
   .rt-pax-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:700px){.rt-pax-grid{grid-template-columns:1fr}}
+  /* 29-jul: los redondeles de "¿Viaja con menores?" salian con el AZUL por defecto
+     del navegador, que no es de la marca y en la captura de Raul cantaba muchisimo
+     al lado del naranja. accent-color los tine sin tener que reconstruir el control
+     (y asi conservan la accesibilidad nativa: teclado, lector de pantalla, foco). */
+  .rt-pax input[type=radio],.rt-pax input[type=checkbox]{accent-color:#C2410C;
+    width:17px;height:17px;cursor:pointer;flex:0 0 auto}
+  html.dark .rt-pax input[type=radio],html.dark .rt-pax input[type=checkbox]{accent-color:#FF8C03}
   .rt-f{display:flex;flex-direction:column;gap:5px}
   .rt-f.full{grid-column:1 / -1}
   .rt-f label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b645c}
@@ -661,7 +692,18 @@
   .cart-row-desc{min-width:0 !important;flex:1 1 46% !important}
   .cart-row-title{white-space:normal !important;text-overflow:clip !important;
     overflow:visible !important;display:-webkit-box !important;-webkit-line-clamp:3;
-    -webkit-box-orient:vertical;line-height:1.35 !important}
+    -webkit-box-orient:vertical;line-height:1.35 !important;
+    /* 29-jul: en el telefono partia las palabras con guion ("Pa-quete desde el
+       Tachira"). El navegador solo hace eso con hyphens:auto, que hereda de la
+       hoja del sitio. Un nombre de producto no se corta a la mitad: queda feo y,
+       en un carrito, hace dudar de si el producto es el correcto. */
+    hyphens:none !important;-webkit-hyphens:none !important;
+    overflow-wrap:break-word;word-break:normal}
+  /* La miniatura recorta en cuadrado y estas fotos llevan MUCHO cielo arriba
+     (margarita.jpg: el 60% superior es cielo). Centrado al 50% el cliente veia una
+     nube y ninguna playa. Bajando el foco al 68% entra la arena y el agua, y en la
+     de Canaima (vertical) sigue cayendo sobre el salto. */
+  .cart-row-img{background-position:50% 68% !important}
   .cart-row-no-img{background:linear-gradient(135deg,#FF8C03,#C2410C) !important;
     border-radius:10px !important}
   .cart-row-no-img svg{opacity:.55 !important}
@@ -728,6 +770,30 @@
   html:not(.dark) .rt-hero-dot{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.28)}
   .rt-hero-dot:focus-visible{outline:2px solid #FF8C03;outline-offset:3px}
   @media(max-width:600px){ .rt-hero-dots{margin-top:20px} }
+
+  /* ===== HOME: la pastilla de Holafly quedaba debajo de la tarjeta de cifras =====
+     29-jul-2026. En la captura de Raul se leia "eSIM Holafly · 5% OFF con" y ahi se
+     cortaba. No era recorte de texto: la tarjeta blanca de "8+ años / 1.000+ / 24/7"
+     sube 64 px sobre el hero a proposito (-mt-16, es el diseno del sitio) y va con
+     z-index 20, asi que se comia los ultimos 36 px de la pastilla.
+     Medido: pastilla 896..952, tarjeta desde 916 → 36 px de solape.
+     Y NO era solo de movil: exactamente los mismos 36 px en escritorio a 1905 px.
+     La tarjeta se coloca respecto al final del hero, asi que dandole aire por debajo
+     a la pastilla baja la tarjeta lo mismo y el solape se convierte en hueco.
+     Medido despues: -22 px (o sea, 22 px de hueco) en los dos anchos. */
+  .rt-holafly{margin-bottom:58px}
+
+  /* ===== /estado-aerolineas: DOS botones flotantes de WhatsApp =====
+     29-jul. Esa pagina trae su propio .rt-fab naranja ("Cotiza por WhatsApp",
+     abajo 24px) ademas del boton verde global .rt-wa-float (abajo 86px): dos CTA
+     flotantes apilados que hacen exactamente lo mismo y que, al llegar al pie,
+     tapaban los enlaces. Se retira el de la pagina y se queda el global, que es el
+     que sale en todo el sitio. Un solo boton por pantalla. */
+  a.rt-fab{display:none !important}
+  /* Con el flotante verde a 86 px del fondo, la ultima fila del pie quedaba debajo
+     de el al llegar al final. El pie vive en shadow DOM y desde fuera solo se puede
+     tocar su anfitrion, que es justo lo que hace falta. */
+  @media(max-width:900px){ #rt2-footer{padding-bottom:96px} }
   /* ===== /tienda: catalogo completo ===== */
   #rt-tcat{--tc-c:#fff;--tc-t:#191512;--tc-m:#6b645c;--tc-l:rgba(0,0,0,.10);--tc-bg:#faf7f4;
     background:var(--tc-bg);color:var(--tc-t);padding:64px 20px 76px}
