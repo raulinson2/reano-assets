@@ -2683,8 +2683,8 @@
     var sec=h.closest('section')||h.closest('.page-section')||h.parentElement;
     var card=document.createElement('div'); card.id='rt-fifty'; card.className='rt-fifty';
     card.innerHTML='<div class="rt-fifty-ico">🛡️</div>'
-      +'<h3>Reserva con 50% de inicial</h3>'
-      +'<p>Asegura tu cupo hoy con la mitad del valor y paga el resto antes de viajar. Sin intereses y con acompañamiento total de tu asesor Reaño.</p>'
+      +'<h3>Reserva con 60% de inicial</h3>'
+      +'<p>Asegura tu cupo hoy con el 60% inicial y paga el resto en 4 cuotas del 10%, sin intereses y con acompañamiento total de tu asesor Reaño.</p>'
       +'<div class="rt-fifty-btns">'
       +'<a class="rt-fifty-pp" href="/cart">💳 Pago seguro vía PayPal</a>'
       +'<a class="rt-fifty-wa" target="_blank" rel="noopener" href="'+WA+'">💬 Cotizar por WhatsApp</a>'
