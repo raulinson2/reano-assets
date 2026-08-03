@@ -3254,7 +3254,44 @@
 
   function markHome(){ if((location.pathname.replace(/\/+$/,'')||'/')==='/') document.body.classList.add('rt-home'); }
 
-  function run(){ injectCSS(); markHome(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); conciertosNuevos(); conciertosFotos(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
+  /* El Mundial 2026 ya paso (11 jun - 19 jul 2026). Se retira TODO rastro visible
+     del texto que quedo en el codigo de las paginas (tarjetas, FAQ, opcion del
+     formulario de contacto, subtitulos). Se hace en runtime porque ese texto vive
+     dentro de los bloques de codigo por-pagina de Squarespace, no en este repo.
+     Idempotente: al limpiar un nodo ya no vuelve a coincidir. */
+  function mundialScrub(){
+    /* 1. la opcion "Mundial 2026" del <select> de contacto */
+    document.querySelectorAll('option').forEach(function(o){
+      if(/^\s*mundial 2026\s*$/i.test(o.textContent||'')) o.remove();
+    });
+    /* 2. los items de FAQ sobre el Mundial (pregunta + respuesta van juntas en el details) */
+    document.querySelectorAll('details, .faq').forEach(function(d){
+      if(/mundial 2026/i.test(d.textContent||'')) d.remove();
+    });
+    /* 3. reescribir el texto suelto, con arreglos por frase para que quede natural */
+    var reps=[
+      [/Del Mundial 2026 a los/gi,'A los'],
+      [/para el Mundial 2026,\s*/gi,'para '],
+      [/para el Mundial 2026 y\s*/gi,'para '],
+      [/el Mundial 2026 y los/gi,'los'],
+      [/:\s*Mundial 2026,\s*/gi,': '],
+      [/\bMundial 2026,?\s*/gi,'']
+    ];
+    document.querySelectorAll('h1,h2,h3,h4,p,span,li,summary,a,div').forEach(function(el){
+      if(el.children.length>2) return;
+      if(!/mundial 2026/i.test(el.textContent||'')) return;
+      for(var i=0;i<el.childNodes.length;i++){
+        var n=el.childNodes[i];
+        if(n.nodeType===3 && /mundial 2026/i.test(n.nodeValue)){
+          var t=n.nodeValue;
+          reps.forEach(function(r){ t=t.replace(r[0],r[1]); });
+          n.nodeValue=t.replace(/\s{2,}/g,' ').replace(/^\s*[,:]\s+/,'');
+        }
+      }
+    });
+  }
+
+  function run(){ injectCSS(); markHome(); mundialScrub(); hideLegacyShell(); markTienda(); markCart(); aliadosYummy(); trasladosYummy(); conciertosHero(); conciertosNoche(); conciertosFix(); conciertosNuevos(); conciertosFotos(); puentePaquetes(); paquetesPortada(); productPage(); fiftyCard(); paxForm(); seguroCalc(); hotelesForm(); holaflyBanda(); heroRotador(); homeServicios(); serviciosAtajos(); wizardEnlaces(); tiendaCatalogo(); giftCard(); contrastFix(); deepenButtons(); waContraste(); revealOnScroll(); }
   if(document.readyState!=='loading')run(); else document.addEventListener('DOMContentLoaded',run);
   [400,1200,2600,4200].forEach(function(d){ setTimeout(run,d); });
   /* La rejilla que pinta la vitrina puede tardar mas de 4,2 s en conexiones
