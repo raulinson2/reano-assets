@@ -27,7 +27,13 @@ module.exports = {
         'on-background': 'var(--text-main)',
         'on-surface': 'var(--text-main)',
         'on-surface-variant': 'var(--text-muted)',
-        'border-subtle': 'var(--border-color-soft)',
+        /* Variable PROPIA por delante. /conciertos usa un tono de borde
+           ligeramente distinto y su valor gana por especificidad: pelear la
+           cascada desde fuera no funciona (probado). Con una variable que solo
+           declaramos nosotros, la pagina que necesite otro tono lo pide y las
+           demas ni se enteran. Comprobado: con esto la sustitucion sale
+           identica pixel a pixel. */
+        'border-subtle': 'var(--rt-tw-borde,var(--border-color-soft))',
         'primary': 'var(--brand-primary)',
         'primary-fixed': 'var(--brand-primary)',
         'primary-container': '#ff6b1a',
