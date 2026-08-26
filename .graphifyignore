@@ -1,0 +1,24 @@
+# reano-assets-work - que NO entra al mapa de conocimiento
+# Creado el 21-ago-2026.
+#
+# Este repositorio guarda los .js COMPILADOS (comprimidos y ofuscados) que sirve
+# el CDN. Lo dice su propio README desde el 3-ago-2026: "No se editan aqui".
+# El codigo legible vive en Documentos\IA\ORION\website\src\.
+#
+# Mapear los blobs ofuscados no aporta nada: los nombres estan destruidos y
+# ademas desplazaban al fuente real en el mapa maestro. Se indexa el fuente.
+*.js
+
+# --- Multimedia ---
+*.jpg
+*.jpeg
+*.png
+*.PNG
+*.gif
+*.webp
+*.svg
+*.ico
+
+# --- Salidas y control de versiones ---
+graphify-out/
+.git/
